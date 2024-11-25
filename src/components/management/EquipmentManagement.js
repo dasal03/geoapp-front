@@ -100,7 +100,16 @@ const EquipmentManagement = () => {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
           },
-          body: JSON.stringify(selectedEquipment),
+          body: JSON.stringify({
+            equipment_id: selectedEquipment.equipment_id,
+            description: selectedEquipment.description,
+            serial: selectedEquipment.serial,
+            model: selectedEquipment.model,
+            image: selectedEquipment.image 
+              ? await convertImageToBase64(selectedEquipment.image)
+              : "",
+            maintenance_status_id: selectedEquipment.maintenance_status_id,
+          }),
         }
       );
       const data = await response.json();
@@ -252,6 +261,15 @@ const EquipmentManagement = () => {
                 text:
                   maintenanceData.message ||
                   "Equipo añadido, pero no se pudo actualizar el estado de mantenimiento.",
+              }).then(() => {
+                setModalVisible(false);
+                setNewEquipment({
+                  description: "",
+                  serial: "",
+                  model: "",
+                  image: null,
+                });
+                handleSearch();
               });
             }
           } catch (error) {
