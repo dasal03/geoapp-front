@@ -1,0 +1,25 @@
+.file-input.file-upload-container {
+    margin-bottom: 16px;
+} 
+
+.file-input input {
+    margin: 0;
+}
+
+.file-input button {
+    align-items: center;
+    margin: 0;
+}
+
+.file-input .remove-image-btn {
+  background-color: #f44336;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.file-input .remove-image-btn:hover {
+  background-color: #d32f2f;
+}
