@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useAuth } from "../auth/AuthContext";
 import { Password } from "../password/Password";
+import LoadingSpinner from "../loading/LoadingSpinner";
 import "./Profile.css";
 
 const Profile = () => {
@@ -19,6 +20,7 @@ const Profile = () => {
   const [success, setSuccess] = useState("");
   const [passwordsMatch, setPasswordsMatch] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     if (!authUser) {
@@ -27,6 +29,7 @@ const Profile = () => {
     }
 
     const fetchUser = async () => {
+      setIsLoading(true);
       try {
         const response = await fetch(
           `http://localhost:3000/dev/get_user?user_id=${authUser.user_id}`
@@ -44,6 +47,8 @@ const Profile = () => {
         }
       } catch (err) {
         setError("Error al conectar con el servidor");
+      } finally {
+        setIsLoading(false);
       }
     };
 
@@ -83,6 +88,7 @@ const Profile = () => {
       return;
     }
 
+    setIsLoading(true); // Inicia carga
     try {
       const response = await fetch("http://localhost:3000/dev/update_user", {
         method: "PUT",
@@ -109,8 +115,14 @@ const Profile = () => {
       }
     } catch (err) {
       setError("Error al conectar con el servidor");
+    } finally {
+      setIsLoading(false); // Termina carga
     }
   };
+
+  if (isLoading) {
+    return <LoadingSpinner />;
+  }
 
   return (
     <div className="profile-container">

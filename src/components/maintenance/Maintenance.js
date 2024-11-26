@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
-import Calendar from "react-calendar";
-import "react-calendar/dist/Calendar.css";
 import { ReactComponent as SearchIcon } from "../../assets/search-icon.svg";
 import { useAuth } from "../auth/AuthContext";
+import LoadingSpinner from "../loading/LoadingSpinner";
+import Calendar from "react-calendar";
+import "react-calendar/dist/Calendar.css";
 import Swal from "sweetalert2";
 import "./Maintenance.css";
 
@@ -23,9 +24,11 @@ function Maintenance() {
   const [newState, setNewState] = useState(null);
   const [scheduledDate, setScheduledDate] = useState(null);
   const [equipmentId, setEquipmentId] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   // Fetches the maintenance list
   const fetchMaintenances = async () => {
+    setIsLoading(true);
     try {
       const response = await fetch(
         "http://localhost:3000/dev/equipment_maintenance_status",
@@ -51,11 +54,14 @@ function Maintenance() {
         title: "Error",
         text: "Error al obtener los mantenimientos programados.",
       });
+    } finally {
+      setIsLoading(false);
     }
   };
 
   // Fetches the equipment list
   const fetchEquipment = async () => {
+    setIsLoading(true);
     try {
       const url = `http://localhost:3000/dev/get_equipment?all_info=true&${filter}=${search}`;
       const response = await fetch(url, {
@@ -86,22 +92,33 @@ function Maintenance() {
         title: "Error",
         text: error.message || "Error al conectarse con el servidor.",
       });
+    } finally {
+      setIsLoading(false);
     }
   };
 
-  const openManageModal = () => {
-    setShowManageModal(true);
-    setShowChangeStateModal(false);
-    setShowMaintenanceModal(false);
+  const openManageModal = async () => {
+    try {
+      setShowManageModal(true);
+      setShowChangeStateModal(false);
+      setShowMaintenanceModal(false);
 
-    setEquipmentList([]);
-    setNoResultsMessage("");
-    setSearch("");
-    setFilter("all");
+      setNoResultsMessage("");
+      setEquipmentList([]);
+
+      await fetchEquipment();
+    } catch (error) {
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "Hubo un problema al cargar los equipos.",
+      });
+    }
   };
 
   // Opens the change state modal
   const openChangeStateModal = () => {
+    setNewState(null);
     setShowManageModal(false);
     setShowChangeStateModal(true);
     setShowMaintenanceModal(false);
@@ -116,6 +133,8 @@ function Maintenance() {
 
   // Handles the state change process for maintenance
   const handleStateChange = async () => {
+    setIsLoading(true);
+
     if (!newState) {
       Swal.fire({
         icon: "warning",
@@ -186,6 +205,8 @@ function Maintenance() {
         title: "Error",
         text: "Hubo un problema al comunicarse con el servidor.",
       });
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -238,164 +259,182 @@ function Maintenance() {
     <div className="maintenance-container">
       <h1 className="title">Mantenimientos Programados</h1>
 
+      {/* Botón para abrir el modal de gestión */}
       <div className="top-actions">
         <button className="manage-button small" onClick={openManageModal}>
           Gestionar
         </button>
       </div>
 
-      {noMaintenanceMessage && (
-        <p className="no-maintenance-message">{noMaintenanceMessage}</p>
-      )}
+      {/* Componente de carga */}
+      {isLoading ? (
+        <LoadingSpinner />
+      ) : (
+        <>
+          {/* Mensaje si no hay mantenimientos */}
+          {noMaintenanceMessage && (
+            <p className="no-maintenance-message">{noMaintenanceMessage}</p>
+          )}
 
-      {/* Modal for managing equipment */}
-      {showManageModal && (
-        <div className="modal">
-          <div className="modal-content">
-            <h2>Gestionar Mantenimientos</h2>
-            <div className="search-container">
-              <input
-                type="text"
-                placeholder="Buscar equipo..."
-                className="search-input"
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-              />
-              <select
-                value={filter}
-                className="search-select"
-                onChange={(e) => setFilter(e.target.value)}
-              >
-                <option value="all">Todos</option>
-                <option value="description">Descripción</option>
-                <option value="model">Modelo</option>
-                <option value="serial">Serial</option>
-              </select>
-              <button onClick={fetchEquipment} className="search-btn">
-                <SearchIcon />
-              </button>
-            </div>
-            <div className="equipment-list">
-              {equipmentList.length === 0 && noResultsMessage && (
-                <p className="no-results-message">{noResultsMessage}</p>
-              )}
-              {equipmentList.map((equipment) => (
-                <div key={equipment.id} className="equipment-card">
-                  <h3>{equipment.description}</h3>
-                  <p>Modelo: {equipment.model}</p>
-                  <p>Serial: {equipment.serial}</p>
-                  <p>Estado actual: {equipment.maintenance_status}</p>
-                  <button
-                    onClick={() => {
-                      setCurrentState(equipment.maintenance_status_id);
-                      setNewState(equipment.maintenance_status_id);
-                      setEquipmentId(equipment.equipment_id);
-                      openChangeStateModal();
-                    }}
+          {/* Modal para gestionar equipos */}
+          {showManageModal && (
+            <div className="modal">
+              <div className="modal-content">
+                <h2>Gestionar Mantenimientos</h2>
+                {/* Búsqueda y filtro */}
+                <div className="search-container">
+                  <input
+                    type="text"
+                    placeholder="Buscar equipo..."
+                    className="search-input"
+                    value={search}
+                    onChange={(e) => setSearch(e.target.value)}
+                  />
+                  <select
+                    value={filter}
+                    className="search-select"
+                    onChange={(e) => setFilter(e.target.value)}
                   >
-                    Cambiar Estado
+                    <option value="all">Todos</option>
+                    <option value="description">Descripción</option>
+                    <option value="model">Modelo</option>
+                    <option value="serial">Serial</option>
+                  </select>
+                  <button onClick={fetchEquipment} className="search-btn">
+                    <SearchIcon />
                   </button>
                 </div>
-              ))}
-            </div>
-            <div className="close-modal-btn">
-              <button
-                className="close-modal"
-                onClick={() => setShowManageModal(false)}
-              >
-                Cerrar
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-      {/* Modal for changing maintenance state */}
-      {showChangeStateModal && (
-        <div className="modal">
-          <div className="modal-content">
-            <h2>Cambiar Estado</h2>
-            <select
-              value={newState}
-              onChange={(e) => setNewState(Number(e.target.value))}
-            >
-              {currentState === 1 && (
-                <>
-                  <option value={2}>Mantenimiento</option>
-                  <option value={3}>Mantenimiento Programado</option>
-                </>
-              )}
-              {currentState === 2 && (
-                <>
-                  <option value={1}>Funcionamiento</option>
-                  <option value={3}>Mantenimiento Programado</option>
-                </>
-              )}
-              {currentState === 3 && (
-                <>
-                  <option value={1}>Funcionamiento</option>
-                  <option value={2}>Mantenimiento</option>
-                  <option value={3}>Mantenimiento Programado</option>
-                </>
-              )}
-            </select>
-
-            {newState === 3 && (
-              <>
-                <h4>Fecha de Mantenimiento Programado</h4>
-                <Calendar
-                  onChange={handleDateChange}
-                  value={scheduledDate}
-                  minDate={new Date()}
-                />
-              </>
-            )}
-
-            <div className="modal-actions">
-              <button
-                onClick={() => handleStateChange(equipmentId)}
-                className="confirm-btn"
-              >
-                Confirmar
-              </button>
-              <button
-                onClick={() => setShowChangeStateModal(false)}
-                className="cancel-btn"
-              >
-                Cancelar
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-      {/* Modal for displaying scheduled maintenance */}
-      {showMaintenanceModal && (
-        <div className="modal">
-          <div className="modal-content">
-            <h2>Detalles de Mantenimiento</h2>
-            {modalData.length > 0 ? (
-              modalData.map((maintenance) => (
-                <div key={maintenance.maintenance_id}>
-                  <h3>Equipo: {maintenance.description}</h3>
-                  <p>Serial: {maintenance.serial}</p>
-                  <p>Modelo: {maintenance.model}</p>
-                  {maintenance.maintenance_status_id === 3 && (
-                    <p>Fecha Programada: {maintenance.scheduled_date}</p>
+                {/* Lista de equipos */}
+                <div className="equipment-list">
+                  {equipmentList.length === 0 && noResultsMessage && (
+                    <p className="no-results-message">{noResultsMessage}</p>
                   )}
+                  {equipmentList.map((equipment) => (
+                    <div key={equipment.id} className="equipment-card">
+                      <h3>{equipment.description}</h3>
+                      <p>Modelo: {equipment.model}</p>
+                      <p>Serial: {equipment.serial}</p>
+                      <p>Estado actual: {equipment.maintenance_status}</p>
+                      <button
+                        onClick={() => {
+                          setCurrentState(equipment.maintenance_status_id);
+                          setNewState(equipment.maintenance_status_id);
+                          setEquipmentId(equipment.equipment_id);
+                          openChangeStateModal();
+                        }}
+                      >
+                        Cambiar Estado
+                      </button>
+                    </div>
+                  ))}
                 </div>
-              ))
-            ) : (
-              <p>No hay mantenimientos programados para esta fecha.</p>
-            )}
-            <button
-              onClick={() => setShowMaintenanceModal(false)}
-              className="close-modal"
-            >
-              Cerrar
-            </button>
-          </div>
-        </div>
+                {/* Cerrar modal */}
+                <div className="close-modal-btn">
+                  <button
+                    className="close-modal"
+                    onClick={() => setShowManageModal(false)}
+                  >
+                    Cerrar
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Modal para cambiar estado */}
+          {showChangeStateModal && (
+            <div className="modal">
+              <div className="modal-content">
+                <h2>Cambiar Estado</h2>
+                <select
+                  value={newState || ""}
+                  onChange={(e) => setNewState(Number(e.target.value))}
+                >
+                  <option value="" disabled>
+                    Selecciona un estado
+                  </option>
+                  {currentState === 1 && (
+                    <>
+                      <option value={2}>Mantenimiento</option>
+                      <option value={3}>Mantenimiento Programado</option>
+                    </>
+                  )}
+                  {currentState === 2 && (
+                    <>
+                      <option value={1}>Funcionamiento</option>
+                      <option value={3}>Mantenimiento Programado</option>
+                    </>
+                  )}
+                  {currentState === 3 && (
+                    <>
+                      <option value={1}>Funcionamiento</option>
+                      <option value={2}>Mantenimiento</option>
+                    </>
+                  )}
+                </select>
+
+                {newState === 3 && (
+                  <>
+                    <h4>Fecha de Mantenimiento Programado</h4>
+                    <Calendar
+                      onChange={handleDateChange}
+                      value={scheduledDate}
+                      minDate={new Date()}
+                    />
+                  </>
+                )}
+
+                {/* Botones del modal */}
+                <div className="modal-actions">
+                  <button
+                    onClick={() => handleStateChange(equipmentId)}
+                    className="confirm-btn"
+                  >
+                    Confirmar
+                  </button>
+                  <button
+                    onClick={() => setShowChangeStateModal(false)}
+                    className="cancel-btn"
+                  >
+                    Cancelar
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Modal para mostrar mantenimientos programados */}
+          {showMaintenanceModal && (
+            <div className="modal">
+              <div className="modal-content">
+                <h2>Detalles de Mantenimiento</h2>
+                {modalData.length > 0 ? (
+                  modalData.map((maintenance) => (
+                    <div key={maintenance.maintenance_id}>
+                      <h3>Equipo: {maintenance.description}</h3>
+                      <p>Serial: {maintenance.serial}</p>
+                      <p>Modelo: {maintenance.model}</p>
+                      {maintenance.maintenance_status_id === 3 && (
+                        <p>Fecha Programada: {maintenance.scheduled_date}</p>
+                      )}
+                    </div>
+                  ))
+                ) : (
+                  <p>No hay mantenimientos programados para esta fecha.</p>
+                )}
+                <button
+                  onClick={() => setShowMaintenanceModal(false)}
+                  className="close-modal"
+                >
+                  Cerrar
+                </button>
+              </div>
+            </div>
+          )}
+        </>
       )}
 
+      {/* Calendario para seleccionar fechas */}
       <div className="calendar-container">
         <Calendar
           onClickDay={handleDateClick}
