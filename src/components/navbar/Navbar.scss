@@ -1,0 +1,120 @@
+$primary-color: #2c3e50;
+$white-color: white;
+$font-size-base: 16px;
+$box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+.navbar {
+  background-color: $primary-color;
+  padding: 10px 20px;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  box-shadow: $box-shadow;
+
+  .navbar-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center; /* Esto garantiza que todo esté centrado verticalmente */
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .navbar-logo {
+    color: $white-color;
+    font-size: 24px;
+    font-weight: bold;
+    text-decoration: none;
+  }
+
+  .menu-icon {
+    display: none;
+    font-size: 30px;
+    color: $white-color;
+    cursor: pointer;
+  }
+
+  .nav-menu {
+    list-style: none;
+    display: flex;
+    margin: 0;
+    padding: 0;
+    align-items: center; /* Asegura que los íconos se alineen en el centro */
+  }
+
+  .nav-item {
+    position: relative;
+    margin-left: 20px; /* Espaciado entre íconos */
+
+    .nav-links {
+      color: $white-color;
+      text-decoration: none;
+      font-size: $font-size-base;
+      font-weight: 500;
+      display: flex;
+      align-items: center; /* Centra el texto con los íconos */
+      transition: color 0.3s ease;
+
+      &:hover {
+        color: #f39c12;
+      }
+
+      svg {
+        margin-right: 8px; /* Espaciado entre el ícono y el texto */
+      }
+    }
+  }
+
+  .logout-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    color: $white-color;
+    text-decoration: none;
+    transition: color 0.3s ease, transform 0.2s ease;
+    margin-top: 3px;
+
+    &:hover {
+      color: #f39c12;
+      transform: scale(1.1);
+    }
+
+    &:active {
+      transform: scale(1.05);
+    }
+
+    .logout-icon {
+      font-size: 1.2rem;
+    }
+  }
+
+  @media screen and (max-width: 768px) {
+    .nav-menu {
+      display: none;
+      flex-direction: column;
+      width: 100%;
+      position: absolute;
+      top: 60px;
+      left: 0;
+      background-color: $primary-color;
+      padding: 20px 0;
+      border-radius: 0 0 10px 10px;
+
+      &.active {
+        display: flex;
+      }
+    }
+
+    .menu-icon {
+      display: block;
+    }
+
+    .nav-item {
+      margin: 10px 0;
+    }
+  }
+}

@@ -1,0 +1,96 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap");
+@import "../../components/inputField/InputField.scss";
+@import "../../components/button/Button.scss";
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+}
+
+.login-form-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #4070f4;
+  overflow: hidden;
+}
+
+.login-form {
+  position: relative;
+  max-width: 800px;
+  width: 100%;
+  border-radius: 8px;
+  padding: 30px;
+  background-color: #fff;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  max-height: 90vh;
+}
+
+header {
+  position: relative;
+  font-size: 24px;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 20px;
+  &::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -5px;
+    height: 4px;
+    width: 40px;
+    border-radius: 8px;
+    background-color: #4070f4;
+  }
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 100%;
+}
+
+.title {
+  font-size: 18px;
+  font-weight: 500;
+  color: #333;
+  margin-bottom: 15px;
+}
+
+.buttons {
+  display: flex;
+  justify-content: space-between;
+  gap: 15px;
+}
+
+.forgot-password {
+  font-size: 14px;
+  color: #4070f4;
+  text-decoration: underline;
+  cursor: pointer;
+  text-align: center;
+  margin-top: 10px;
+}
+
+@media (max-width: 768px) {
+  .login-form {
+    padding: 20px;
+  }
+
+  .buttons {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .forgot-password {
+    font-size: 12px;
+  }
+}
