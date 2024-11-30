@@ -1,6 +1,14 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { FaUserCircle, FaBars, FaTimes, FaSignOutAlt } from "react-icons/fa";
+import {
+  FaUserCircle,
+  FaBars,
+  FaTimes,
+  FaSignOutAlt,
+  FaHome,
+  FaInfoCircle,
+  FaEnvelope,
+} from "react-icons/fa";
 import { useAuth } from "../../context/AuthContext";
 import Dropdown from "../dropdown/Dropdown";
 import "./Navbar.scss";
@@ -31,11 +39,21 @@ function Navbar() {
 
         <ul className={`nav-menu ${isMenuOpen ? "active" : ""}`}>
           <li className="nav-item">
-            <Link to="/about_us" className="nav-links">
-              Nuestra compañía
+            <Link to="/" className="nav-links">
+              <FaHome /> Inicio
+            </Link>
+          </li>
+          <li className="nav-item">
+            <Link to="/about" className="nav-links">
+              <FaInfoCircle /> Acerca de
             </Link>
           </li>
 
+          <li className="nav-item">
+            <Link to="/contact" className="nav-links">
+              <FaEnvelope /> Contactanos
+            </Link>
+          </li>
           {token ? (
             <>
               <li className="nav-item">
@@ -44,19 +62,19 @@ function Navbar() {
 
               <li className="nav-item">
                 <Link to="/profile" className="nav-links">
-                  <FaUserCircle />
+                  <FaUserCircle /> Mi perfil
                 </Link>
               </li>
               <li className="nav-item">
                 <button onClick={logout} className="logout-button">
-                  <FaSignOutAlt className="logout-icon" />
+                  Cerrar sesión <FaSignOutAlt className="logout-icon" />
                 </button>
               </li>
             </>
           ) : (
             <li className="nav-item">
               <Link to="/login" className="nav-links">
-                <FaUserCircle />
+                <FaUserCircle /> Iniciar sesión
               </Link>
             </li>
           )}

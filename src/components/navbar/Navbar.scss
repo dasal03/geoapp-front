@@ -14,7 +14,7 @@ $box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   .navbar-container {
     display: flex;
     justify-content: space-between;
-    align-items: center; /* Esto garantiza que todo esté centrado verticalmente */
+    align-items: center;
     max-width: 1200px;
     margin: 0 auto;
   }
@@ -38,12 +38,12 @@ $box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     display: flex;
     margin: 0;
     padding: 0;
-    align-items: center; /* Asegura que los íconos se alineen en el centro */
+    align-items: center;
   }
 
   .nav-item {
     position: relative;
-    margin-left: 20px; /* Espaciado entre íconos */
+    margin-left: 20px;
 
     .nav-links {
       color: $white-color;
@@ -51,7 +51,7 @@ $box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
       font-size: $font-size-base;
       font-weight: 500;
       display: flex;
-      align-items: center; /* Centra el texto con los íconos */
+      align-items: center;
       transition: color 0.3s ease;
 
       &:hover {
@@ -59,7 +59,7 @@ $box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
       }
 
       svg {
-        margin-right: 8px; /* Espaciado entre el ícono y el texto */
+        margin-right: 8px;
       }
     }
   }
@@ -103,6 +103,9 @@ $box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
       background-color: $primary-color;
       padding: 20px 0;
       border-radius: 0 0 10px 10px;
+      align-items: flex-start;
+      justify-content: flex-start;
+      padding-left: 20px;
 
       &.active {
         display: flex;

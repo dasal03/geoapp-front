@@ -7,6 +7,8 @@ import Home from "./pages/Home";
 import Maintenance from "./pages/Maintenance";
 import EquipmentManagement from "./pages/EquipmentManagement";
 import Profile from "./pages/Profile";
+import About from "./pages/About";
+import Contact from "./pages/Contact";
 import NotFound from "./pages/NotFound";
 
 const AppRoutes = () => (
@@ -38,6 +40,8 @@ const AppRoutes = () => (
         </PrivateRoute>
       }
     />
+    <Route path="/about" element={<About />} />
+    <Route path="/contact" element={<Contact />} />
     <Route path="*" element={<NotFound />} />
   </Routes>
 );
