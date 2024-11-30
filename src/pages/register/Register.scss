@@ -1,4 +1,6 @@
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap");
+@import "../../components/inputField/InputField.scss";
+@import "../../components/button/Button.scss";
 
 * {
   margin: 0;
@@ -83,63 +85,10 @@ form {
   justify-content: space-between;
 }
 
-.input-field {
-  display: flex;
-  flex-direction: column;
-  width: calc(50% - 10px);
-  margin-bottom: 15px;
-}
-
-input[type="text"],
-input[type="email"],
-input[type="password"],
-input[type="date"] {
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  font-size: 16px;
-  margin-top: 5px;
-  width: 100%;
-}
-
-button {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 45px;
-  width: 100%;
-  border: none;
-  border-radius: 5px;
-  background-color: #4070f4;
-  color: white;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  padding: 0 20px;
-  text-align: center;
-}
-
-button:hover {
-  background-color: #265df2;
-}
-
-button i {
-  margin-left: 10px;
-}
-
 .buttons {
   display: flex;
   justify-content: space-between;
   gap: 15px;
-}
-
-.backBtn {
-  background-color: #ccc;
-  color: #333;
-}
-
-.backBtn:hover {
-  background-color: #999;
 }
 
 @media (max-width: 768px) {

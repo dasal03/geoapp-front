@@ -1,6 +1,7 @@
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap");
 @import "../../components/inputField/InputField.scss";
 @import "../../components/button/Button.scss";
+@import "../../styles/variables";
 
 * {
   margin: 0;
@@ -9,7 +10,7 @@
   font-family: "Poppins", sans-serif;
 }
 
-.register-form-container {
+.login-form-container {
   min-height: 100vh;
   display: flex;
   align-items: center;
@@ -18,7 +19,7 @@
   overflow: hidden;
 }
 
-.register-form {
+.login-form {
   position: relative;
   max-width: 800px;
   width: 100%;
@@ -58,31 +59,11 @@ form {
   width: 100%;
 }
 
-.form {
-  display: none;
-  transition: 0.3s ease-in-out;
-  opacity: 0;
-  pointer-events: none;
-}
-
-.form.active {
-  display: block;
-  opacity: 1;
-  pointer-events: auto;
-}
-
 .title {
   font-size: 18px;
   font-weight: 500;
   color: #333;
   margin-bottom: 15px;
-}
-
-.fields {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 20px;
-  justify-content: space-between;
 }
 
 .buttons {
@@ -91,17 +72,26 @@ form {
   gap: 15px;
 }
 
-@media (max-width: 768px) {
-  .input-field {
-    width: 100%;
-  }
+.forgot-password {
+  font-size: 14px;
+  color: #4070f4;
+  text-decoration: underline;
+  cursor: pointer;
+  text-align: center;
+  margin-top: 10px;
+}
 
-  .register-form {
+@media (max-width: 768px) {
+  .login-form {
     padding: 20px;
   }
 
   .buttons {
     flex-direction: column;
     gap: 10px;
+  }
+
+  .forgot-password {
+    font-size: 12px;
   }
 }

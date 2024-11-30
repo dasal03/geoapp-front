@@ -1,7 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { FaExclamationTriangle } from "react-icons/fa";
-import "../styles/pages/notFound.scss";
+import "./NotFound.scss";
 
 function NotFound() {
   const navigate = useNavigate();

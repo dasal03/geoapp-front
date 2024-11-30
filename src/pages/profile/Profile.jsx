@@ -1,6 +1,6 @@
 import React from "react";
-import "../styles/pages/profile.scss";
-import placeholderProfileImage from "../assets/profile-placeholder.jpg";
+import "./Profile.scss";
+import placeholderProfileImage from "../../assets/profile-placeholder.jpg";
 
 function Profile() {
   const profileImage = null;

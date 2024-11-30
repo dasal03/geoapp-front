@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { ReactComponent as SearchIcon } from "../assets/search-icon.svg";
-import { useAuth } from "../context/AuthContext";
-import LoadingSpinner from "../components/loading/LoadingSpinner";
-import apiFetch from "../utils/apiClient";
+import { ReactComponent as SearchIcon } from "../../assets/search-icon.svg";
+import { useAuth } from "../../context/AuthContext";
+import LoadingSpinner from "../../components/loading/LoadingSpinner";
+import apiFetch from "../../utils/apiClient";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 import Swal from "sweetalert2";
-import "../styles/pages/maintenance.scss";
+import "./Maintenance.scss";
 
 function Maintenance() {
   const { user: authUser } = useAuth();

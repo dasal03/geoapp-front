@@ -1,11 +1,11 @@
 import React from "react";
-import Hero from "../components/hero/Hero";
-import MoreInfo from "../components/moreInfo/MoreInfo";
-import Footer from "../components/footer/Footer";
-import maintenanceImage from "../assets/maintenance.jpg";
-import saleImage from "../assets/sale.jpg";
-import rentalImage from "../assets/rental.jpg";
-import "../styles/pages/home.scss";
+import Hero from "../../components/hero/Hero";
+import MoreInfo from "../../components/moreInfo/MoreInfo";
+import Footer from "../../components/footer/Footer";
+import maintenanceImage from "../../assets/maintenance.jpg";
+import saleImage from "../../assets/sale.jpg";
+import rentalImage from "../../assets/rental.jpg";
+import "./Home.scss";
 
 function Home() {
   const handleReadMore = () => {
@@ -24,18 +24,21 @@ function Home() {
       title: "Alquiler de Equipos",
       description:
         "Ofrecemos equipos médicos en alquiler para adaptarnos a las necesidades temporales de nuestros clientes.",
+      link: "/services/rental",
     },
     {
       image: maintenanceImage,
       title: "Mantenimiento",
       description:
         "Brindamos servicios de mantenimiento preventivo y correctivo de dispositivos biomédicos.",
+      link: "/services/maintenance",
     },
     {
       image: saleImage,
       title: "Venta de Equipos",
       description:
         "Vendemos equipos biomédicos de última tecnología con garantía y soporte continuo.",
+      link: "/services/sale",
     },
   ];
 

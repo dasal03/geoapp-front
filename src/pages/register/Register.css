@@ -1,6 +1,4 @@
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap");
-@import "../../components/inputField/InputField.scss";
-@import "../../components/button/Button.scss";
 
 * {
   margin: 0;
@@ -9,7 +7,7 @@
   font-family: "Poppins", sans-serif;
 }
 
-.login-form-container {
+.register-form-container {
   min-height: 100vh;
   display: flex;
   align-items: center;
@@ -18,7 +16,7 @@
   overflow: hidden;
 }
 
-.login-form {
+.register-form {
   position: relative;
   max-width: 800px;
   width: 100%;
@@ -58,11 +56,75 @@ form {
   width: 100%;
 }
 
+.form {
+  display: none;
+  transition: 0.3s ease-in-out;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.form.active {
+  display: block;
+  opacity: 1;
+  pointer-events: auto;
+}
+
 .title {
   font-size: 18px;
   font-weight: 500;
   color: #333;
   margin-bottom: 15px;
+}
+
+.fields {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: space-between;
+}
+
+.input-field {
+  display: flex;
+  flex-direction: column;
+  width: calc(50% - 10px);
+  margin-bottom: 15px;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="date"] {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 16px;
+  margin-top: 5px;
+  width: 100%;
+}
+
+button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 45px;
+  width: 100%;
+  border: none;
+  border-radius: 5px;
+  background-color: #4070f4;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  padding: 0 20px;
+  text-align: center;
+}
+
+button:hover {
+  background-color: #265df2;
+}
+
+button i {
+  margin-left: 10px;
 }
 
 .buttons {
@@ -71,26 +133,26 @@ form {
   gap: 15px;
 }
 
-.forgot-password {
-  font-size: 14px;
-  color: #4070f4;
-  text-decoration: underline;
-  cursor: pointer;
-  text-align: center;
-  margin-top: 10px;
+.backBtn {
+  background-color: #ccc;
+  color: #333;
+}
+
+.backBtn:hover {
+  background-color: #999;
 }
 
 @media (max-width: 768px) {
-  .login-form {
+  .input-field {
+    width: 100%;
+  }
+
+  .register-form {
     padding: 20px;
   }
 
   .buttons {
     flex-direction: column;
     gap: 10px;
-  }
-
-  .forgot-password {
-    font-size: 12px;
   }
 }

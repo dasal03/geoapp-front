@@ -1,16 +1,16 @@
 import React from "react";
 import { Route, Routes } from "react-router-dom";
 import PrivateRoute from "./components/auth/PrivateRoute";
-import Login from "./pages/Login";
-import Register from "./pages/Register";
-import Home from "./pages/Home";
-import Maintenance from "./pages/Maintenance";
-import EquipmentManagement from "./pages/EquipmentManagement";
-import Profile from "./pages/Profile";
-import About from "./pages/About";
-import ContactUs from "./pages/ContactUs";
-import NotFound from "./pages/NotFound";
-import PrivacyPolicy from "./pages/PrivacyPolicy";
+import Login from "./pages/login/Login";
+import Register from "./pages/register/Register";
+import Home from "./pages/home/Home";
+import Maintenance from "./pages/maintenance/Maintenance";
+import EquipmentManagement from "./pages/management/Management";
+import Profile from "./pages/profile/Profile";
+import About from "./pages/about/About";
+import ContactUs from "./pages/contactUs/ContactUs";
+import NotFound from "./pages/notFound/NotFound";
+import PrivacyPolicy from "./pages/privacyPolicy/PrivacyPolicy";
 
 const AppRoutes = () => (
   <Routes>

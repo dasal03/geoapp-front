@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
-import apiFetch from "../utils/apiClient";
-import { convertImageToBase64 } from "../utils/generalTools";
-import { useAuth } from "../context/AuthContext";
-import { FileInput } from "../components/fileInput/FileInput";
-import LoadingSpinner from "../components/loading/LoadingSpinner";
+import apiFetch from "../../utils/apiClient";
+import { convertImageToBase64 } from "../../utils/generalTools";
+import { useAuth } from "../../context/AuthContext";
+import { FileInput } from "../../components/fileInput/FileInput";
+import LoadingSpinner from "../../components/loading/LoadingSpinner";
 import Swal from "sweetalert2";
-import { ReactComponent as SearchIcon } from "../assets/search-icon.svg";
-import "../styles/pages/equipmentManagement.scss";
+import { ReactComponent as SearchIcon } from "../../assets/search-icon.svg";
+import "./Management.scss";
 
 const EquipmentManagement = () => {
   const { user: authUser } = useAuth();

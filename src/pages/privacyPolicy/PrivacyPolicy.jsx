@@ -1,6 +1,6 @@
 import React from "react";
-import Footer from "../components/footer/Footer";
-import "../styles/pages/privacyPolicy.scss";
+import Footer from "../../components/footer/Footer";
+import "./PrivacyPolicy.scss";
 
 function PrivacyPolicy() {
   return (

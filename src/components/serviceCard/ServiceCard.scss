@@ -1,26 +1,40 @@
+@import "../../styles/variables.scss";
+
 .card {
-  background: #fff;
-  border: 1px solid #ddd;
+  background: $white-color;
+  border: 1px solid $border-color;
   border-radius: 5px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: $box-shadow;
   padding: 20px;
   text-align: center;
   min-width: 300px;
   flex: 1 1 calc(33.333% - 20px);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  text-decoration: none;
+  color: inherit;
 
   img {
     max-width: 100%;
-    border-bottom: 4px solid #ff6600;
+    border-bottom: 4px solid $accent-color;
     margin-bottom: 15px;
   }
 
   h3 {
     font-size: 22px;
     margin-bottom: 10px;
+    color: $primary-color;
+    text-decoration: none;
   }
 
   p {
     font-size: 16px;
     line-height: 1.5;
+    color: $secondary-color;
+    text-decoration: none;
+  }
+
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
   }
 }
