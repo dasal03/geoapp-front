@@ -50,7 +50,7 @@ function Navbar() {
           </li>
 
           <li className="nav-item">
-            <Link to="/contact" className="nav-links">
+            <Link to="/contact-us" className="nav-links">
               <FaEnvelope /> Contactanos
             </Link>
           </li>
@@ -67,7 +67,7 @@ function Navbar() {
               </li>
               <li className="nav-item">
                 <button onClick={logout} className="logout-button">
-                  Cerrar sesión <FaSignOutAlt className="logout-icon" />
+                  <FaSignOutAlt className="logout-icon" /> Cerrar sesión
                 </button>
               </li>
             </>

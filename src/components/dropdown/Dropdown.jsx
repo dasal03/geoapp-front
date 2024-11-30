@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { FaAngleDown, FaAngleUp } from "react-icons/fa";
+import { FaCaretDown } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import "./Dropdown.scss";
 
@@ -20,10 +20,7 @@ function Dropdown({ title, items }) {
       onMouseLeave={() => setIsOpen(false)}
     >
       <button className="dropdown-toggle" onClick={toggleDropdown}>
-        {title}{" "}
-        <span className="dropdown-arrow">
-          {isOpen ? <FaAngleUp /> : <FaAngleDown />}
-        </span>
+        <FaCaretDown /> {title}
       </button>
       {isOpen && (
         <ul className="dropdown-menu">

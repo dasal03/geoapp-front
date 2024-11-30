@@ -8,8 +8,9 @@ import Maintenance from "./pages/Maintenance";
 import EquipmentManagement from "./pages/EquipmentManagement";
 import Profile from "./pages/Profile";
 import About from "./pages/About";
-import Contact from "./pages/Contact";
+import ContactUs from "./pages/ContactUs";
 import NotFound from "./pages/NotFound";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
 
 const AppRoutes = () => (
   <Routes>
@@ -41,7 +42,8 @@ const AppRoutes = () => (
       }
     />
     <Route path="/about" element={<About />} />
-    <Route path="/contact" element={<Contact />} />
+    <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+    <Route path="/contact-us" element={<ContactUs />} />
     <Route path="*" element={<NotFound />} />
   </Routes>
 );

@@ -1,0 +1,36 @@
+@import "../variables";
+
+.contact-us-page {
+  .contact-us {
+    padding: 40px 20px;
+    background-color: $white-color;
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    .contact-title {
+      text-align: center;
+      font-size: 36px;
+      margin-bottom: 40px;
+    }
+
+    .contact-info {
+      margin-bottom: 40px;
+
+      ul {
+        padding-left: 20px;
+      }
+
+      li {
+        margin-bottom: 10px;
+      }
+
+      li strong {
+        font-weight: bold;
+      }
+    }
+  }
+}

@@ -1,9 +1,3 @@
-.home-container {
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-}
-
 .hero {
   position: relative;
   height: 70vh;
@@ -82,8 +76,4 @@
       }
     }
   }
-}
-
-::-webkit-scrollbar {
-  display: none;
 }
