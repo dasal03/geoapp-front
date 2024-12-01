@@ -5,7 +5,7 @@ import LoadingSpinner from "../loading/LoadingSpinner";
 import InputField from "../inputField/InputField";
 import PasswordField from "../passwordField/PasswordField";
 import Button from "../button/Button";
-import "../../styles/pages/login.scss";
+import "../../pages/login/Login.scss";
 
 const LoginForm = () => {
   const { login } = useAuth();

@@ -5,7 +5,7 @@ import LoadingSpinner from "../loading/LoadingSpinner";
 import PasswordField from "../passwordField/PasswordField";
 import InputField from "../inputField/InputField";
 import Button from "../button/Button";
-import "../../styles/pages/register.scss";
+import "../../pages/register/Register.scss";
 
 const RegisterForm = () => {
   const [activeForm, setActiveForm] = useState("first");

@@ -1,3 +1,5 @@
+@import "../../styles/variables";
+
 button {
   display: flex;
   align-items: center;
@@ -6,8 +8,8 @@ button {
   width: 100%;
   border: none;
   border-radius: 5px;
-  background-color: #4070f4;
-  color: white;
+  background-color: $form-btn-color;
+  color: $white-color;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
@@ -16,7 +18,7 @@ button {
 }
 
 button:hover {
-  background-color: #265df2;
+  background-color: $form-btn-hover-color;
 }
 
 button i {
