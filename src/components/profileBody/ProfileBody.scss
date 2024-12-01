@@ -1,0 +1,49 @@
+@import '../../styles/variables';
+
+.profile-body {
+  width: 100%;
+  max-width: 800px;
+
+  .profile-section {
+    background-color: $light-gray;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: $box-shadow;
+    margin-bottom: 20px;
+
+    h2 {
+      font-size: 24px;
+      margin-bottom: 15px;
+    }
+
+    p {
+      font-size: 16px;
+      margin-bottom: 10px;
+    }
+
+    .action-btn {
+      display: inline-block;
+      margin-top: 10px;
+      padding: 10px 20px;
+      background-color: #ff6600;
+      color: #fff;
+      font-size: 16px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+
+      &:hover {
+        background-color: #cc5200;
+      }
+
+      &.danger {
+        background-color: #ff4d4d;
+
+        &:hover {
+          background-color: #cc0000;
+        }
+      }
+    }
+  }
+}

@@ -1,3 +1,4 @@
+import axios from "axios";
 import { BASE_URL } from "./constants";
 
 const apiFetch = async (
@@ -10,26 +11,28 @@ const apiFetch = async (
     ...(token ? { Authorization: `Bearer ${token}` } : {}),
   };
 
-  const config = {
-    ...options,
-    headers,
-  };
-
   try {
-    const response = await fetch(`${BASE_URL}${endpoint}`, config);
+    const response = await axios({
+      method: options.method || "GET",
+      url: `${BASE_URL}${endpoint}`,
+      headers,
+      data: options.body || options.data,
+      ...options,
+    });
 
-    if (response.status === 401) {
-      if (logout) logout();
-      throw new Error("No autorizado. Sesión cerrada.");
-    }
-
-    if (!response.ok) {
-      const errorData = await response.json();
-      throw new Error(errorData.message || "Error en la solicitud.");
-    }
-
-    return await response.json();
+    return response.data;
   } catch (error) {
+    if (error.response) {
+      if (error.response.status === 401) {
+        if (logout) logout();
+        throw new Error("No autorizado. Sesión cerrada.");
+      }
+
+      const errorMessage =
+        error.response.data?.message || "Error en la solicitud.";
+      throw new Error(errorMessage);
+    }
+
     console.error("Error en apiFetch:", error);
     throw error;
   }
