@@ -8,74 +8,75 @@ import "./ProfileBody.scss";
 const ProfileBody = ({ profileData }) => {
   const [loading, setLoading] = useState(true);
   const [bankAccounts, setBankAccounts] = useState([]);
+  const [isEditing, setIsEditing] = useState(false);
 
-  const {
-    user_id,
-    full_name,
-    email,
-    indicative_code,
-    phone_number,
-    gender_name,
-    date_of_birth,
-    document_type,
-    document_number,
-    issue_date,
-    issue_city,
-    country_name,
-    state_name,
-    city_name,
-    address,
-  } = profileData;
+  const [formData, setFormData] = useState({
+    user_id: profileData.user_id,
+    full_name: profileData.full_name,
+    email: profileData.email,
+    indicative_code: profileData.indicative_code,
+    phone_number: profileData.phone_number,
+    gender_name: profileData.gender_name,
+    date_of_birth: profileData.date_of_birth,
+    document_type: profileData.document_type,
+    document_number: profileData.document_number,
+    issue_date: profileData.issue_date,
+    issue_city: profileData.issue_city,
+    country_name: profileData.country_name,
+    state_name: profileData.state_name,
+    city_name: profileData.city_name,
+    address: profileData.address,
+  });
 
   const personalInfoFields = [
-    { label: "Nombre", value: full_name },
-    { label: "Email", value: email },
-    { label: "Teléfono", value: indicative_code + " " + phone_number },
-    { label: "Género", value: gender_name },
-    { label: "Fecha de nacimiento", value: date_of_birth },
+    { label: "Nombre", value: formData.full_name, name: "full_name" },
+    { label: "Email", value: formData.email, name: "email" },
+    {
+      label: "Teléfono",
+      value: formData.indicative_code + " " + formData.phone_number,
+      name: "phone_number",
+    },
+    { label: "Género", value: formData.gender_name, name: "gender_name" },
+    {
+      label: "Fecha de nacimiento",
+      value: formData.date_of_birth,
+      name: "date_of_birth",
+    },
   ];
 
   const documentInfoFields = [
-    { label: "Tipo de documento", value: document_type },
-    { label: "Número de documento", value: document_number },
-    { label: "Fecha de expedición", value: issue_date },
-    { label: "Lugar de expedición", value: issue_city },
+    {
+      label: "Tipo de documento",
+      value: formData.document_type,
+      name: "document_type",
+    },
+    {
+      label: "Número de documento",
+      value: formData.document_number,
+      name: "document_number",
+    },
+    {
+      label: "Fecha de expedición",
+      value: formData.issue_date,
+      name: "issue_date",
+    },
+    {
+      label: "Lugar de expedición",
+      value: formData.issue_city,
+      name: "issue_city",
+    },
   ];
 
   const addressInfoFields = [
-    { label: "País", value: country_name },
-    { label: "Provincia", value: state_name },
-    { label: "Ciudad", value: city_name },
-    { label: "Dirección", value: address },
+    { label: "País", value: formData.country_name, name: "country_name" },
+    { label: "Provincia", value: formData.state_name, name: "state_name" },
+    { label: "Ciudad", value: formData.city_name, name: "city_name" },
+    { label: "Dirección", value: formData.address, name: "address" },
   ];
 
-  useEffect(() => {
-    const fetchBankAccounts = async () => {
-      try {
-        setLoading(true);
-        const response = await apiFetch(`/get_bank_account?user_id=${user_id}`);
-        if (response.responseCode === 200) {
-          setBankAccounts(response.data);
-        } else {
-          Swal.fire({
-            icon: "error",
-            title: "Error al cargar cuentas bancarias",
-            text: response.description,
-          });
-        }
-      } catch (error) {
-        Swal.fire({
-          icon: "error",
-          title: "Error",
-          text: "No se pudo cargar la información bancaria.",
-        });
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchBankAccounts();
-  }, [user_id]);
+  const handleEditClick = () => {
+    setIsEditing(!isEditing);
+  };
 
   const handleDeleteAccount = async () => {
     const confirmation = await Swal.fire({
@@ -120,36 +121,92 @@ const ProfileBody = ({ profileData }) => {
     }
   };
 
-  const settingsFields = [
-    {
-      label: "Acciones",
-      value: (
-        <>
-          <button className="action-btn">Editar Perfil</button>
-          <button className="action-btn danger" onClick={handleDeleteAccount}>
-            Eliminar Cuenta
-          </button>
-        </>
-      ),
-    },
-  ];
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
+
+  const handleSaveChanges = async () => {
+    console.log("Changes saved", formData);
+    setIsEditing(false);
+  };
+
+  useEffect(() => {
+    const fetchBankAccounts = async () => {
+      try {
+        setLoading(true);
+        const response = await apiFetch(
+          `/get_bank_account?user_id=${formData.user_id}`
+        );
+        if (response.responseCode === 200) {
+          setBankAccounts(response.data);
+        } else {
+          Swal.fire({
+            icon: "error",
+            title: "Error al cargar cuentas bancarias",
+            text: response.description,
+          });
+        }
+      } catch (error) {
+        Swal.fire({
+          icon: "error",
+          title: "Error",
+          text: "No se pudo cargar la información bancaria.",
+        });
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchBankAccounts();
+  }, [formData.user_id]);
 
   return (
     <div className="profile-body">
       <ProfileSection
         title="Información Personal"
         fields={personalInfoFields}
+        isEditing={isEditing}
+        handleChange={handleChange}
       />
       <ProfileSection
         title="Información del Documento"
         fields={documentInfoFields}
+        isEditing={isEditing}
+        handleChange={handleChange}
       />
-      <ProfileSection title="Dirección" fields={addressInfoFields} />
+      <ProfileSection
+        title="Dirección"
+        fields={addressInfoFields}
+        isEditing={isEditing}
+        handleChange={handleChange}
+      />
       <BankAccountsSection
         title="Información Bancaria"
         accounts={bankAccounts}
+        isEditing={isEditing}
       />
-      <ProfileSection title="Configuraciones" fields={settingsFields} />
+      <div className="settings-actions">
+        {isEditing ? (
+          <>
+            <button className="action-btn" onClick={handleEditClick}>
+              Cancelar Edición
+            </button>
+            <button className="action-btn success" onClick={handleSaveChanges}>
+              Guardar Cambios
+            </button>
+          </>
+        ) : (
+          <>
+            <button className="action-btn" onClick={handleEditClick}>
+              Editar Perfil
+            </button>
+            <button className="action-btn danger" onClick={handleDeleteAccount}>
+              Eliminar Cuenta
+            </button>
+          </>
+        )}
+      </div>
     </div>
   );
 };
