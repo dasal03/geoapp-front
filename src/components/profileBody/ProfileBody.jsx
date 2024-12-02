@@ -6,23 +6,25 @@ const ProfileBody = ({ profileData }) => {
   const {
     full_name,
     email,
+    indicative_code,
     phone_number,
-    gender,
+    gender_name,
     date_of_birth,
     document_type,
     document_number,
     issue_date,
-    issue_place,
-    country,
-    city,
+    issue_city,
+    country_name,
+    state_name,
+    city_name,
     address,
   } = profileData;
 
   const personalInfoFields = [
     { label: "Nombre", value: full_name },
     { label: "Email", value: email },
-    { label: "Teléfono", value: phone_number },
-    { label: "Género", value: gender },
+    { label: "Teléfono", value: (indicative_code) + " " + (phone_number)},
+    { label: "Género", value: gender_name },
     { label: "Fecha de nacimiento", value: date_of_birth },
   ];
 
@@ -30,12 +32,13 @@ const ProfileBody = ({ profileData }) => {
     { label: "Tipo de documento", value: document_type },
     { label: "Número de documento", value: document_number },
     { label: "Fecha de expedicción", value: issue_date },
-    { label: "Lugar de expedición", value: issue_place },
+    { label: "Lugar de expedición", value: issue_city },
   ];
 
   const addressInfoFields = [
-      { label: "País", value: country },
-      { label: "Ciudad", value: city },
+    { label: "País", value: country_name },
+    { label: "Provincia", value: state_name },
+    { label: "Ciudad", value: city_name },
     { label: "Dirección", value: address },
   ];
 
