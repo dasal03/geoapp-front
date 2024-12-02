@@ -1,4 +1,4 @@
-@import '../../styles/variables';
+@import "../../styles/variables";
 
 .profile-body {
   width: 100%;
@@ -19,6 +19,20 @@
     p {
       font-size: 16px;
       margin-bottom: 10px;
+    }
+
+    .bank-account {
+      display: flex;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .bank-details {
+      margin-left: 10px;
+    }
+
+    input[type="radio"] {
+      accent-color: green;
     }
 
     .action-btn {
