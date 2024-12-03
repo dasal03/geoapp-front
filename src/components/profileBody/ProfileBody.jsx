@@ -1,7 +1,8 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect } from "react";
 import ProfileSection from "../../components/profileSection/ProfileSection";
 import EditableListSection from "../editableListSection/EditableListSection";
 import apiFetch from "../../utils/apiClient";
+import { showAlert } from "../../utils/generalTools";
 import Swal from "sweetalert2";
 import "./ProfileBody.scss";
 
@@ -93,38 +94,38 @@ const ProfileBody = ({ profileData }) => {
         );
 
         if (response.responseCode === 200) {
-          Swal.fire({
-            icon: "success",
-            title: "Cuenta eliminada",
-            text: "Tu cuenta ha sido eliminada con éxito.",
-          });
+          showAlert(
+            "success",
+            "Cuenta eliminada",
+            "Tu cuenta ha sido eliminada con éxito."
+          );
           window.location.href = "/";
         } else {
-          Swal.fire({
-            icon: "error",
-            title: "Error al eliminar la cuenta",
-            text: response.description,
-          });
+          showAlert(
+            "error",
+            "Error al eliminar la cuenta",
+            "Ha ocurrido un error al eliminar la cuenta."
+          );
         }
       } catch (error) {
-        Swal.fire({
-          icon: "error",
-          title: "Error al eliminar la cuenta",
-          text: "Ha ocurrido un error al eliminar la cuenta.",
-        });
+        showAlert(
+          "error",
+          "Error al eliminar la cuenta",
+          "Ha ocurrido un error al eliminar la cuenta."
+        );
       } finally {
         setLoading(false);
       }
     }
   };
 
-  const handleChange = useCallback((e) => {
+  const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prevState) => ({
-      ...prevState,
+    setFormData((prev) => ({
+      ...prev,
       [name]: value,
     }));
-  }, []);
+  };
 
   const handleSaveChanges = async () => {
     try {
@@ -135,40 +136,41 @@ const ProfileBody = ({ profileData }) => {
       });
 
       if (response.responseCode === 200) {
-        Swal.fire({
-          icon: "success",
-          title: "Información guardada",
-          text: "Los cambios se han guardado con éxito.",
-        });
+        showAlert(
+          "success",
+          "Información actualizada",
+          "La información ha sido actualizada con éxito."
+        );
       } else {
-        Swal.fire({
-          icon: "error",
-          title: "Error al guardar la información",
-          text: response.description,
-        });
+        showAlert(
+          "error",
+          "Error al actualizar la información",
+          response.description
+        );
       }
     } catch (error) {
-      Swal.fire({
-        icon: "error",
-        title: "Error al guardar la información",
-        text: "Ha ocurrido un error al guardar la información.",
-      });
+      showAlert(
+        "error",
+        "Error al actualizar la información",
+        "Ha ocurrido un error al actualizar la información."
+      );
     } finally {
       setLoading(false);
     }
-    setIsEditing(false);
   };
 
   useEffect(() => {
-    const fetchBankAccounts = async () => {
+    const fetchData = async () => {
       try {
         setLoading(true);
-        const response = await apiFetch(
-          `/get_bank_account?user_id=${formData.user_id}`
-        );
-        if (response.responseCode === 200) {
+        const [bankAccountsResponse, addressesResponse] = await Promise.all([
+          apiFetch(`/get_bank_account?user_id=${formData.user_id}`),
+          apiFetch(`/get_address?user_id=${formData.user_id}`),
+        ]);
+
+        if (bankAccountsResponse.responseCode === 200) {
           setBankAccounts(
-            response.data.map((account) => ({
+            bankAccountsResponse.data.map((account) => ({
               id: account.bank_account_id,
               name: account.bank_name,
               type: account.account_type,
@@ -176,29 +178,11 @@ const ProfileBody = ({ profileData }) => {
               primary: !!account.principal_account,
             }))
           );
-        } else {
-          setBankAccounts([]);
         }
-      } catch (error) {
-        Swal.fire({
-          icon: "error",
-          title: "Error",
-          text: "No se pudo cargar la información bancaria.",
-        });
-      } finally {
-        setLoading(false);
-      }
-    };
 
-    const fetchAddresses = async () => {
-      try {
-        setLoading(true);
-        const response = await apiFetch(
-          `/get_address?user_id=${formData.user_id}`
-        );
-        if (response.responseCode === 200) {
+        if (addressesResponse.responseCode === 200) {
           setAddresses(
-            response.data.map((address) => ({
+            addressesResponse.data.map((address) => ({
               id: address.address_id,
               address: address.address,
               country: address.country_name,
@@ -208,25 +192,174 @@ const ProfileBody = ({ profileData }) => {
               primary: !!address.principal_address,
             }))
           );
-        } else {
-          setAddresses([]);
         }
       } catch (error) {
-        Swal.fire({
-          icon: "error",
-          title: "Error",
-          text: "No se pudo cargar las direcciones.",
-        });
+        showAlert("error", "Error", "No se pudo obtener la información.");
       } finally {
         setLoading(false);
       }
     };
 
     if (formData.user_id) {
-      fetchBankAccounts();
-      fetchAddresses();
+      fetchData();
     }
   }, [formData.user_id]);
+
+  const createAddress = async (newAddressData) => {
+    try {
+      setLoading(true);
+      const response = await fetch("/api/create_address", {
+        method: "POST",
+        body: JSON.stringify(newAddressData),
+      });
+
+      if (response.responseCode === 200) {
+        const newAddress = await response.json();
+        setAddresses((prevAddresses) => [...prevAddresses, newAddress]);
+      } else {
+        showAlert("error", "Error", "Error al crear la dirección.");
+      }
+    } catch (error) {
+      showAlert("error", "Error", "Error de conexión.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const updateAddress = async (addressId, updatedAddressData) => {
+    try {
+      setLoading(true);
+      const response = await fetch(`/api/update_address/${addressId}`, {
+        method: "PUT",
+        body: JSON.stringify(updatedAddressData),
+      });
+
+      if (response.responseCode) {
+        const updatedAddress = await response.json();
+        setAddresses((prevAddresses) =>
+          prevAddresses.map((address) =>
+            address.id === addressId ? updatedAddress : address
+          )
+        );
+      } else {
+        showAlert("error", "Error", "Error al actualizar la dirección.");
+      }
+    } catch (error) {
+      showAlert("error", "Error", "Error de conexión.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const deleteAddress = async (addressId) => {
+    try {
+      setLoading(true);
+      const response = await fetch(`/api/delete_address/${addressId}`, {
+        method: "DELETE",
+      });
+
+      if (response.responseCode === 200) {
+        setAddresses((prevAddresses) =>
+          prevAddresses.filter((address) => address.id !== addressId)
+        );
+      } else {
+        showAlert("error", "Error", "Error al eliminar la dirección.");
+      }
+    } catch (error) {
+      showAlert("error", "Error", "Error de conexión.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const createBankAccount = async (newAccountData) => {
+    try {
+      setLoading(true);
+      const response = await fetch("/api/create_bank_account", {
+        method: "POST",
+        body: JSON.stringify(newAccountData),
+      });
+
+      if (response.responseCode === 200) {
+        const newAccount = await response.json();
+        setBankAccounts((prevAccounts) => [...prevAccounts, newAccount]);
+      } else {
+        showAlert("error", "Error", "Error al crear la cuenta bancaria.");
+      }
+    } catch (error) {
+      showAlert("error", "Error", "Error de conexión.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const updateBankAccount = async (accountId, updatedAccountData) => {
+    try {
+      setLoading(true);
+      const response = await fetch(`/api/update_bank_account/${accountId}`, {
+        method: "PUT",
+        body: JSON.stringify(updatedAccountData),
+      });
+
+      if (response.responseCode === 200) {
+        const updatedAccount = await response.json();
+        setBankAccounts((prevAccounts) =>
+          prevAccounts.map((account) =>
+            account.id === accountId ? updatedAccount : account
+          )
+        );
+      } else {
+        showAlert("error", "Error", "Error al actualizar la cuenta bancaria.");
+      }
+    } catch (error) {
+      showAlert("error", "Error", "Error de conexión.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const deleteBankAccount = async (accountId) => {
+    try {
+      setLoading(true);
+      const response = await fetch(`/api/delete_bank_account/${accountId}`, {
+        method: "DELETE",
+      });
+
+      if (response.responseCode === 200) {
+        setBankAccounts((prevAccounts) =>
+          prevAccounts.filter((account) => account.id !== accountId)
+        );
+      } else {
+        showAlert("error", "Error", "Error al eliminar la cuenta bancaria.");
+      }
+    } catch (error) {
+      showAlert("error", "Error", "Error de conexión.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleTogglePrimary = (type, id) => {
+    // console.log("Toggle primary:", type, id);
+
+    if (type === "address") {
+      setAddresses((prevAddresses) =>
+        prevAddresses.map((address) =>
+          address.id === id
+            ? { ...address, primary: true }
+            : { ...address, primary: false }
+        )
+      );
+    } else if (type === "bank") {
+      setBankAccounts((prevAccounts) =>
+        prevAccounts.map((account) =>
+          account.id === id
+            ? { ...account, primary: true }
+            : { ...account, primary: false }
+        )
+      );
+    }
+  };
 
   return (
     <div className="profile-body">
@@ -246,11 +379,20 @@ const ProfileBody = ({ profileData }) => {
         title="Direcciones"
         items={addresses}
         isEditing={isEditing}
+        onAddItem={createAddress}
+        onEditItem={updateAddress}
+        onDeleteItem={deleteAddress}
+        onTogglePrimary={handleTogglePrimary}
+        type="address"
       />
       <EditableListSection
         title="Información Bancaria"
         items={bankAccounts}
         isEditing={isEditing}
+        onAddItem={createBankAccount}
+        onEditItem={updateBankAccount}
+        onDeleteItem={deleteBankAccount}
+        onTogglePrimary={handleTogglePrimary}
         type="bank"
       />
       <div className="settings-actions">

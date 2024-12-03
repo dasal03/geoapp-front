@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-// import apiFetch from "../../utils/apiClient";
 import { FaEdit, FaCheck, FaTimes, FaTrashAlt, FaPlus } from "react-icons/fa";
 import "./EditableListSection.scss";
 
@@ -33,10 +32,6 @@ const EditableListSection = ({
 
   const handleDelete = (itemId) => {
     onDeleteItem(itemId);
-  };
-
-  const handleChangePrimary = (e, itemId) => {
-    onTogglePrimary(e, itemId);
   };
 
   const toggleEditMode = (itemId, itemData) => {
@@ -73,8 +68,8 @@ const EditableListSection = ({
                   type="checkbox"
                   name="primary"
                   checked={item.primary}
-                  onChange={(e) => handleChangePrimary(e, item.id)}
-                  disabled={!isEditing || editingItemId !== item.id}
+                  onChange={() => onTogglePrimary(type, item.id)}
+                  disabled={!isEditing}
                 />
 
                 {type === "bank" ? (
