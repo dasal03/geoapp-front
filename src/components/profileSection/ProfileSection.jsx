@@ -8,10 +8,8 @@ const ProfileSection = ({ title, fields, isEditing, handleChange }) => {
         <div key={index}>
           <strong>{field.label}:</strong>
           {field.name === "Acciones" ? (
-            // Aquí renderizamos los botones directamente
             <div>{field.value}</div>
           ) : isEditing ? (
-            // Si está en modo edición, mostramos un input
             <input
               type="text"
               name={field.name}
@@ -20,7 +18,6 @@ const ProfileSection = ({ title, fields, isEditing, handleChange }) => {
               readOnly={!isEditing}
             />
           ) : (
-            // Si no está en modo edición, mostramos el valor en un <p>
             <p>{field.value}</p>
           )}
         </div>

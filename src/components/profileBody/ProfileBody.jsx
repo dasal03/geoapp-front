@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import ProfileSection from "../../components/profileSection/ProfileSection";
-import BankAccountsSection from "../../components/bankAccountSection/BankAccountSection";
+import EditableListSection from "../editableListSection/EditableListSection";
 import apiFetch from "../../utils/apiClient";
 import Swal from "sweetalert2";
 import "./ProfileBody.scss";
@@ -8,6 +8,7 @@ import "./ProfileBody.scss";
 const ProfileBody = ({ profileData }) => {
   const [loading, setLoading] = useState(true);
   const [bankAccounts, setBankAccounts] = useState([]);
+  const [addresses, setAddresses] = useState([]);
   const [isEditing, setIsEditing] = useState(false);
 
   const [formData, setFormData] = useState({
@@ -67,15 +68,8 @@ const ProfileBody = ({ profileData }) => {
     },
   ];
 
-  const addressInfoFields = [
-    { label: "País", value: formData.country_name, name: "country_name" },
-    { label: "Provincia", value: formData.state_name, name: "state_name" },
-    { label: "Ciudad", value: formData.city_name, name: "city_name" },
-    { label: "Dirección", value: formData.address, name: "address" },
-  ];
-
   const handleEditClick = () => {
-    setIsEditing(!isEditing);
+    setIsEditing((prev) => !prev);
   };
 
   const handleDeleteAccount = async () => {
@@ -91,9 +85,12 @@ const ProfileBody = ({ profileData }) => {
     if (confirmation.isConfirmed) {
       try {
         setLoading(true);
-        const response = await apiFetch(`/delete_user?user_id=20`, {
-          method: "DELETE",
-        });
+        const response = await apiFetch(
+          `/delete_user?user_id=${formData.user_id}`,
+          {
+            method: "DELETE",
+          }
+        );
 
         if (response.responseCode === 200) {
           Swal.fire({
@@ -121,13 +118,44 @@ const ProfileBody = ({ profileData }) => {
     }
   };
 
-  const handleChange = (e) => {
+  const handleChange = useCallback((e) => {
     const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
-  };
+    setFormData((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
+  }, []);
 
   const handleSaveChanges = async () => {
-    console.log("Changes saved", formData);
+    try {
+      setLoading(true);
+      const response = await apiFetch("/update_user", {
+        method: "PUT",
+        body: JSON.stringify(formData),
+      });
+
+      if (response.responseCode === 200) {
+        Swal.fire({
+          icon: "success",
+          title: "Información guardada",
+          text: "Los cambios se han guardado con éxito.",
+        });
+      } else {
+        Swal.fire({
+          icon: "error",
+          title: "Error al guardar la información",
+          text: response.description,
+        });
+      }
+    } catch (error) {
+      Swal.fire({
+        icon: "error",
+        title: "Error al guardar la información",
+        text: "Ha ocurrido un error al guardar la información.",
+      });
+    } finally {
+      setLoading(false);
+    }
     setIsEditing(false);
   };
 
@@ -139,13 +167,17 @@ const ProfileBody = ({ profileData }) => {
           `/get_bank_account?user_id=${formData.user_id}`
         );
         if (response.responseCode === 200) {
-          setBankAccounts(response.data);
+          setBankAccounts(
+            response.data.map((account) => ({
+              id: account.bank_account_id,
+              name: account.bank_name,
+              type: account.account_type,
+              accountNumber: account.account_number,
+              primary: !!account.principal_account,
+            }))
+          );
         } else {
-          Swal.fire({
-            icon: "error",
-            title: "Error al cargar cuentas bancarias",
-            text: response.description,
-          });
+          setBankAccounts([]);
         }
       } catch (error) {
         Swal.fire({
@@ -158,7 +190,42 @@ const ProfileBody = ({ profileData }) => {
       }
     };
 
-    fetchBankAccounts();
+    const fetchAddresses = async () => {
+      try {
+        setLoading(true);
+        const response = await apiFetch(
+          `/get_address?user_id=${formData.user_id}`
+        );
+        if (response.responseCode === 200) {
+          setAddresses(
+            response.data.map((address) => ({
+              id: address.address_id,
+              address: address.address,
+              country: address.country_name,
+              state: address.state_name,
+              city: address.city_name,
+              description: address.description,
+              primary: !!address.principal_address,
+            }))
+          );
+        } else {
+          setAddresses([]);
+        }
+      } catch (error) {
+        Swal.fire({
+          icon: "error",
+          title: "Error",
+          text: "No se pudo cargar las direcciones.",
+        });
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (formData.user_id) {
+      fetchBankAccounts();
+      fetchAddresses();
+    }
   }, [formData.user_id]);
 
   return (
@@ -175,16 +242,16 @@ const ProfileBody = ({ profileData }) => {
         isEditing={isEditing}
         handleChange={handleChange}
       />
-      <ProfileSection
-        title="Dirección"
-        fields={addressInfoFields}
+      <EditableListSection
+        title="Direcciones"
+        items={addresses}
         isEditing={isEditing}
-        handleChange={handleChange}
       />
-      <BankAccountsSection
+      <EditableListSection
         title="Información Bancaria"
-        accounts={bankAccounts}
+        items={bankAccounts}
         isEditing={isEditing}
+        type="bank"
       />
       <div className="settings-actions">
         {isEditing ? (
