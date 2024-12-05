@@ -2,7 +2,15 @@ import React, { useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import "./PasswordField.scss";
 
-const PasswordField = ({ label, id, name, placeholder, value, onChange }) => {
+const PasswordField = ({
+  label,
+  id,
+  name,
+  placeholder,
+  value,
+  onChange,
+  required = false,
+}) => {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
   const toggleVisibility = () => {
@@ -20,7 +28,7 @@ const PasswordField = ({ label, id, name, placeholder, value, onChange }) => {
           placeholder={placeholder}
           value={value}
           onChange={(e) => onChange(e.target.value)}
-          required
+          required={required}
         />
         <span className="toggle-icon" onClick={toggleVisibility}>
           {isPasswordVisible ? <FaEye /> : <FaEyeSlash />}

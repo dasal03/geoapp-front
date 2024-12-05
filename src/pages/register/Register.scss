@@ -1,26 +1,17 @@
+@import "../../styles/variables";
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap");
-@import "../../components/inputField/InputField.scss";
-@import "../../components/button/Button.scss";
-
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: "Poppins", sans-serif;
-}
 
 .register-form-container {
   min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #4070f4;
   overflow: hidden;
 }
 
 .register-form {
   position: relative;
-  max-width: 800px;
+  max-width: 900px;
   width: 100%;
   border-radius: 8px;
   padding: 30px;
@@ -33,12 +24,13 @@
   max-height: 90vh;
 }
 
-header {
+.form-header {
   position: relative;
   font-size: 24px;
   font-weight: 600;
   color: #333;
   margin-bottom: 20px;
+
   &::before {
     content: "";
     position: absolute;
@@ -49,13 +41,6 @@ header {
     border-radius: 8px;
     background-color: #4070f4;
   }
-}
-
-form {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  width: 100%;
 }
 
 .form {
@@ -69,30 +54,33 @@ form {
   display: block;
   opacity: 1;
   pointer-events: auto;
+
+  .title {
+    font-size: 16px;
+    font-weight: 500;
+    color: #333;
+    margin-bottom: 15px;
+    text-align: left;
+  }
 }
 
-.title {
-  font-size: 18px;
-  font-weight: 500;
-  color: #333;
-  margin-bottom: 15px;
-}
-
-.fields {
+.section-content {
   display: flex;
   flex-wrap: wrap;
   gap: 20px;
-  justify-content: space-between;
 }
 
-.buttons {
-  display: flex;
-  justify-content: space-between;
-  gap: 15px;
+.login-link {
+  text-align: center;
+
+  a {
+    color: #4070f4;
+    text-decoration: none;
+  }
 }
 
 @media (max-width: 768px) {
-  .input-field {
+  .field-item {
     width: 100%;
   }
 
@@ -100,8 +88,9 @@ form {
     padding: 20px;
   }
 
-  .buttons {
-    flex-direction: column;
-    gap: 10px;
+  input,
+  textarea,
+  select {
+    height: 40px;
   }
 }

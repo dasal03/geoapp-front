@@ -1,0 +1,39 @@
+.phone-field {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 15px;
+}
+
+.phone-field select,
+.phone-field input {
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  outline: none;
+  width: 100%;
+}
+
+.phone-field select {
+  flex: 1;
+  max-width: 150px;
+}
+
+.phone-field input {
+  flex: 2;
+  max-width: 250px;
+}
+
+.phone-field select:focus,
+.phone-field input:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+.phone-field option {
+  padding: 10px;
+}
+
+.phone-field input::placeholder {
+  color: #aaa;
+}

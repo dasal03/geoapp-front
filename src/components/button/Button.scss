@@ -1,5 +1,3 @@
-@import "../../styles/variables";
-
 button {
   display: flex;
   align-items: center;
@@ -8,8 +6,8 @@ button {
   width: 100%;
   border: none;
   border-radius: 5px;
-  background-color: $form-btn-color;
-  color: $white-color;
+  background-color: #4070f4;
+  color: white;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
@@ -18,11 +16,17 @@ button {
 }
 
 button:hover {
-  background-color: $form-btn-hover-color;
+  background-color: #265df2;
 }
 
 button i {
   margin-left: 10px;
+}
+
+.buttons {
+  display: flex;
+  justify-content: space-between;
+  gap: 15px;
 }
 
 .backBtn {

@@ -1,18 +1,26 @@
 .input-field {
   display: flex;
   flex-direction: column;
-  width: calc(50% - 10px);
   margin-bottom: 15px;
-}
 
-input[type="text"],
-input[type="email"],
-input[type="password"],
-input[type="date"] {
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  font-size: 16px;
-  margin-top: 5px;
-  width: 100%;
+  input {
+    padding: 10px;
+    padding-right: 3rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+    margin-top: 5px;
+    width: 100%;
+    box-sizing: border-box;
+    outline: none;
+
+    &:focus {
+      border-color: #4070f4;
+      box-shadow: 0 0 4px rgba(64, 112, 244, 0.5);
+    }
+
+    &::placeholder {
+      color: #aaa;
+    }
+  }
 }

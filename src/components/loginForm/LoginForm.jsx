@@ -40,42 +40,54 @@ const LoginForm = () => {
   };
 
   return (
-    <div className="login-form">
-      <header>Iniciar Sesión</header>
-      {error && <p className="error-message">{error}</p>}
+    <div className="login-container">
+      <div className="login-form">
+        <header className="form-header">Iniciar Sesión</header>
+        {error && <p className="error-message">{error}</p>}
 
-      <form onSubmit={handleSubmit}>
-        {isLoading ? (
-          <LoadingSpinner />
-        ) : (
-          <>
-            <div className="fields">
-              <InputField
-                label="Usuario"
-                type="text"
-                placeholder="Ingresa tu usuario"
-                value={formValues.username}
-                onChange={(e) => handleInputChange("username", e.target.value)}
-              />
-              <PasswordField
-                label="Contraseña"
-                id="password"
-                name="password"
-                placeholder="Ingresa tu contraseña"
-                value={formValues.password}
-                onChange={(value) => handleInputChange("password", value)}
-              />
-            </div>
-            <div className="buttons">
-              <Button
-                type="submit"
-                text="Iniciar Sesión"
-                icon="fas fa-sign-in-alt"
-              />
-            </div>
-          </>
-        )}
-      </form>
+        <form onSubmit={handleSubmit}>
+          {isLoading ? (
+            <LoadingSpinner />
+          ) : (
+            <>
+              <div className="fields">
+                <InputField
+                  label="Usuario"
+                  type="text"
+                  placeholder="Ingresa tu usuario"
+                  value={formValues.username}
+                  onChange={(e) =>
+                    handleInputChange("username", e.target.value)
+                  }
+                  required
+                />
+                <PasswordField
+                  label="Contraseña"
+                  id="password"
+                  name="password"
+                  placeholder="Ingresa tu contraseña"
+                  value={formValues.password}
+                  onChange={(value) => handleInputChange("password", value)}
+                  required
+                />
+              </div>
+              <div className="buttons">
+                <Button
+                  type="submit"
+                  text="Iniciar Sesión"
+                  icon="fas fa-sign-in-alt"
+                />
+              </div>
+              <div className="register-link">
+                <p>
+                  ¿No tienes una cuenta?{" "}
+                  <a href="/register">Registrate</a>
+                </p>
+              </div>
+            </>
+          )}
+        </form>
+      </div>
     </div>
   );
 };
