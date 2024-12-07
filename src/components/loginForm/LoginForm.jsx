@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import LoadingSpinner from "../loading/LoadingSpinner";
@@ -79,10 +80,7 @@ const LoginForm = () => {
                 />
               </div>
               <div className="register-link">
-                <p>
-                  ¿No tienes una cuenta?{" "}
-                  <a href="/register">Registrate</a>
-                </p>
+                ¿No tienes una cuenta? <Link to="/register">Crear cuenta</Link>
               </div>
             </>
           )}

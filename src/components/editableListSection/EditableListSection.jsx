@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { FaEdit, FaCheck, FaTimes, FaTrashAlt, FaPlus } from "react-icons/fa";
+import InputField from "../inputField/InputField";
 import "./EditableListSection.scss";
 
 const EditableListSection = ({
@@ -77,31 +78,41 @@ const EditableListSection = ({
                     <p>
                       <strong>Banco: </strong>
                       {editingItemId === item.id ? (
-                        <input
+                        <InputField
                           type="text"
-                          value={editedItemData.name || item.name}
-                          onChange={(e) => handleInputChange(e, "name")}
+                          value={editedItemData.bank || item.bank}
+                          onChange={(e) => handleInputChange(e, "bank")}
                         />
                       ) : (
+                        // <input
+                        //   type="text"
+                        //   value={editedItemData.name || item.name}
+                        //   onChange={(e) => handleInputChange(e, "name")}
+                        // />
                         item.name
                       )}
                     </p>
                     <p>
                       <strong>Tipo de cuenta: </strong>
                       {editingItemId === item.id ? (
-                        <input
+                        <InputField
                           type="text"
                           value={editedItemData.type || item.type}
                           onChange={(e) => handleInputChange(e, "type")}
                         />
                       ) : (
+                        // <input
+                        //   type="text"
+                        //   value={editedItemData.type || item.type}
+                        //   onChange={(e) => handleInputChange(e, "type")}
+                        // />
                         item.type
                       )}
                     </p>
                     <p>
                       <strong>Número de cuenta: </strong>
                       {editingItemId === item.id ? (
-                        <input
+                        <InputField
                           type="text"
                           value={
                             editedItemData.accountNumber || item.accountNumber
@@ -111,6 +122,15 @@ const EditableListSection = ({
                           }
                         />
                       ) : (
+                        // <input
+                        //   type="text"
+                        //   value={
+                        //     editedItemData.accountNumber || item.accountNumber
+                        //   }
+                        //   onChange={(e) =>
+                        //     handleInputChange(e, "accountNumber")
+                        //   }
+                        // />
                         item.accountNumber
                       )}
                     </p>
@@ -118,25 +138,18 @@ const EditableListSection = ({
                 ) : (
                   <>
                     <p>
-                      <strong>País: </strong>
+                      <strong>Departamento: </strong>
                       {editingItemId === item.id ? (
-                        <input
-                          type="text"
-                          value={editedItemData.country || item.country}
-                          onChange={(e) => handleInputChange(e, "country")}
-                        />
-                      ) : (
-                        item.country
-                      )}
-                    </p>
-                    <p>
-                      <strong>Estado: </strong>
-                      {editingItemId === item.id ? (
-                        <input
+                        <InputField
                           type="text"
                           value={editedItemData.state || item.state}
                           onChange={(e) => handleInputChange(e, "state")}
                         />
+                        // <input
+                        //   type="text"
+                        //   value={editedItemData.state || item.state}
+                        //   onChange={(e) => handleInputChange(e, "state")}
+                        // />
                       ) : (
                         item.state
                       )}
@@ -144,11 +157,16 @@ const EditableListSection = ({
                     <p>
                       <strong>Ciudad: </strong>
                       {editingItemId === item.id ? (
-                        <input
+                        <InputField
                           type="text"
                           value={editedItemData.city || item.city}
                           onChange={(e) => handleInputChange(e, "city")}
                         />
+                        // <input
+                        //   type="text"
+                        //   value={editedItemData.city || item.city}
+                        //   onChange={(e) => handleInputChange(e, "city")}
+                        // />
                       ) : (
                         item.city
                       )}
@@ -156,11 +174,16 @@ const EditableListSection = ({
                     <p>
                       <strong>Dirección: </strong>
                       {editingItemId === item.id ? (
-                        <input
+                        <InputField
                           type="text"
                           value={editedItemData.address || item.address}
                           onChange={(e) => handleInputChange(e, "address")}
                         />
+                        // <input
+                        //   type="text"
+                        //   value={editedItemData.address || item.address}
+                        //   onChange={(e) => handleInputChange(e, "address")}
+                        // />
                       ) : (
                         item.address
                       )}

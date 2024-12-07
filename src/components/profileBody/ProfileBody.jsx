@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import ProfileSection from "../../components/profileSection/ProfileSection";
+import Button from "../../components/button/Button";
 import EditableListSection from "../editableListSection/EditableListSection";
 import apiFetch from "../../utils/apiClient";
 import { showAlert } from "../../utils/generalTools";
@@ -16,7 +17,6 @@ const ProfileBody = ({ profileData }) => {
     user_id: profileData.user_id,
     full_name: profileData.full_name,
     email: profileData.email,
-    indicative_code: profileData.indicative_code,
     phone_number: profileData.phone_number,
     gender_name: profileData.gender_name,
     date_of_birth: profileData.date_of_birth,
@@ -31,16 +31,33 @@ const ProfileBody = ({ profileData }) => {
   });
 
   const personalInfoFields = [
-    { label: "Nombre", value: formData.full_name, name: "full_name" },
-    { label: "Email", value: formData.email, name: "email" },
+    {
+      label: "Nombre",
+      type: "text",
+      value: formData.full_name,
+      name: "full_name",
+    },
+    {
+      label: "Email",
+      type: "email",
+      value: formData.email,
+      name: "email",
+    },
     {
       label: "Teléfono",
-      value: formData.indicative_code + " " + formData.phone_number,
+      type: "phone",
+      value: formData.phone_number,
       name: "phone_number",
     },
-    { label: "Género", value: formData.gender_name, name: "gender_name" },
+    {
+      label: "Género",
+      type: "select",
+      value: formData.gender_name,
+      name: "gender_name",
+    },
     {
       label: "Fecha de nacimiento",
+      type: "date",
       value: formData.date_of_birth,
       name: "date_of_birth",
     },
@@ -49,21 +66,25 @@ const ProfileBody = ({ profileData }) => {
   const documentInfoFields = [
     {
       label: "Tipo de documento",
+      type: "select",
       value: formData.document_type,
       name: "document_type",
     },
     {
       label: "Número de documento",
+      type: "text",
       value: formData.document_number,
       name: "document_number",
     },
     {
       label: "Fecha de expedición",
+      type: "date",
       value: formData.issue_date,
       name: "issue_date",
     },
     {
       label: "Lugar de expedición",
+      type: "text",
       value: formData.issue_city,
       name: "issue_city",
     },
@@ -161,16 +182,20 @@ const ProfileBody = ({ profileData }) => {
 
   useEffect(() => {
     const fetchData = async () => {
+      setLoading(true);
       try {
-        setLoading(true);
-        const [bankAccountsResponse, addressesResponse] = await Promise.all([
-          apiFetch(`/get_bank_account?user_id=${formData.user_id}`),
-          apiFetch(`/get_address?user_id=${formData.user_id}`),
-        ]);
+        const [bankAccountsResponse, addressesResponse] =
+          await Promise.allSettled([
+            apiFetch(`/get_bank_account?user_id=${formData.user_id}`),
+            apiFetch(`/get_address?user_id=${formData.user_id}`),
+          ]);
 
-        if (bankAccountsResponse.responseCode === 200) {
+        if (
+          bankAccountsResponse.status === "fulfilled" &&
+          bankAccountsResponse.value.responseCode === 200
+        ) {
           setBankAccounts(
-            bankAccountsResponse.data.map((account) => ({
+            bankAccountsResponse.value.data.map((account) => ({
               id: account.bank_account_id,
               name: account.bank_name,
               type: account.account_type,
@@ -178,23 +203,28 @@ const ProfileBody = ({ profileData }) => {
               primary: !!account.principal_account,
             }))
           );
+        } else {
+          setBankAccounts([]);
         }
 
-        if (addressesResponse.responseCode === 200) {
+        if (
+          addressesResponse.status === "fulfilled" &&
+          addressesResponse.value.responseCode === 200
+        ) {
           setAddresses(
-            addressesResponse.data.map((address) => ({
+            addressesResponse.value.data.map((address) => ({
               id: address.address_id,
               address: address.address,
-              country: address.country_name,
               state: address.state_name,
               city: address.city_name,
-              description: address.description,
               primary: !!address.principal_address,
             }))
           );
+        } else {
+          setAddresses([]);
         }
       } catch (error) {
-        showAlert("error", "Error", "No se pudo obtener la información.");
+        console.error("Error fetching data:", error);
       } finally {
         setLoading(false);
       }
@@ -398,21 +428,37 @@ const ProfileBody = ({ profileData }) => {
       <div className="settings-actions">
         {isEditing ? (
           <>
-            <button className="action-btn" onClick={handleEditClick}>
-              Cancelar Edición
-            </button>
-            <button className="action-btn success" onClick={handleSaveChanges}>
-              Guardar Cambios
-            </button>
+            <div className="action-btn">
+              <Button
+                type="button"
+                text="Cancelar edición"
+                onClick={handleEditClick}
+              />
+            </div>
+            <div className="action-btn success">
+              <Button
+                type="button"
+                text="Guardar Cambios"
+                onClick={handleSaveChanges}
+              />
+            </div>
           </>
         ) : (
           <>
-            <button className="action-btn" onClick={handleEditClick}>
-              Editar Perfil
-            </button>
-            <button className="action-btn danger" onClick={handleDeleteAccount}>
-              Eliminar Cuenta
-            </button>
+            <div className="action-btn">
+              <Button
+                type="button"
+                text="Editar Perfil"
+                onClick={handleEditClick}
+              />
+            </div>
+            <div className="action-btn danger">
+              <Button
+                type="button"
+                text="Eliminar Cuenta"
+                onClick={handleDeleteAccount}
+              />
+            </div>
           </>
         )}
       </div>

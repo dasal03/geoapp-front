@@ -1,12 +1,15 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import { showAlert } from "../../utils/generalTools";
 import apiFetch from "../../utils/apiClient";
-import LoadingSpinner from "../loading/LoadingSpinner";
 import InputField from "../inputField/InputField";
 import PasswordField from "../passwordField/PasswordField";
+import SelectField from "../selectField/SelectField";
 import PhoneField from "../phoneField/PhoneField";
-import DateInput from "../dateInput/DateInput";
+import DateInputField from "../dateInputField/DateInputField";
 import Button from "../button/Button";
+import LoadingSpinner from "../loading/LoadingSpinner";
 import "../../pages/register/Register.scss";
 
 const RegisterForm = () => {
@@ -14,7 +17,73 @@ const RegisterForm = () => {
   const [formValues, setFormValues] = useState({});
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [documentTypes, setDocumentTypes] = useState([]);
+  const [genders, setGenders] = useState([]);
+  const [states, setStates] = useState([]);
+  const [cities, setCities] = useState([]);
+  const [issueCities, setIssueCities] = useState([]);
   const navigate = useNavigate();
+
+  const fetchData = async (url, setData, formatData) => {
+    try {
+      setIsLoading(true);
+      const response = await apiFetch(url);
+      if (response.responseCode === 200) {
+        const formattedData = formatData(response.data);
+        setData(formattedData);
+      } else if (response.responseCode === 404) {
+        setData([]);
+      } else {
+        showAlert("error", "Error", `Error al obtener datos de ${url}.`);
+      }
+    } catch {
+      showAlert("error", "Error", "Error al conectar con el servidor.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchData("/get_document_types", setDocumentTypes, (data) =>
+      data.map((doc) => ({ id: doc.document_type_id, name: doc.description }))
+    );
+    fetchData("/get_genders", setGenders, (data) =>
+      data.map((gen) => ({ id: gen.gender_id, name: gen.gender_name }))
+    );
+    fetchData("/get_states", setStates, (data) =>
+      data.map((state) => ({ id: state.state_id, name: state.state_name }))
+    );
+  }, []);
+
+  useEffect(() => {
+    if (formValues.state_id) {
+      fetchData(
+        `/get_cities?state_id=${formValues.state_id}`,
+        setCities,
+        (data) =>
+          data.map((city) => ({ id: city.city_id, name: city.city_name }))
+      );
+      setFormValues((prev) => ({ ...prev, city_id: "" }));
+    } else {
+      setCities([]);
+      setFormValues((prev) => ({ ...prev, city_id: "" }));
+    }
+  }, [formValues.state_id]);
+
+  useEffect(() => {
+    if (formValues.state_of_issue_id) {
+      fetchData(
+        `/get_cities?state_id=${formValues.state_of_issue_id}`,
+        setIssueCities,
+        (data) =>
+          data.map((city) => ({ id: city.city_id, name: city.city_name }))
+      );
+      setFormValues((prev) => ({ ...prev, city_of_issue_id: "" }));
+    } else {
+      setIssueCities([]);
+      setFormValues((prev) => ({ ...prev, city_of_issue_id: "" }));
+    }
+  }, [formValues.state_of_issue_id]);
 
   const handleChange = (field, eventOrValue) => {
     const value = eventOrValue.target
@@ -32,15 +101,35 @@ const RegisterForm = () => {
     setIsLoading(true);
 
     try {
-      const response = await apiFetch("/create_user", {
+      const userResponse = await apiFetch("/create_user", {
         method: "POST",
         body: JSON.stringify(formValues),
       });
 
-      if (response.responseCode === 201) {
-        navigate("/login");
+      if (userResponse.responseCode === 201) {
+        const userId = userResponse.data.user_id;
+
+        const addressPayload = {
+          user_id: userId,
+          state_id: formValues.state_id,
+          city_id: formValues.city_id,
+          address: formValues.address,
+        };
+
+        const addressResponse = await apiFetch("/create_address", {
+          method: "POST",
+          body: JSON.stringify(addressPayload),
+        });
+
+        if (addressResponse.responseCode === 201) {
+          navigate("/login");
+        } else {
+          setError("Error al registrar la dirección.");
+        }
+      } else if (userResponse.responseCode === 400) {
+        setError(userResponse.description);
       } else {
-        setError(response.data || "Error en el registro.");
+        setError(userResponse.data || "Error en el registro.");
       }
     } catch {
       setError("Error al conectar con el servidor.");
@@ -57,27 +146,28 @@ const RegisterForm = () => {
       if (activeForm === "third") setActiveForm("second");
       else if (activeForm === "second") setActiveForm("first");
     }
+    window.scrollTo(0, 0);
   };
 
   const formFields = {
     first: [
       {
-        label: "Primer Nombre",
+        label: "Nombre",
         type: "text",
-        placeholder: "Ingrese su primer nombre",
+        placeholder: "Ingrese su nombre",
         name: "first_name",
-      },
-      {
-        label: "Segundo Nombre",
-        type: "text",
-        placeholder: "Ingrese su segundo nombre",
-        name: "middle_name",
       },
       {
         label: "Apellido",
         type: "text",
         placeholder: "Ingrese su apellido",
         name: "last_name",
+      },
+      {
+        label: "Correo",
+        type: "email",
+        placeholder: "Ingrese su correo",
+        name: "email",
       },
       {
         label: "Usuario",
@@ -103,7 +193,7 @@ const RegisterForm = () => {
         label: "Número de Teléfono",
         type: "phone",
         placeholder: "Ingrese su teléfono",
-        name: "phone",
+        name: "phone_number",
       },
       {
         label: "Fecha de Nacimiento",
@@ -113,13 +203,29 @@ const RegisterForm = () => {
       {
         label: "Género",
         type: "select",
-        placeholder: "Ingrese su género",
+        placeholder: "Seleccione un género",
         name: "gender_id",
+        options: genders,
+      },
+      {
+        label: "Departamento",
+        type: "select",
+        placeholder: "Seleccione un departamento",
+        name: "state_id",
+        options: states,
+      },
+      {
+        label: "Ciudad",
+        type: "select",
+        placeholder: "Seleccione una ciudad",
+        name: "city_id",
+        options: cities,
+        disabled: isLoading || !formValues.state_id || cities.length === 0,
       },
       {
         label: "Dirección",
         type: "text",
-        placeholder: "Colombia, Atlántico, Barranquilla",
+        placeholder: "Ingrese su dirección",
         name: "address",
       },
     ],
@@ -127,8 +233,9 @@ const RegisterForm = () => {
       {
         label: "Tipo de Documento",
         type: "select",
-        placeholder: "Ingrese su tipo de documento",
-        name: "document_type",
+        placeholder: "Seleccione un tipo de documento",
+        name: "document_type_id",
+        options: documentTypes,
       },
       {
         label: "Número de Documento",
@@ -137,17 +244,83 @@ const RegisterForm = () => {
         name: "document_number",
       },
       {
-        label: "Lugar de Expedición",
-        type: "text",
-        placeholder: "Colombia, Atlántico, Barranquilla",
-        name: "issue_place",
+        label: "Departamento de Expedición",
+        type: "select",
+        placeholder: "Seleccione un departamento",
+        name: "state_of_issue_id",
+        options: states,
+      },
+      {
+        label: "Ciudad de Expedición",
+        type: "select",
+        placeholder: "Seleccione una ciudad",
+        name: "city_of_issue_id",
+        options: issueCities,
+        disabled:
+          isLoading || !formValues.state_of_issue_id || issueCities.length === 0,
       },
       {
         label: "Fecha de Expedición",
         type: "date",
-        name: "issue_date",
+        name: "date_of_issue",
       },
     ],
+  };
+
+  const renderField = (field) => {
+    const value = formValues[field.name] || "";
+    switch (field.type) {
+      case "text":
+      case "email":
+        return (
+          <InputField
+            label={field.label}
+            type={field.type}
+            value={value}
+            onChange={(e) => handleChange(field.name, e)}
+            placeholder={field.placeholder}
+          />
+        );
+      case "password":
+        return (
+          <PasswordField
+            label={field.label}
+            value={formValues[field.name] || ""}
+            onChange={(e) => handleChange(field.name, e)}
+            placeholder={field.placeholder}
+          />
+        );
+      case "select":
+        return (
+          <SelectField
+            label={field.label}
+            options={field.options}
+            value={value}
+            onChange={(e) => handleChange(field.name, e)}
+            placeholder={field.placeholder}
+            disabled={field.disabled || false}
+          />
+        );
+      case "phone":
+        return (
+          <PhoneField
+            label={field.label}
+            value={value}
+            onChange={(e) => handleChange(field.name, e)}
+            placeholder={field.placeholder}
+          />
+        );
+      case "date":
+        return (
+          <DateInputField
+            label={field.label}
+            value={value}
+            onChange={(e) => handleChange(field.name, e)}
+          />
+        );
+      default:
+        return null;
+    }
   };
 
   return (
@@ -161,7 +334,7 @@ const RegisterForm = () => {
           {isLoading ? (
             <LoadingSpinner />
           ) : (
-            Object.keys(formFields).map((formKey) => (
+            Object.entries(formFields).map(([formKey, fields]) => (
               <div
                 key={formKey}
                 className={`form ${formKey} ${
@@ -177,47 +350,9 @@ const RegisterForm = () => {
                 </div>
                 <div className="section">
                   <div className="section-content">
-                    {formFields[formKey].map((field, index) => (
+                    {fields.map((field, index) => (
                       <div key={index} className="field-item">
-                        {field.type === "password" ? (
-                          <PasswordField
-                            label={field.label}
-                            id={field.name}
-                            name={field.name}
-                            placeholder={field.placeholder}
-                            value={formValues[field.name] || ""}
-                            onChange={(value) =>
-                              handleChange(field.name, value)
-                            }
-                          />
-                        ) : field.type === "phone" ? (
-                          <PhoneField
-                            label={field.label}
-                            value={formValues.phone}
-                            onChange={(updatedPhone) =>
-                              handleChange("phone", updatedPhone)
-                            }
-                          />
-                        ) : field.type === "date" ? (
-                          <DateInput
-                            label={field.label}
-                            placeholder={field.placeholder}
-                            value={formValues[field.name] || ""}
-                            onChange={(value) =>
-                              handleChange(field.name, value)
-                            }
-                          />
-                        ) : (
-                          <InputField
-                            label={field.label}
-                            type={field.type}
-                            placeholder={field.placeholder}
-                            value={formValues[field.name] || ""}
-                            onChange={(value) =>
-                              handleChange(field.name, value)
-                            }
-                          />
-                        )}
+                        {renderField(field)}
                       </div>
                     ))}
                   </div>
@@ -225,23 +360,31 @@ const RegisterForm = () => {
               </div>
             ))
           )}
-          {error && <div className="error-message">{error}</div>}
-          <div className="button-container">
+          <div className="error-container">
+            {error && <div className="error-message">{error}</div>}
+          </div>
+          <div className="actions">
             {activeForm !== "first" && (
-              <div className="back-button">
+              <div
+                className={`back-btn ${
+                  activeForm === "second" ? "back-active" : ""
+                }`}
+              >
                 <Button
-                  className="backBtn"
                   type="button"
-                  text="Atrás"
+                  text="Volver"
                   icon="fas fa-arrow-left"
                   onClick={() => handleFormSwitch("back")}
                 />
               </div>
             )}
             {activeForm !== "third" && (
-              <div className="next-button">
+              <div
+                className={`next-btn ${
+                  activeForm === "second" ? "next-active" : ""
+                }`}
+              >
                 <Button
-                  className="nextBtn"
                   type="button"
                   text="Siguiente"
                   icon="fas fa-arrow-right"
@@ -250,21 +393,22 @@ const RegisterForm = () => {
               </div>
             )}
             {activeForm === "third" && (
-              <div className="submit-button">
+              <div
+                className={`register-btn ${
+                  activeForm === "third" ? "register-active" : ""
+                }`}
+              >
                 <Button
-                  className="submitBtn"
                   type="submit"
-                  text="Registrar"
-                  icon="fas fa-sign-in-alt"
-                  onClick={handleSubmit}
+                  text="Registrarse"
+                  icon="fas fa-user-plus"
+                  onClick={() => handleFormSwitch("next")}
                 />
               </div>
             )}
             {activeForm === "first" && (
               <div className="login-link">
-                <p>
-                  ¿Ya tienes una cuenta? <a href="/login">Iniciar sesión</a>
-                </p>
+                ¿Ya tienes una cuenta? <Link to="/login">Iniciar sesión</Link>
               </div>
             )}
           </div>

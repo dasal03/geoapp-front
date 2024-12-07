@@ -1,39 +1,58 @@
-button {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 45px;
-  width: 100%;
-  border: none;
-  border-radius: 5px;
-  background-color: #4070f4;
-  color: white;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  padding: 0 20px;
-  text-align: center;
-}
-
-button:hover {
-  background-color: #265df2;
-}
-
-button i {
-  margin-left: 10px;
-}
-
 .buttons {
   display: flex;
   justify-content: space-between;
-  gap: 15px;
+  width: 100%;
+  margin-top: 20px;
 }
 
-.backBtn {
+.back-btn .button {
   background-color: #ccc;
   color: #333;
+  font-weight: 600;
+  padding: 0 20px;
+  height: 45px;
+  width: 48%;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-align: center;
 }
 
-.backBtn:hover {
+.back-btn .button:hover {
   background-color: #999;
+}
+
+.next-btn .button,
+.register-btn .button {
+  background-color: #5582fc;
+  color: white;
+  font-weight: 600;
+  padding: 0 20px;
+  height: 45px;
+  width: 48%;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-align: center;
+}
+
+.next-btn .button:hover,
+.register-btn .button:hover {
+  background-color: #265df2;
+}
+
+@media (max-width: 768px) {
+  .buttons {
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .back-btn .button,
+  .next-btn .button,
+  .register-btn .button {
+    width: 100%;
+    justify-content: center;
+  }
 }

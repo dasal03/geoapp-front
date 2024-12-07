@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import Swal from "sweetalert2";
 import apiFetch from "../../utils/apiClient";
+import { showAlert } from "../../utils/generalTools";
 import { useAuth } from "../../context/AuthContext";
 import LoadingSpinner from "../../components/loading/LoadingSpinner";
 import ProfileHeader from "../../components/profileHeader/ProfileHeader";
@@ -15,11 +15,7 @@ const Profile = () => {
   useEffect(() => {
     const fetchProfileData = async () => {
       if (!authUser?.user_id) {
-        Swal.fire({
-          icon: "error",
-          title: "Error",
-          text: "No hay un usuario logueado.",
-        });
+        showAlert("error", "Error", "No se pudo obtener el ID del usuario.");
         setLoading(false);
         return;
       }
@@ -34,22 +30,12 @@ const Profile = () => {
         if (response.responseCode === 200) {
           setProfileData(response.data);
         } else if (response.responseCode === 404) {
-          Swal.fire({
-            icon: "error",
-            title: "Error",
-            text: "No se encontraron datos de perfil.",
-          });
+          showAlert("error", "Error", response.description);
         } else {
-          throw new Error(
-            response.description || "Error desconocido en la API."
-          );
+          showAlert("error", "Error", response.description);
         }
       } catch (err) {
-        Swal.fire({
-          icon: "error",
-          title: "Error",
-          text: err.message || "Error desconocido.",
-        });
+        showAlert("error", "Error", err.message);
       } finally {
         setLoading(false);
       }
@@ -61,11 +47,7 @@ const Profile = () => {
   if (loading) return <LoadingSpinner />;
 
   if (!profileData) {
-    Swal.fire({
-      icon: "warning",
-      title: "Advertencia",
-      text: "No se pudo cargar la información del perfil.",
-    });
+    showAlert("error", "Error", "No se pudo obtener los datos del perfil.");
     return null;
   }
 

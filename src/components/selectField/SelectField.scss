@@ -1,0 +1,44 @@
+.select-field {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 15px;
+
+  label {
+    font-size: 16px;
+    margin-bottom: 5px;
+    color: #333;
+    font-weight: 500;
+  }
+
+  select {
+    padding: 10px;
+    padding-right: 3rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+    margin-top: 5px;
+    width: 100%;
+    box-sizing: border-box;
+    outline: none;
+    background-color: #fff;
+    color: #333;
+
+    &:focus {
+      border-color: #4070f4;
+      box-shadow: 0 0 4px rgba(64, 112, 244, 0.5);
+    }
+
+    &:disabled {
+      background-color: #f5f5f5;
+      color: #aaa;
+      cursor: not-allowed;
+    }
+
+    option {
+      padding: 10px;
+      font-size: 16px;
+      background-color: #fff;
+      color: #333;
+    }
+  }
+}

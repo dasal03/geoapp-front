@@ -1,5 +1,5 @@
 import React from "react";
-import "./DateInput.scss";
+import "./DateInputField.scss";
 
 const DateInput = ({ label, value, onChange }) => {
   const handleChange = (e) => {
