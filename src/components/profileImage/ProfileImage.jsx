@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import { FaEdit } from "react-icons/fa";
-import Cropper from "react-easy-crop";
 import placeholderProfileImage from "../../assets/profile-placeholder.jpg";
 import { convertImageToBase64, getCroppedImg } from "../../utils/generalTools";
+import ImageOptionsModal from "../imageOptionsModal/ImageOptionsModal";
+import ImageCropperModal from "../imageCropperModal/ImageCropperModal";
 import "./ProfileImage.scss";
 
 const ProfileImage = ({
@@ -81,47 +82,25 @@ const ProfileImage = ({
       </label>
 
       {isOptionsOpen && (
-        <div className="modal-overlay">
-          <div className="modal-content options-modal">
-            <span
-              className="close-modal"
-              onClick={() => setIsOptionsOpen(false)}
-            >
-              &times;
-            </span>
-            <div className="modal-body">
-              <img src={image} alt="Vista previa" className="modal-preview" />
-              <div className="modal-buttons">
-                <button onClick={openFileSelector}>Cambiar imagen</button>
-                <button onClick={handleDeleteImage}>Eliminar imagen</button>
-              </div>
-            </div>
-          </div>
-        </div>
+        <ImageOptionsModal
+          image={image}
+          onChangeImage={openFileSelector}
+          onDeleteImage={handleDeleteImage}
+          onClose={() => setIsOptionsOpen(false)}
+        />
       )}
 
       {isCropping && (
-        <div className="modal-overlay">
-          <div className="modal-content">
-            <div className="crop-container">
-              <Cropper
-                image={cropImage}
-                crop={crop}
-                zoom={zoom}
-                aspect={1}
-                cropShape="round"
-                showGrid={false}
-                onCropChange={setCrop}
-                onZoomChange={setZoom}
-                onCropComplete={handleCropComplete}
-              />
-            </div>
-            <div className="modal-actions">
-              <button onClick={() => setIsCropping(false)}>Cancelar</button>
-              <button onClick={handleSaveCrop}>Seleccionar</button>
-            </div>
-          </div>
-        </div>
+        <ImageCropperModal
+          cropImage={cropImage}
+          crop={crop}
+          zoom={zoom}
+          onCropChange={setCrop}
+          onZoomChange={setZoom}
+          onCropComplete={handleCropComplete}
+          onClose={() => setIsCropping(false)}
+          onSaveCrop={handleSaveCrop}
+        />
       )}
     </div>
   );

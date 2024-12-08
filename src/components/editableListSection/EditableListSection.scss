@@ -1,6 +1,6 @@
 @import "../../styles/variables";
+@import "../button/Button.scss";
 
-// Estilos comunes (basados en profile-section)
 .profile-section,
 .editable-list-section {
   background-color: $light-gray;
@@ -31,37 +31,6 @@
     &:disabled {
       background-color: #f0f0f0;
       cursor: not-allowed;
-    }
-  }
-}
-
-.editable-list-section {
-  .add-item-btn {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: $primary-color;
-    color: #fff;
-    border: none;
-    border-radius: 5px;
-    padding: 10px 15px;
-    font-size: 16px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: background-color 0.3s, transform 0.2s;
-    margin-bottom: 20px;
-
-    &:hover {
-      background-color: darken($primary-color, 10%);
-      transform: translateY(-2px);
-    }
-
-    &:active {
-      transform: translateY(1px);
-    }
-
-    svg {
-      margin-right: 5px;
     }
   }
 
@@ -132,36 +101,79 @@
         }
       }
     }
+  }
+}
 
-    .item-actions {
-      display: flex;
-      align-items: center;
-      gap: 10px;
+.btn {
+  &.add-item-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: $primary-color;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 15px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+    margin-bottom: 20px;
 
-      button {
-        background: none;
-        border: none;
-        padding: 0;
-        cursor: pointer;
-        transition: transform 0.2s;
+    &:hover {
+      background-color: darken($primary-color, 10%);
+      transform: translateY(-2px);
+    }
 
-        &:hover {
-          transform: scale(1.2);
-        }
+    &:active {
+      transform: translateY(1px);
+    }
 
-        svg {
-          font-size: 18px;
-          color: $primary-color;
-        }
+    svg {
+      margin-right: 5px;
+    }
+  }
+  &.card-cancel-btn {
+    background-color: #dc3545;
+    color: white;
+    margin-right: 10px;
+    width: 100%;
 
-        &.delete-btn svg {
-          color: $danger-color;
-        }
+    &:hover {
+      background-color: #b02a37;
+    }
+  }
 
-        &.edit-btn svg {
-          color: $success-color;
-        }
-      }
+  &.card-edit-btn {
+    background-color: $success-color;
+    color: white;
+    margin-right: 10px;
+    width: 100%;
+
+    &:hover {
+      background-color: darken($success-color, 10%);
+    }
+  }
+
+  &.card-save-btn {
+    background-color: #28a745;
+    color: white;
+    margin-right: 10px;
+    width: 100%;
+
+    &:hover {
+      background-color: #1e7e34;
+    }
+  }
+
+  &.card-delete-btn {
+    background-color: $danger-color;
+    color: white;
+    margin-right: 10px;
+    width: 100%;
+
+    &:hover {
+      background-color: darken($danger-color, 10%);
     }
   }
 }

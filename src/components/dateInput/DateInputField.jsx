@@ -1,7 +1,7 @@
 import React from "react";
 import "./DateInputField.scss";
 
-const DateInput = ({ label, value, onChange, required = false, disabled }) => {
+const DateInput = ({ label, value, onChange }) => {
   const handleChange = (e) => {
     onChange(e.target.value);
   };
@@ -9,13 +9,7 @@ const DateInput = ({ label, value, onChange, required = false, disabled }) => {
   return (
     <div className="date-input">
       <label htmlFor={label}>{label}</label>
-      <input
-        type="date"
-        value={value || ""}
-        onChange={handleChange}
-        required={required}
-        disabled={disabled}
-      />
+      <input type="date" value={value || ""} onChange={handleChange} required />
     </div>
   );
 };

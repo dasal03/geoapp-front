@@ -1,5 +1,6 @@
 import React from "react";
 import ProfileImage from "../profileImage/ProfileImage";
+import { formatDate } from "../../utils/generalTools";
 import "./ProfileHeader.scss";
 
 const ProfileHeader = ({ profileData }) => {
@@ -11,7 +12,7 @@ const ProfileHeader = ({ profileData }) => {
       <div className="profile-info">
         <h1>{full_name}</h1>
         <p><span className="username-decorator">@</span> {username}</p>
-        <p>Miembro desde: {created_at}</p>
+        <p>Miembro desde: {formatDate(created_at)}</p>
       </div>
     </div>
   );

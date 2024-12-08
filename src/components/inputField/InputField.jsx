@@ -8,6 +8,8 @@ const InputField = ({
   value,
   onChange,
   required = false,
+  styleType = "default",
+  disabled = false
 }) => {
   return (
     <div className="input-field">
@@ -18,6 +20,8 @@ const InputField = ({
         value={value}
         onChange={onChange}
         required={required}
+        className={`input ${styleType}`}
+        disabled={disabled}
       />
     </div>
   );

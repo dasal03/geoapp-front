@@ -4,7 +4,6 @@ import "./SelectField.scss";
 
 const SelectField = ({
   label,
-  id,
   name,
   value,
   onChange,
@@ -12,11 +11,14 @@ const SelectField = ({
   placeholder,
   disabled,
 }) => {
+  const normalizedOptions = Array.isArray(options)
+    ? options
+    : [{ value: options, label: options }];
+
   return (
     <div className="select-field">
-      {label && <label htmlFor={id}>{label}</label>}
+      {label && <label htmlFor={name}>{label}</label>}
       <select
-        id={id}
         name={name}
         value={value}
         onChange={(e) => onChange(e.target.value)}
@@ -25,9 +27,9 @@ const SelectField = ({
         <option value="" disabled>
           {placeholder || "Seleccione una opción"}
         </option>
-        {options.map((option) => (
-          <option key={option.id} value={option.id}>
-            {option.name}
+        {normalizedOptions.map((option) => (
+          <option key={option.value} value={option.value}>
+            {option.label}
           </option>
         ))}
       </select>
@@ -37,16 +39,20 @@ const SelectField = ({
 
 SelectField.propTypes = {
   label: PropTypes.string,
-  id: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
-  value: PropTypes.string.isRequired,
+  value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
   onChange: PropTypes.func.isRequired,
-  options: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
-      name: PropTypes.string.isRequired,
-    })
-  ).isRequired,
+  options: PropTypes.oneOfType([
+    PropTypes.arrayOf(
+      PropTypes.shape({
+        value: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
+          .isRequired,
+        label: PropTypes.string.isRequired,
+      })
+    ),
+    PropTypes.string,
+    PropTypes.number,
+  ]).isRequired,
   placeholder: PropTypes.string,
   disabled: PropTypes.bool,
 };

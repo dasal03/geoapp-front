@@ -1,5 +1,5 @@
 import React from "react";
-import { FaArrowDown } from "react-icons/fa";
+import Button from "../button/Button";
 import "./Hero.scss";
 
 const Hero = ({ onReadMore }) => (
@@ -14,10 +14,13 @@ const Hero = ({ onReadMore }) => (
         mantenimiento y venta de{"\n"}
         dispositivos biomédicos.
       </p>
-      <button className="read-more-btn" onClick={onReadMore}>
-        Leer más
-        <FaArrowDown className="arrow" />
-      </button>
+      <Button
+        type="button"
+        text="Conocenos"
+        icon="fas fa-arrow-down"
+        onClick={onReadMore}
+        styleType="secondary"
+      />
     </div>
   </section>
 );

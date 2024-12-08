@@ -3,7 +3,7 @@ import ProfileSection from "../../components/profileSection/ProfileSection";
 import Button from "../../components/button/Button";
 import EditableListSection from "../editableListSection/EditableListSection";
 import apiFetch from "../../utils/apiClient";
-import { showAlert } from "../../utils/generalTools";
+import { showAlert, formatDate } from "../../utils/generalTools";
 import Swal from "sweetalert2";
 import "./ProfileBody.scss";
 
@@ -15,16 +15,20 @@ const ProfileBody = ({ profileData }) => {
 
   const [formData, setFormData] = useState({
     user_id: profileData.user_id,
-    full_name: profileData.full_name,
+    // full_name: profileData.full_name,
     email: profileData.email,
     phone_number: profileData.phone_number,
+    gender_id: profileData.gender_id,
     gender_name: profileData.gender_name,
-    date_of_birth: profileData.date_of_birth,
+    date_of_birth: formatDate(profileData.date_of_birth),
     document_type: profileData.document_type,
+    document_type_id: profileData.document_type_id,
     document_number: profileData.document_number,
-    issue_date: profileData.issue_date,
-    issue_city: profileData.issue_city,
-    country_name: profileData.country_name,
+    date_of_issue: formatDate(profileData.date_of_issue),
+    state_of_issue: profileData.state_of_issue,
+    city_of_issue: profileData.city_of_issue,
+    state_of_issue_id: profileData.state_of_issue_id,
+    city_of_issue_id: profileData.city_of_issue_id,
     state_name: profileData.state_name,
     city_name: profileData.city_name,
     address: profileData.address,
@@ -32,34 +36,33 @@ const ProfileBody = ({ profileData }) => {
 
   const personalInfoFields = [
     {
-      label: "Nombre",
-      type: "text",
-      value: formData.full_name,
-      name: "full_name",
-    },
-    {
       label: "Email",
       type: "email",
       value: formData.email,
       name: "email",
+      required: true,
     },
     {
       label: "Teléfono",
       type: "phone",
       value: formData.phone_number,
       name: "phone_number",
+      required: true,
     },
     {
       label: "Género",
       type: "select",
       value: formData.gender_name,
       name: "gender_name",
+      options: formData.gender_name,
+      disabled: true,
     },
     {
       label: "Fecha de nacimiento",
       type: "date",
       value: formData.date_of_birth,
       name: "date_of_birth",
+      disabled: true,
     },
   ];
 
@@ -69,24 +72,38 @@ const ProfileBody = ({ profileData }) => {
       type: "select",
       value: formData.document_type,
       name: "document_type",
+      options: formData.document_type,
+      disabled: true,
     },
     {
       label: "Número de documento",
       type: "text",
       value: formData.document_number,
       name: "document_number",
+      disabled: true,
     },
     {
       label: "Fecha de expedición",
       type: "date",
-      value: formData.issue_date,
-      name: "issue_date",
+      value: formData.date_of_issue,
+      name: "date_of_issue",
+      disabled: true,
     },
     {
-      label: "Lugar de expedición",
-      type: "text",
-      value: formData.issue_city,
-      name: "issue_city",
+        label: "Departamento de expedición",
+        type: "select",
+        value: formData.state_of_issue,
+        name: "state_of_issue",
+        options: formData.state_of_issue,
+        disabled: true,
+    },
+    {
+        label: "Ciudad de expedición",
+        type: "select",
+        value: formData.city_of_issue,
+        name: "city_of_issue",
+        options: formData.city_of_issue,
+        disabled: true,
     },
   ];
 
@@ -428,37 +445,33 @@ const ProfileBody = ({ profileData }) => {
       <div className="settings-actions">
         {isEditing ? (
           <>
-            <div className="action-btn">
-              <Button
-                type="button"
-                text="Cancelar edición"
-                onClick={handleEditClick}
-              />
-            </div>
-            <div className="action-btn success">
-              <Button
-                type="button"
-                text="Guardar Cambios"
-                onClick={handleSaveChanges}
-              />
-            </div>
+            <Button
+              type="button"
+              text="Cancelar edición"
+              onClick={handleEditClick}
+              styleType="cancel-btn"
+            />
+            <Button
+              type="button"
+              text="Guardar Cambios"
+              onClick={handleSaveChanges}
+              styleType="save-btn"
+            />
           </>
         ) : (
           <>
-            <div className="action-btn">
-              <Button
-                type="button"
-                text="Editar Perfil"
-                onClick={handleEditClick}
-              />
-            </div>
-            <div className="action-btn danger">
-              <Button
-                type="button"
-                text="Eliminar Cuenta"
-                onClick={handleDeleteAccount}
-              />
-            </div>
+            <Button
+              type="button"
+              text="Editar Perfil"
+              onClick={handleEditClick}
+              styleType="edit-btn"
+            />
+            <Button
+              type="button"
+              text="Eliminar Cuenta"
+              onClick={handleDeleteAccount}
+              styleType="delete-btn"
+            />
           </>
         )}
       </div>

@@ -4,12 +4,12 @@ import "./PasswordField.scss";
 
 const PasswordField = ({
   label,
-  id,
-  name,
   placeholder,
   value,
   onChange,
   required = false,
+  styleType = "default",
+  disabled = false,
 }) => {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
@@ -19,16 +19,16 @@ const PasswordField = ({
 
   return (
     <div className="password-field">
-      <label htmlFor={id}>{label}</label>
+      <label>{label}</label>
       <div className="password-input-container">
         <input
           type={isPasswordVisible ? "text" : "password"}
-          id={id}
-          name={name}
           placeholder={placeholder}
           value={value}
           onChange={(e) => onChange(e.target.value)}
           required={required}
+          className={`password-input ${styleType}`}
+          disabled={disabled}
         />
         <span className="toggle-icon" onClick={toggleVisibility}>
           {isPasswordVisible ? <FaEye /> : <FaEyeSlash />}

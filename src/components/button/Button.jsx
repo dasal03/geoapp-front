@@ -1,10 +1,24 @@
 import React from "react";
-// import "./Button.scss";
+import "./Button.scss";
 
-const Button = ({ type, text, icon, onClick }) => {
+const Button = ({
+  type = "button",
+  text,
+  icon,
+  onClick,
+  styleType = "default",
+  disabled = false,
+  hideText = false,
+}) => {
   return (
-    <button type={type} onClick={onClick}>
-      {text} <i className={icon}></i>
+    <button
+      type={type}
+      disabled={disabled}
+      onClick={onClick}
+      className={`btn ${styleType}`}
+    >
+      <i className={icon}></i>
+      {!hideText && <span>{text}</span>}
     </button>
   );
 };

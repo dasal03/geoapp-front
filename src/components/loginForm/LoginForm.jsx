@@ -64,12 +64,11 @@ const LoginForm = () => {
                 />
                 <PasswordField
                   label="Contraseña"
-                  id="password"
-                  name="password"
                   placeholder="Ingresa tu contraseña"
                   value={formValues.password}
                   onChange={(value) => handleInputChange("password", value)}
-                  required
+                  required="true"
+                  styleType="default"
                 />
               </div>
               <div className="buttons">

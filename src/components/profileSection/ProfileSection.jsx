@@ -18,7 +18,6 @@ const ProfileSection = ({ title, fields, isEditing, handleChange }) => {
     switch (field.type) {
       case "text":
       case "email":
-    //   case "password":
         return (
           <InputField
             label={field.label}
@@ -26,6 +25,8 @@ const ProfileSection = ({ title, fields, isEditing, handleChange }) => {
             value={field.value}
             name={field.name}
             onChange={handleChange}
+            required={field.required}
+            disabled={field.disabled}
           />
         );
       case "phone":
@@ -44,6 +45,7 @@ const ProfileSection = ({ title, fields, isEditing, handleChange }) => {
             value={field.value}
             name={field.name}
             onChange={handleChange}
+            disabled={field.disabled}
           />
         );
       case "select":
@@ -54,6 +56,7 @@ const ProfileSection = ({ title, fields, isEditing, handleChange }) => {
             value={field.value}
             name={field.name}
             onChange={handleChange}
+            disabled={field.disabled}
           />
         );
       default:

@@ -138,6 +138,38 @@ const RegisterForm = () => {
     }
   };
 
+  const isFirstSectionComplete = () => {
+    return (
+      formValues.first_name &&
+      formValues.last_name &&
+      formValues.email &&
+      formValues.username &&
+      formValues.password &&
+      formValues.confirm_password
+    );
+  };
+
+  const isSecondSectionComplete = () => {
+    return (
+      formValues.phone_number &&
+      formValues.date_of_birth &&
+      formValues.gender_id &&
+      formValues.state_id &&
+      formValues.city_id &&
+      formValues.address
+    );
+  };
+
+  const isThirdSectionComplete = () => {
+    return (
+      formValues.document_type_id &&
+      formValues.document_number &&
+      formValues.state_of_issue_id &&
+      formValues.city_of_issue_id &&
+      formValues.date_of_issue
+    );
+  };
+
   const handleFormSwitch = (direction) => {
     if (direction === "next") {
       if (activeForm === "first") setActiveForm("second");
@@ -257,7 +289,9 @@ const RegisterForm = () => {
         name: "city_of_issue_id",
         options: issueCities,
         disabled:
-          isLoading || !formValues.state_of_issue_id || issueCities.length === 0,
+          isLoading ||
+          !formValues.state_of_issue_id ||
+          issueCities.length === 0,
       },
       {
         label: "Fecha de Expedición",
@@ -276,18 +310,22 @@ const RegisterForm = () => {
           <InputField
             label={field.label}
             type={field.type}
+            placeholder={field.placeholder}
             value={value}
             onChange={(e) => handleChange(field.name, e)}
-            placeholder={field.placeholder}
+            required="true"
+            styleType="default"
           />
         );
       case "password":
         return (
           <PasswordField
             label={field.label}
+            placeholder={field.placeholder}
             value={formValues[field.name] || ""}
             onChange={(e) => handleChange(field.name, e)}
-            placeholder={field.placeholder}
+            required="true"
+            styleType="default"
           />
         );
       case "select":
@@ -364,45 +402,62 @@ const RegisterForm = () => {
             {error && <div className="error-message">{error}</div>}
           </div>
           <div className="actions">
-            {activeForm !== "first" && (
-              <div
-                className={`back-btn ${
-                  activeForm === "second" ? "back-active" : ""
-                }`}
-              >
-                <Button
-                  type="button"
-                  text="Volver"
-                  icon="fas fa-arrow-left"
-                  onClick={() => handleFormSwitch("back")}
-                />
-              </div>
-            )}
-            {activeForm !== "third" && (
-              <div
-                className={`next-btn ${
-                  activeForm === "second" ? "next-active" : ""
-                }`}
-              >
+            {activeForm === "first" && (
+              <div className="btn-group">
                 <Button
                   type="button"
                   text="Siguiente"
                   icon="fas fa-arrow-right"
                   onClick={() => handleFormSwitch("next")}
+                  styleType="primary"
+                  disabled={!isFirstSectionComplete()}
+                  className="next-btn"
                 />
               </div>
             )}
+
+            {activeForm === "second" && activeForm !== "third" && (
+              <div className="btn-group">
+                <Button
+                  type="button"
+                  text="Volver"
+                  icon="fas fa-arrow-left"
+                  onClick={() => handleFormSwitch("back")}
+                  styleType="gray"
+                  disabled={activeForm === "first"}
+                  className="back-btn"
+                />
+                <Button
+                  type="button"
+                  text="Siguiente"
+                  icon="fas fa-arrow-right"
+                  onClick={() => handleFormSwitch("next")}
+                  styleType="primary"
+                  disabled={!isSecondSectionComplete()}
+                  className="next-btn"
+                />
+              </div>
+            )}
+
             {activeForm === "third" && (
-              <div
-                className={`register-btn ${
-                  activeForm === "third" ? "register-active" : ""
-                }`}
-              >
+              <div className="btn-group">
+                <Button
+                  type="button"
+                  text="Volver"
+                  icon="fas fa-arrow-left"
+                  onClick={() => handleFormSwitch("back")}
+                  styleType="gray"
+                  disabled={activeForm === "first"}
+                  className="back-btn"
+                />
                 <Button
                   type="submit"
                   text="Registrarse"
                   icon="fas fa-user-plus"
                   onClick={() => handleFormSwitch("next")}
+                  styleType="primary"
+                  disabled={!isThirdSectionComplete()}
+                  className="register-btn"
                 />
               </div>
             )}

@@ -46,34 +46,5 @@
       color: #fff;
       white-space: pre-wrap;
     }
-
-    .read-more-btn {
-      display: inline-flex;
-      align-items: center;
-      margin-top: 35px;
-      padding: 10px 20px;
-      width: fit-content;
-      background-color: #ff6600;
-      color: #fff;
-      font-size: 18px;
-      font-weight: 600;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      transition: background-color 0.3s;
-
-      &:hover {
-        background-color: #cc5200;
-
-        .arrow {
-          visibility: visible;
-        }
-      }
-
-      .arrow {
-        margin-left: 10px;
-        visibility: hidden;
-      }
-    }
   }
 }
