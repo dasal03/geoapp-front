@@ -92,6 +92,15 @@ const RegisterForm = () => {
             ...prevValues,
             [field]: value,
         }));
+
+        if (value.trim() !== "") {
+            setFormError((prevError) => {
+                if (prevError.field === field) {
+                    return { field: null, message: "" };
+                }
+                return prevError;
+            });
+        }
     };
 
     const handleSubmit = async (e) => {
@@ -294,13 +303,24 @@ const RegisterForm = () => {
     const validateSection = (sectionFields) => {
         for (const field of sectionFields) {
             const value = formValues[field.name];
-            // TODO: implement field validations
             if (field.required && (!value || value.toString().trim() === "")) {
                 return {
                     isValid: false,
                     message: `${field.label} es requerido.`,
                     field: field.name
                 };
+            }
+
+            if (field.name === "confirm_password") {
+                const confirmPasswordValue = formValues.confirm_password || "";
+                const passwordValue = formValues.password || "";
+                if (confirmPasswordValue.trim() !== "" && confirmPasswordValue !== passwordValue) {
+                    return {
+                        isValid: false,
+                        message: "Las contraseñas no coinciden.",
+                        field: field.name
+                    };
+                }
             }
         }
         return { isValid: true, message: "", field: null };
@@ -342,24 +362,27 @@ const RegisterForm = () => {
                             placeholder={field.placeholder}
                             value={value}
                             onChange={(e) => handleChange(field.name, e)}
-                            // required={field.required}
                             styleType={`form-${field.type} ${errorClass}`}
                         />
                         {hasError && <span className="error-message">{errorMessage}</span>}
                     </div>
                 );
             case "password":
+                const isConfirmPasswordField = field.name === "confirm_password";
+                const passwordError = isConfirmPasswordField && formValues.confirm_password && formValues.confirm_password.trim() !== "" && formValues.confirm_password !== formValues.password;
+                const passwordSuccess = isConfirmPasswordField && formValues.confirm_password === formValues.password && formValues.confirm_password.trim() !== "";
+
                 return (
-                    <div className={`field-wrapper ${hasError ? "error" : ""}`}>
+                    <div className={`field-wrapper ${hasError || passwordError ? "error" : (isConfirmPasswordField && passwordSuccess ? "success" : "")}`}>
                         <PasswordField
                             label={field.label}
                             placeholder={field.placeholder}
                             value={value}
                             onChange={(e) => handleChange(field.name, e)}
-                            // required={field.required}
-                            styleType={`form-${field.type} ${errorClass}`}
+                            styleType={`form-${field.type} ${passwordError ? "password-error" : ""} ${passwordSuccess ? "password-success" : ""} ${errorClass}`}
                         />
                         {hasError && <span className="error-message">{errorMessage}</span>}
+                        {passwordError && <span className="error-message">Las contraseñas no coinciden.</span>}
                     </div>
                 );
             case "select":
@@ -386,7 +409,6 @@ const RegisterForm = () => {
                             name={field.name}
                             value={value}
                             onChange={(e) => handleChange(field.name, e)}
-                            // required={field.required}
                             placeholder={field.placeholder}
                             styleType={`form-${field.type} ${errorClass}`}
                         />
@@ -400,7 +422,6 @@ const RegisterForm = () => {
                             label={field.label}
                             value={value}
                             onChange={(e) => handleChange(field.name, e)}
-                            // required={field.required}
                             styleType={`form-${field.type} ${errorClass}`}
                         />
                         {hasError && <span className="error-message">{errorMessage}</span>}
