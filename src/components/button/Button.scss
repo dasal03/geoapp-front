@@ -1,22 +1,5 @@
 @import "../../styles/variables";
 
-.actions {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.btn-group {
-  display: flex;
-  justify-content: space-between;
-  gap: 10px;
-  width: 100%;
-
-  .btn {
-    margin-left: 10px;
-  }
-}
-
 .btn {
   padding: 10px 20px;
   border-radius: 4px;
@@ -77,36 +60,4 @@
       transition: visibility 0.3s ease;
     }
   }
-}
-
-.item-actions {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0;
-
-  .btn {
-    &:hover {
-      transform: scale(1.2);
-    }
-
-    &.delete-btn i {
-      color: $danger-color;
-    }
-
-    &.edit-btn i {
-      color: $success-color;
-    }
-  }
-}
-
-.back-btn {
-  justify-content: flex-start;
-  flex-grow: 1;
-}
-
-.next-btn,
-.register-btn {
-  justify-content: flex-end;
-  flex-grow: 1;
 }

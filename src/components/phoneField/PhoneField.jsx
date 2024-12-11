@@ -3,7 +3,15 @@ import PhoneInput from "react-phone-number-input";
 import "react-phone-number-input/style.css";
 import "./PhoneField.scss";
 
-const PhoneField = ({ label, value, onChange }) => {
+const PhoneField = ({
+  label,
+  name,
+  value,
+  onChange,
+  placeholder,
+  required = false,
+  styleType = "default",
+}) => {
   const [phone, setPhone] = useState(value);
 
   const handleChange = (value) => {
@@ -17,9 +25,12 @@ const PhoneField = ({ label, value, onChange }) => {
       <PhoneInput
         international
         defaultCountry="CO"
+        name={name}
         value={phone}
+        placeholder={placeholder}
         onChange={handleChange}
-        placeholder="Número de teléfono"
+        required={required}
+        className={`phone ${styleType}`}
       />
     </div>
   );

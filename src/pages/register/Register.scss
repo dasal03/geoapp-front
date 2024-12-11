@@ -1,5 +1,10 @@
 @import "../../styles/variables";
-@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap");
+@import "../../components/button/Button.scss";
+@import "../../components/inputField/InputField.scss";
+@import "../../components/passwordField/PasswordField.scss";
+@import "../../components/dateInputField/DateInputField.scss";
+@import "../../components/phoneField/PhoneField.scss";
+@import "../../components/selectField/SelectField.scss";
 
 .register-form-container {
   min-height: 100vh;
@@ -13,23 +18,23 @@
   position: relative;
   max-width: 900px;
   width: 100%;
-  border-radius: 8px;
-  padding: 30px;
+  border-radius: 6px;
+  padding: 40px;
+  margin: 0 15px;
   background-color: #fff;
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-  overflow: hidden;
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
-  max-height: 90vh;
+  height: auto;
+  box-sizing: border-box;
+  overflow: hidden;
 }
 
 .form-header {
-  position: relative;
   font-size: 24px;
   font-weight: 600;
   color: #333;
-  margin-bottom: 20px;
+  position: relative;
 
   &::before {
     content: "";
@@ -48,19 +53,19 @@
   transition: 0.3s ease-in-out;
   opacity: 0;
   pointer-events: none;
-}
 
-.form.active {
-  display: block;
-  opacity: 1;
-  pointer-events: auto;
+  &.active {
+    display: block;
+    opacity: 1;
+    pointer-events: auto;
 
-  .title {
-    font-size: 16px;
-    font-weight: 500;
-    color: #333;
-    margin-bottom: 15px;
-    text-align: left;
+    .title {
+      font-size: 16px;
+      font-weight: 500;
+      color: #333;
+      margin-bottom: 15px;
+      text-align: left;
+    }
   }
 }
 
@@ -68,11 +73,47 @@
   display: flex;
   flex-wrap: wrap;
   gap: 20px;
+
+  .field-item {
+    flex: 1 1 calc(33.33% - 20px);
+    max-width: calc(33.33% - 20px);
+
+    input,
+    textarea,
+    select {
+      height: 40px;
+      width: 100%;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+      padding: 10px;
+
+      &:focus {
+        border-color: #4070f4;
+        box-shadow: 0 0 4px rgba(64, 112, 244, 0.5);
+      }
+    }
+
+    .error-message {
+      color: #e74c3c;
+      font-size: 13px;
+      font-weight: 600;
+      margin-top: 5px;
+    }
+
+    .field-wrapper {
+      &.error input,
+      &.error textarea,
+      &.error select {
+        border-color: #e74c3c;
+        box-shadow: 0 0 4px rgba(231, 76, 60, 0.5);
+      }
+    }
+  }
 }
 
 .login-link {
   text-align: center;
-  justify-content: center;
 
   a {
     color: #4070f4;
@@ -80,18 +121,56 @@
   }
 }
 
-@media (max-width: 768px) {
-  .field-item {
+.btn-group {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+
+  .back-btn {
+    background-color: #e2e2e2;
+    color: #333;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-right: auto;
     width: 100%;
+    text-align: center;
+
+    &:hover {
+      background-color: #d0d0d0;
+    }
   }
 
-  .register-form {
-    padding: 20px;
+  .next-btn,
+  .register-btn {
+    background-color: #4070f4;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    width: 100%;
+    text-align: center;
+
+    &:hover {
+      background-color: #2f5bb7;
+    }
   }
 
-  input,
-  textarea,
-  select {
-    height: 40px;
+  .register-btn {
+    margin-left: 10px;
+  }
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+
+    .next-btn,
+    .register-btn,
+    .back-btn {
+      width: 100%;
+      margin-left: 0;
+    }
   }
 }

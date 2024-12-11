@@ -9,7 +9,9 @@ const SelectField = ({
   onChange,
   options,
   placeholder,
+  required = false,
   disabled,
+  styleType = "default",
 }) => {
   const normalizedOptions = Array.isArray(options)
     ? options
@@ -22,7 +24,9 @@ const SelectField = ({
         name={name}
         value={value}
         onChange={(e) => onChange(e.target.value)}
+        required={required}
         disabled={disabled}
+        className={`select ${styleType}`}
       >
         <option value="" disabled>
           {placeholder || "Seleccione una opción"}
