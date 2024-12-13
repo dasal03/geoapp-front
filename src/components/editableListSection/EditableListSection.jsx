@@ -36,6 +36,8 @@ const EditableListSection = ({
     onDeleteItem(itemId);
   };
 
+  
+
   const toggleEditMode = (itemId, itemData) => {
     if (editingItemId === itemId) {
       setEditingItemId(null);

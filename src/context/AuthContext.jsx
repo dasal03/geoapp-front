@@ -55,7 +55,7 @@ export const AuthProvider = ({ children }) => {
         body: JSON.stringify({ username, password }),
       });
 
-      if (data.data.token) {
+      if (data.responseCode === 200 && data.data.token) {
         localStorage.setItem("token", data.data.token);
         setToken(data.data.token);
 
@@ -66,8 +66,10 @@ export const AuthProvider = ({ children }) => {
         } else {
           throw new Error("Error al obtener datos del usuario.");
         }
-      } else {
+      } else if (data.responseCode === 401) {
         throw new Error(data.message || "Credenciales inválidas.");
+      } else {
+        throw new Error(data.message || "Error al iniciar sesión.");
       }
     } catch (error) {
       console.error("Error durante el inicio de sesión:", error);

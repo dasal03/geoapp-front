@@ -4,13 +4,20 @@ import PhoneField from "../phoneField/PhoneField";
 import DateInputField from "../dateInputField/DateInputField";
 import SelectField from "../selectField/SelectField";
 
-const ProfileSection = ({ title, fields, isEditing, handleChange }) => {
+const ProfileSection = ({
+  title,
+  fields,
+  isEditing,
+  handleInputChange,
+  handlePhoneChange,
+}) => {
   const renderField = (field) => {
+    const value = field.value || "";
     if (!isEditing) {
       return (
         <>
           <strong>{field.label}:</strong>
-          <p>{field.value}</p>
+          <p>{value}</p>
         </>
       );
     }
@@ -21,56 +28,57 @@ const ProfileSection = ({ title, fields, isEditing, handleChange }) => {
         return (
           <InputField
             label={field.label}
-            type={field.type}
-            value={field.value}
+            value={value}
             name={field.name}
-            onChange={handleChange}
             required={field.required}
             disabled={field.disabled}
+            onChange={handleInputChange}
           />
         );
       case "phone":
         return (
           <PhoneField
             label={field.label}
-            value={field.value}
+            value={value}
             name={field.name}
-            onChange={handleChange}
+            onChange={handlePhoneChange}
           />
         );
       case "date":
         return (
           <DateInputField
             label={field.label}
-            value={field.value}
+            value={value}
             name={field.name}
-            onChange={handleChange}
             disabled={field.disabled}
+            onChange={handleInputChange}
           />
         );
       case "select":
         return (
           <SelectField
             label={field.label}
-            options={field.options || []}
-            value={field.value}
+            value={value}
             name={field.name}
-            onChange={handleChange}
             disabled={field.disabled}
+            options={field.options}
+            onChange={handleInputChange}
           />
         );
       default:
-        return <p>{field.value}</p>;
+        return null;
     }
   };
 
   return (
-    <section className="profile-section">
+    <div className="profile-section">
       <h2>{title}</h2>
-      {fields.map((field, index) => (
-        <div key={index}>{renderField(field)}</div>
+      {fields.map((field, idx) => (
+        <div key={idx} className="profile-field">
+          {renderField(field)}
+        </div>
       ))}
-    </section>
+    </div>
   );
 };
 

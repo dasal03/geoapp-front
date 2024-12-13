@@ -1,30 +1,82 @@
-class FormValidator {
-    static validateFields(fields, formValues) {
-        for (const field of fields) {
-            const value = formValues[field.name];
+class Validator {
+  constructor(formValues) {
+    this.formValues = formValues;
 
-            if (field.required && (!value || value.toString().trim() === "")) {
-                return {
-                    isValid: false,
-                    message: `${field.label} es requerido.`,
-                    field: field.name,
-                };
-            }
+    this.regex = {
+      email: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+      phone: /^\+\d{1,3}-\d{1,3}-\d{1,4}$/,
+      username: /^[a-zA-Z0-9_]+$/,
+    };
 
-            if (field.name === "confirm_password") {
-                const confirmPasswordValue = formValues.confirm_password || "";
-                const passwordValue = formValues.password || "";
-                if (confirmPasswordValue.trim() !== "" && confirmPasswordValue !== passwordValue) {
-                    return {
-                        isValid: false,
-                        message: "Las contraseñas no coinciden.",
-                        field: field.name,
-                    };
-                }
-            }
-        }
-        return { isValid: true, message: "", field: null };
+    this.messages = {
+      required: (field) => `${field} es requerido.`,
+      email: "Ingrese un correo electrónico válido.",
+      phone: "Ingrese un número de teléfono válido.",
+      username:
+        "El nombre de usuario debe contener solo letras, números y guiones bajos (_).",
+      passwordMatch: "Las contraseñas no coinciden.",
+    };
+  }
+
+  validateField(field) {
+    const value = this.formValues[field.name]?.toString().trim() || "";
+
+    if (field.required && !value) {
+      return {
+        isValid: false,
+        message: this.messages.required(field.label),
+        field: field.name,
+      };
     }
+
+    if (field.name === "confirm_password") {
+      const confirmPasswordValue = this.formValues.confirm_password || "";
+      const passwordValue = this.formValues.password || "";
+      if (confirmPasswordValue && confirmPasswordValue !== passwordValue) {
+        return {
+          isValid: false,
+          message: this.messages.passwordMatch,
+          field: field.name,
+        };
+      }
+    }
+
+    if (field.type === "email" && !this.regex.email.test(value)) {
+      return {
+        isValid: false,
+        message: this.messages.email,
+        field: field.name,
+      };
+    }
+
+    if (field.type === "phone" && !this.regex.phone.test(value)) {
+      return {
+        isValid: false,
+        message: this.messages.phone,
+        field: field.name,
+      };
+    }
+
+    if (field.name === "username" && !this.regex.username.test(value)) {
+      return {
+        isValid: false,
+        message: this.messages.username,
+        field: field.name,
+      };
+    }
+
+    return { isValid: true, message: "", field: null };
+  }
+
+  validateSection(sectionFields) {
+    for (const field of sectionFields) {
+      const result = this.validateField(field);
+      if (!result.isValid) {
+        return result;
+      }
+    }
+    return { isValid: true, message: "", field: null };
+  }
 }
 
-export default FormValidator;
+export default Validator;

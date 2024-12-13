@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { showAlert } from "../../utils/generalTools";
 import apiFetch from "../../utils/apiClient";
+import Validator from "../../utils/formValidator";
 import InputField from "../inputField/InputField";
 import PasswordField from "../passwordField/PasswordField";
 import SelectField from "../selectField/SelectField";
@@ -14,8 +15,8 @@ import "../../pages/register/Register.scss";
 
 const RegisterForm = () => {
   const [activeForm, setActiveForm] = useState("first");
-  const [formValues, setFormValues] = useState({});
   const [error, setError] = useState("");
+  const [formValues, setFormValues] = useState({});
   const [formError, setFormError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [documentTypes, setDocumentTypes] = useState([]);
@@ -132,7 +133,9 @@ const RegisterForm = () => {
         if (addressResponse.responseCode === 201) {
           navigate("/login");
         } else {
-          setError("Error al registrar la dirección.");
+          setError(
+            addressResponse.description || "Error al registrar la dirección."
+          );
         }
       } else {
         setError(userResponse.description || "Error al registrar el usuario.");
@@ -298,38 +301,10 @@ const RegisterForm = () => {
     ],
   };
 
-  const validateSection = (sectionFields) => {
-    for (const field of sectionFields) {
-      const value = formValues[field.name];
-      if (field.required && (!value || value.toString().trim() === "")) {
-        return {
-          isValid: false,
-          message: `${field.label} es requerido.`,
-          field: field.name,
-        };
-      }
-
-      if (field.name === "confirm_password") {
-        const confirmPasswordValue = formValues.confirm_password || "";
-        const passwordValue = formValues.password || "";
-        if (
-          confirmPasswordValue.trim() !== "" &&
-          confirmPasswordValue !== passwordValue
-        ) {
-          return {
-            isValid: false,
-            message: "Las contraseñas no coinciden.",
-            field: field.name,
-          };
-        }
-      }
-    }
-    return { isValid: true, message: "", field: null };
-  };
-
   const handleFormSwitch = (direction) => {
     const currentFields = formFields[activeForm];
-    const validation = validateSection(currentFields);
+    const validator = new Validator(formValues);
+    const validation = validator.validateSection(currentFields);
 
     if (direction === "next") {
       if (validation.isValid) {
@@ -350,10 +325,8 @@ const RegisterForm = () => {
     const hasError = formError.field === field.name;
     const errorMessage = hasError ? formError.message : "";
 
-    // Manejo de la clase de error común
     const errorClass = hasError ? `${field.type}-error` : "";
 
-    // Función común para renderizar el campo con error
     const renderFieldWithError = (FieldComponent, additionalProps = {}) => (
       <div className={`field-wrapper ${hasError ? "error" : ""}`}>
         <FieldComponent {...commonProps} {...additionalProps} />
@@ -432,31 +405,34 @@ const RegisterForm = () => {
           {isLoading ? (
             <LoadingSpinner />
           ) : (
-            Object.entries(formFields).map(([formKey, fields]) => (
-              <div
-                key={formKey}
-                className={`form ${formKey} ${
-                  activeForm === formKey ? "active" : ""
-                }`}
-              >
-                <div className="title">
-                  {formKey === "first"
-                    ? "Información de la cuenta"
-                    : formKey === "second"
-                    ? "Información Personal"
-                    : "Información de Identidad"}
-                </div>
-                <div className="section">
-                  <div className="section-content">
-                    {fields.map((field, index) => (
-                      <div key={index} className="field-item">
-                        {renderField(field)}
-                      </div>
-                    ))}
+            Object.entries(formFields).map(([formKey, fields]) => {
+              const title =
+                formKey === "first"
+                  ? "Información de la cuenta"
+                  : formKey === "second"
+                  ? "Información Personal"
+                  : "Información del documento";
+
+              return (
+                <div
+                  key={formKey}
+                  className={`form ${formKey} ${
+                    activeForm === formKey ? "active" : ""
+                  }`}
+                >
+                  <div className="title">{title}</div>
+                  <div className="section">
+                    <div className="section-content">
+                      {fields.map((field, index) => (
+                        <div key={index} className="field-item">
+                          {renderField(field)}
+                        </div>
+                      ))}
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))
+              );
+            })
           )}
           <div className="error-container">
             {error && <div className="error-message">{error}</div>}
@@ -473,7 +449,7 @@ const RegisterForm = () => {
                 />
               )}
 
-              {activeForm === "second" && activeForm !== "third" && (
+              {activeForm === "second" && (
                 <>
                   <Button
                     type="button"

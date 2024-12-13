@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
-import ProfileSection from "../../components/profileSection/ProfileSection";
-import Button from "../../components/button/Button";
-import EditableListSection from "../editableListSection/EditableListSection";
 import apiFetch from "../../utils/apiClient";
 import { showAlert, formatDate } from "../../utils/generalTools";
+import ProfileSection from "../profileSection/ProfileSection";
+import EditableListSection from "../editableListSection/EditableListSection";
+import Button from "../../components/button/Button";
 import Swal from "sweetalert2";
 import "./ProfileBody.scss";
 
@@ -15,7 +15,6 @@ const ProfileBody = ({ profileData }) => {
 
   const [formData, setFormData] = useState({
     user_id: profileData.user_id,
-    // full_name: profileData.full_name,
     email: profileData.email,
     phone_number: profileData.phone_number,
     gender_id: profileData.gender_id,
@@ -90,20 +89,20 @@ const ProfileBody = ({ profileData }) => {
       disabled: true,
     },
     {
-        label: "Departamento de expedición",
-        type: "select",
-        value: formData.state_of_issue,
-        name: "state_of_issue",
-        options: formData.state_of_issue,
-        disabled: true,
+      label: "Departamento de expedición",
+      type: "select",
+      value: formData.state_of_issue,
+      name: "state_of_issue",
+      options: formData.state_of_issue,
+      disabled: true,
     },
     {
-        label: "Ciudad de expedición",
-        type: "select",
-        value: formData.city_of_issue,
-        name: "city_of_issue",
-        options: formData.city_of_issue,
-        disabled: true,
+      label: "Ciudad de expedición",
+      type: "select",
+      value: formData.city_of_issue,
+      name: "city_of_issue",
+      options: formData.city_of_issue,
+      disabled: true,
     },
   ];
 
@@ -157,20 +156,41 @@ const ProfileBody = ({ profileData }) => {
     }
   };
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
+  const handleInputChange = (name, value) => {
+    setFormData((prevData) => ({
+      ...prevData,
       [name]: value,
     }));
   };
 
+  const handlePhoneChange = (value) => {
+    setFormData((prevData) => ({
+      ...prevData,
+      phone: value,
+    }));
+  };
+
   const handleSaveChanges = async () => {
+    if (!formData.email || !formData.phone_number) {
+      showAlert(
+        "error",
+        "Campos incompletos",
+        "Por favor, complete todos los campos obligatorios."
+      );
+      return;
+    }
+
     try {
+      const updated_values = {
+        user_id: formData.user_id,
+        email: formData.email,
+        phone_number: formData.phone_number,
+      };
+
       setLoading(true);
       const response = await apiFetch("/update_user", {
         method: "PUT",
-        body: JSON.stringify(formData),
+        body: JSON.stringify(updated_values),
       });
 
       if (response.responseCode === 200) {
@@ -252,143 +272,7 @@ const ProfileBody = ({ profileData }) => {
     }
   }, [formData.user_id]);
 
-  const createAddress = async (newAddressData) => {
-    try {
-      setLoading(true);
-      const response = await fetch("/api/create_address", {
-        method: "POST",
-        body: JSON.stringify(newAddressData),
-      });
-
-      if (response.responseCode === 200) {
-        const newAddress = await response.json();
-        setAddresses((prevAddresses) => [...prevAddresses, newAddress]);
-      } else {
-        showAlert("error", "Error", "Error al crear la dirección.");
-      }
-    } catch (error) {
-      showAlert("error", "Error", "Error de conexión.");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const updateAddress = async (addressId, updatedAddressData) => {
-    try {
-      setLoading(true);
-      const response = await fetch(`/api/update_address/${addressId}`, {
-        method: "PUT",
-        body: JSON.stringify(updatedAddressData),
-      });
-
-      if (response.responseCode) {
-        const updatedAddress = await response.json();
-        setAddresses((prevAddresses) =>
-          prevAddresses.map((address) =>
-            address.id === addressId ? updatedAddress : address
-          )
-        );
-      } else {
-        showAlert("error", "Error", "Error al actualizar la dirección.");
-      }
-    } catch (error) {
-      showAlert("error", "Error", "Error de conexión.");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const deleteAddress = async (addressId) => {
-    try {
-      setLoading(true);
-      const response = await fetch(`/api/delete_address/${addressId}`, {
-        method: "DELETE",
-      });
-
-      if (response.responseCode === 200) {
-        setAddresses((prevAddresses) =>
-          prevAddresses.filter((address) => address.id !== addressId)
-        );
-      } else {
-        showAlert("error", "Error", "Error al eliminar la dirección.");
-      }
-    } catch (error) {
-      showAlert("error", "Error", "Error de conexión.");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const createBankAccount = async (newAccountData) => {
-    try {
-      setLoading(true);
-      const response = await fetch("/api/create_bank_account", {
-        method: "POST",
-        body: JSON.stringify(newAccountData),
-      });
-
-      if (response.responseCode === 200) {
-        const newAccount = await response.json();
-        setBankAccounts((prevAccounts) => [...prevAccounts, newAccount]);
-      } else {
-        showAlert("error", "Error", "Error al crear la cuenta bancaria.");
-      }
-    } catch (error) {
-      showAlert("error", "Error", "Error de conexión.");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const updateBankAccount = async (accountId, updatedAccountData) => {
-    try {
-      setLoading(true);
-      const response = await fetch(`/api/update_bank_account/${accountId}`, {
-        method: "PUT",
-        body: JSON.stringify(updatedAccountData),
-      });
-
-      if (response.responseCode === 200) {
-        const updatedAccount = await response.json();
-        setBankAccounts((prevAccounts) =>
-          prevAccounts.map((account) =>
-            account.id === accountId ? updatedAccount : account
-          )
-        );
-      } else {
-        showAlert("error", "Error", "Error al actualizar la cuenta bancaria.");
-      }
-    } catch (error) {
-      showAlert("error", "Error", "Error de conexión.");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const deleteBankAccount = async (accountId) => {
-    try {
-      setLoading(true);
-      const response = await fetch(`/api/delete_bank_account/${accountId}`, {
-        method: "DELETE",
-      });
-
-      if (response.responseCode === 200) {
-        setBankAccounts((prevAccounts) =>
-          prevAccounts.filter((account) => account.id !== accountId)
-        );
-      } else {
-        showAlert("error", "Error", "Error al eliminar la cuenta bancaria.");
-      }
-    } catch (error) {
-      showAlert("error", "Error", "Error de conexión.");
-    } finally {
-      setLoading(false);
-    }
-  };
-
   const handleTogglePrimary = (type, id) => {
-    // console.log("Toggle primary:", type, id);
-
     if (type === "address") {
       setAddresses((prevAddresses) =>
         prevAddresses.map((address) =>
@@ -414,21 +298,19 @@ const ProfileBody = ({ profileData }) => {
         title="Información Personal"
         fields={personalInfoFields}
         isEditing={isEditing}
-        handleChange={handleChange}
+        handleChange={handleInputChange}
+        handlePhoneChange={handlePhoneChange}
       />
       <ProfileSection
         title="Información del Documento"
         fields={documentInfoFields}
         isEditing={isEditing}
-        handleChange={handleChange}
+        handleChange={handleInputChange}
       />
       <EditableListSection
         title="Direcciones"
         items={addresses}
         isEditing={isEditing}
-        onAddItem={createAddress}
-        onEditItem={updateAddress}
-        onDeleteItem={deleteAddress}
         onTogglePrimary={handleTogglePrimary}
         type="address"
       />
@@ -436,9 +318,6 @@ const ProfileBody = ({ profileData }) => {
         title="Información Bancaria"
         items={bankAccounts}
         isEditing={isEditing}
-        onAddItem={createBankAccount}
-        onEditItem={updateBankAccount}
-        onDeleteItem={deleteBankAccount}
         onTogglePrimary={handleTogglePrimary}
         type="bank"
       />
@@ -447,15 +326,17 @@ const ProfileBody = ({ profileData }) => {
           <>
             <Button
               type="button"
-              text="Cancelar edición"
-              onClick={handleEditClick}
-              styleType="cancel-btn"
-            />
-            <Button
-              type="button"
               text="Guardar Cambios"
               onClick={handleSaveChanges}
               styleType="save-btn"
+              disabled={loading}
+            />
+            <Button
+              type="button"
+              text="Cancelar edición"
+              onClick={handleEditClick}
+              styleType="cancel-btn"
+              disabled={loading}
             />
           </>
         ) : (
