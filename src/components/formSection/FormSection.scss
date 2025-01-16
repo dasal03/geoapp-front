@@ -1,0 +1,83 @@
+@import "../../styles/variables";
+
+.form-section {
+  background-color: #ffffff;
+  border: 1px solid #dcdcdc;
+  border-radius: 10px;
+  padding: 25px;
+  box-shadow: $box-shadow;
+  width: 100%;
+  max-width: 800px;
+  margin-bottom: 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+
+  &-title {
+    font-size: 1.75rem;
+    font-weight: 600;
+    color: #222;
+    margin-bottom: 10px;
+    border-bottom: 2px solid #007bff;
+    padding-bottom: 5px;
+  }
+
+  .form-fields {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+
+  .form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 15px;
+
+    .btn-edit,
+    .btn-save,
+    .btn-cancel {
+      padding: 12px 18px;
+      font-size: 1rem;
+      font-weight: 500;
+      border-radius: 6px;
+      border: none;
+      cursor: pointer;
+      transition: transform 0.2s ease, background-color 0.3s ease, color 0.3s ease;
+
+      &:hover {
+        transform: translateY(-2px);
+      }
+
+      &:active {
+        transform: translateY(0);
+      }
+    }
+
+    .btn-edit {
+      background-color: #007bff;
+      color: #fff;
+
+      &:hover {
+        background-color: #0056b3;
+      }
+    }
+
+    .btn-save {
+      background-color: #28a745;
+      color: #fff;
+
+      &:hover {
+        background-color: #1e7e34;
+      }
+    }
+
+    .btn-cancel {
+      background-color: #dc3545;
+      color: #fff;
+
+      &:hover {
+        background-color: #c82333;
+      }
+    }
+  }
+}

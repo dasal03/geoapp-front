@@ -1,4 +1,7 @@
-import React, { useState } from "react";
+import { useState } from "react";
+import InputField from "../ui/inputField/InputField";
+import TextAreaField from "../ui/textAreaField/TextAreaField";
+import Button from "../ui/button/Button";
 import "./ContactForm.scss";
 
 const ContactForm = () => {
@@ -18,8 +21,6 @@ const ContactForm = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Aquí iría la lógica para enviar el formulario
-    console.log(formData);
   };
 
   return (
@@ -27,10 +28,9 @@ const ContactForm = () => {
       <h3>Envíanos tu mensaje</h3>
       <form onSubmit={handleSubmit}>
         <div className="form-group">
-          <label htmlFor="name">Nombre</label>
-          <input
+          <InputField
+            label="Nombre"
             type="text"
-            id="name"
             name="name"
             placeholder="Tu nombre"
             value={formData.name}
@@ -40,12 +40,11 @@ const ContactForm = () => {
         </div>
 
         <div className="form-group">
-          <label htmlFor="email">Correo electrónico</label>
-          <input
+          <InputField
+            label="Correo"
             type="email"
-            id="email"
             name="email"
-            placeholder="Tu correo electrónico"
+            placeholder="Tu correo@email"
             value={formData.email}
             onChange={handleChange}
             required
@@ -53,20 +52,17 @@ const ContactForm = () => {
         </div>
 
         <div className="form-group">
-          <label htmlFor="message">Mensaje</label>
-          <textarea
+          <TextAreaField
+            label="Mensaje"
             id="message"
             name="message"
-            placeholder="Escribe tu mensaje aquí..."
+            placeholder="Escribe tu mensaje aqui..."
             value={formData.message}
             onChange={handleChange}
             required
-          ></textarea>
+          />
         </div>
-
-        <button type="submit" className="submit-btn">
-          Enviar mensaje
-        </button>
+        <Button type="submit" text="Enviar mensaje" />
       </form>
     </div>
   );

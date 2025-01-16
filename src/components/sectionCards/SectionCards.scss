@@ -1,0 +1,88 @@
+@import "../../styles/variables";
+
+.section-cards {
+  list-style-type: none;
+  padding: 0;
+  margin: 0 auto;
+  width: 100%;
+  max-width: 800px;
+  background-color: $light-gray;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  display: grid;
+  grid-template-rows: repeat(auto-fill, auto);
+  gap: 10px;
+}
+
+.section-card {
+  display: flex;
+  align-items: center;
+  height: auto;
+}
+
+.section-card a {
+  text-decoration: none;
+  color: #333;
+  font-size: 1.2rem;
+  padding: 10px 20px;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  background-color: #fff;
+  border-radius: 10px;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  width: 100%;
+}
+
+.section-card a:hover {
+  background-color: #f9f9f9;
+  transform: translateY(-4px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.section-card a:active {
+  background-color: #f0f0f0;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.section-icon-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background-color: $white-color;
+  margin-right: 15px;
+  flex-shrink: 0;
+}
+
+.section-icon {
+  font-size: 1.8rem;
+  color: #fff;
+}
+
+.section-text {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.section-text span {
+  font-weight: bold;
+  font-size: 1.1rem;
+}
+
+.section-text p {
+  font-size: 0.9rem;
+  color: #6c757d;
+  margin: 0;
+}
+
+.arrow-icon {
+  font-size: 1.5rem;
+  color: #6c757d;
+  margin-left: auto;
+}

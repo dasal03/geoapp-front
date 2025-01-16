@@ -1,15 +1,14 @@
-import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { useNavigate, Link } from "react-router-dom";
 import { showAlert } from "../../utils/generalTools";
 import apiFetch from "../../utils/apiClient";
 import Validator from "../../utils/formValidator";
-import InputField from "../inputField/InputField";
-import PasswordField from "../passwordField/PasswordField";
-import SelectField from "../selectField/SelectField";
-import PhoneField from "../phoneField/PhoneField";
-import DateInputField from "../dateInputField/DateInputField";
-import Button from "../button/Button";
+import InputField from "../ui/inputField/InputField";
+import PasswordField from "../ui/passwordField/PasswordField";
+import SelectField from "../ui/selectField/SelectField";
+import PhoneField from "../ui/phoneField/PhoneField";
+import DateInputField from "../ui/dateInputField/DateInputField";
+import Button from "../ui/button/Button";
 import LoadingSpinner from "../loading/LoadingSpinner";
 import "../../pages/register/Register.scss";
 
@@ -102,6 +101,13 @@ const RegisterForm = () => {
         return prevError;
       });
     }
+  };
+
+  const handlePhoneChange = (value) => {
+    setFormValues((prevValues) => ({
+      ...prevValues,
+      "phone_number": value,
+    }));
   };
 
   const handleSubmit = async (e) => {
@@ -387,7 +393,9 @@ const RegisterForm = () => {
       case "select":
         return renderFieldWithError(SelectField, { options: field.options });
       case "phone":
-        return renderFieldWithError(PhoneField);
+        return renderFieldWithError(PhoneField, {
+          handlePhoneChange: handlePhoneChange,
+        });
       case "date":
         return renderFieldWithError(DateInputField);
       default:

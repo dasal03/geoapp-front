@@ -1,4 +1,3 @@
-import React from "react";
 import "./ServiceCard.scss";
 
 const ServiceCard = ({ image, title, description, link }) => (

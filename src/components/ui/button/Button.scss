@@ -1,0 +1,32 @@
+@import "../../../styles/variables";
+
+button {
+  padding: 10px 20px;
+  border-radius: 4px;
+  font-size: 16px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.3s ease, opacity 0.3s ease;
+  border: none;
+  background-color: #007bff;
+  color: white;
+  margin-bottom: 5px;
+
+  &:hover {
+    background-color: #0056b3;
+  }
+
+  i {
+    font-size: 18px;
+    margin-left: 8px;
+    color: inherit;
+  }
+
+  span {
+    margin-left: 8px;
+    font-size: 14px;
+    color: inherit;
+  }
+}

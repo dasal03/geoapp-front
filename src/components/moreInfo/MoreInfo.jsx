@@ -1,4 +1,3 @@
-import React from "react";
 import ServiceCard from "../serviceCard/ServiceCard";
 import "./MoreInfo.scss";
 

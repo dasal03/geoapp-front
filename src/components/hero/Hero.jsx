@@ -1,5 +1,4 @@
-import React from "react";
-import Button from "../button/Button";
+import Button from "../ui/button/Button";
 import "./Hero.scss";
 
 const Hero = ({ onReadMore }) => (
@@ -19,7 +18,6 @@ const Hero = ({ onReadMore }) => (
         text="Conocenos"
         icon="fas fa-arrow-down"
         onClick={onReadMore}
-        styleType="secondary"
       />
     </div>
   </section>

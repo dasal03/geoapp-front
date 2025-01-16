@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { FaEdit } from "react-icons/fa";
 import placeholderProfileImage from "../../assets/profile-placeholder.jpg";
 import { convertImageToBase64, getCroppedImg } from "../../utils/generalTools";

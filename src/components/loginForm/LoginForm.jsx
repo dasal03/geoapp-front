@@ -1,11 +1,10 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import LoadingSpinner from "../loading/LoadingSpinner";
-import InputField from "../inputField/InputField";
-import PasswordField from "../passwordField/PasswordField";
-import Button from "../button/Button";
+import InputField from "../ui/inputField/InputField";
+import PasswordField from "../ui/passwordField/PasswordField";
+import Button from "../ui/button/Button";
 import "../../pages/login/Login.scss";
 
 const LoginForm = () => {

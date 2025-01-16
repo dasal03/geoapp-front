@@ -1,4 +1,4 @@
-import React, { createContext, useState, useContext, useEffect } from "react";
+import { createContext, useState, useContext, useEffect } from "react";
 import apiFetch from "../utils/apiClient";
 
 const AuthContext = createContext();
@@ -14,14 +14,8 @@ export const AuthProvider = ({ children }) => {
       const storedToken = localStorage.getItem("token");
       if (storedToken) {
         try {
-          const userData = await validateToken(storedToken);
-          if (userData) {
-            setToken(storedToken);
-            setUser(userData);
-            setIsAuthenticated(true);
-          } else {
-            logout();
-          }
+          setToken(storedToken);
+          setIsAuthenticated(true);
         } catch (error) {
           console.error("Error durante la inicialización:", error);
           logout();
@@ -32,21 +26,6 @@ export const AuthProvider = ({ children }) => {
 
     initializeAuth();
   }, []);
-
-  const validateToken = async (token) => {
-    try {
-      const response = await apiFetch("/get_user_data_by_token", {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      return response.data;
-    } catch (error) {
-      console.error("Error al validar el token:", error);
-      return null;
-    }
-  };
 
   const login = async (username, password) => {
     try {
@@ -59,13 +38,8 @@ export const AuthProvider = ({ children }) => {
         localStorage.setItem("token", data.data.token);
         setToken(data.data.token);
 
-        const userData = await validateToken(data.data.token);
-        if (userData) {
-          setUser(userData);
-          setIsAuthenticated(true);
-        } else {
-          throw new Error("Error al obtener datos del usuario.");
-        }
+        setUser(data.data.user);
+        setIsAuthenticated(true);
       } else if (data.responseCode === 401) {
         throw new Error(data.message || "Credenciales inválidas.");
       } else {

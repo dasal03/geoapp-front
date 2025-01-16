@@ -4,7 +4,7 @@ class Validator {
 
     this.regex = {
       email: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-      phone: /^\+\d{1,3}-\d{1,3}-\d{1,4}$/,
+      phone: /^\+\d{1,3}\d{1,14}$/,
       username: /^[a-zA-Z0-9_]+$/,
     };
 

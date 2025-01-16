@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import {
   FaUserCircle,
@@ -10,7 +10,7 @@ import {
   FaEnvelope,
 } from "react-icons/fa";
 import { useAuth } from "../../context/AuthContext";
-import Dropdown from "../dropdown/Dropdown";
+import Dropdown from "../ui/dropdown/Dropdown";
 import "./Navbar.scss";
 
 function Navbar() {

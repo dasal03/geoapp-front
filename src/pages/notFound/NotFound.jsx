@@ -1,4 +1,3 @@
-import React from "react";
 import { useNavigate } from "react-router-dom";
 import { FaExclamationTriangle } from "react-icons/fa";
 import "./NotFound.scss";

@@ -1,8 +1,12 @@
-import React from "react";
+import { useEffect } from "react";
 import Footer from "../../components/footer/Footer";
 import "./PrivacyPolicy.scss";
 
 function PrivacyPolicy() {
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   return (
     <div className="privacy-container">
       <div className="privacy-hero">

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { ReactComponent as SearchIcon } from "../../assets/search-icon.svg";
 import { useAuth } from "../../context/AuthContext";
 import LoadingSpinner from "../../components/loading/LoadingSpinner";

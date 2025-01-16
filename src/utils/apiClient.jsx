@@ -20,21 +20,40 @@ const apiFetch = async (
       ...options,
     });
 
+    const { responseCode, responseReason, data, description } = response.data;
+
+    if (responseCode !== 200) {
+      return {
+        responseCode,
+        responseReason,
+        data,
+        description,
+      };
+    }
+
     return response.data;
   } catch (error) {
     if (error.response) {
-      if (error.response.status === 401) {
+      const { status, data } = error.response;
+
+      if (status === 401) {
         if (logout) logout();
         throw new Error("No autorizado. Sesión cerrada.");
       }
 
-      const errorMessage =
-        error.response.data?.message || "Error en la solicitud.";
-      throw new Error(errorMessage);
+      if ([400, 404].includes(status)) {
+        return {
+          responseCode: status,
+          data: [],
+          description: data?.data,
+        };
+      }
+
+      throw new Error(data?.description || "Error en la solicitud.");
     }
 
     console.error("Error en apiFetch:", error);
-    throw error;
+    throw new Error("Error inesperado. Intenta nuevamente.");
   }
 };
 

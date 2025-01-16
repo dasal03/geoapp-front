@@ -1,4 +1,3 @@
-import React from "react";
 import ContactForm from "../../components/contactForm/ContactForm";
 import Footer from "../../components/footer/Footer";
 import "./ContactUs.scss";
