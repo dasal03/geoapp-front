@@ -9,7 +9,7 @@ import SelectField from "../ui/selectField/SelectField";
 import PhoneField from "../ui/phoneField/PhoneField";
 import DateInputField from "../ui/dateInputField/DateInputField";
 import Button from "../ui/button/Button";
-import LoadingSpinner from "../loading/LoadingSpinner";
+import Loader from "../ui/loader/Loader";
 import "../../pages/register/Register.scss";
 
 const RegisterForm = () => {
@@ -411,7 +411,7 @@ const RegisterForm = () => {
         </header>
         <form onSubmit={handleSubmit}>
           {isLoading ? (
-            <LoadingSpinner />
+            <Loader />
           ) : (
             Object.entries(formFields).map(([formKey, fields]) => {
               const title =

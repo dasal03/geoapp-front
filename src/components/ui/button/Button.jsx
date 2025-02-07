@@ -12,7 +12,7 @@ const Button = ({
   return (
     <button
       type={type}
-      className={styleType}
+      className={`${styleType} ${hideText ? "hide-text" : ""}`}
       disabled={disabled}
       onClick={onClick}
     >

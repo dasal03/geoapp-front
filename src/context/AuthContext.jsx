@@ -16,10 +16,29 @@ export const AuthProvider = ({ children }) => {
         try {
           setToken(storedToken);
           setIsAuthenticated(true);
+
+          const response = await apiFetch("/get_user_data_by_token", {
+            method: "GET",
+            headers: {
+              Authorization: `Bearer ${storedToken}`,
+            },
+          });
+
+          if (response.responseCode === 200) {
+            setUser({
+              user_id: response.data.user_id,
+              username: response.data.username,
+              role_name: response.data.role_name,
+            });
+          } else if (response.responseCode === 401) {
+            logout();
+          }
         } catch (error) {
-          console.error("Error durante la inicialización:", error);
+          console.error("Error during initialization:", error);
           logout();
         }
+      } else {
+        setIsAuthenticated(false);
       }
       setIsLoading(false);
     };
@@ -37,16 +56,29 @@ export const AuthProvider = ({ children }) => {
       if (data.responseCode === 200 && data.data.token) {
         localStorage.setItem("token", data.data.token);
         setToken(data.data.token);
-
-        setUser(data.data.user);
         setIsAuthenticated(true);
-      } else if (data.responseCode === 401) {
-        throw new Error(data.message || "Credenciales inválidas.");
+
+        const userResponse = await apiFetch("/get_user_data_by_token", {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${data.data.token}`,
+          },
+        });
+
+        if (userResponse.responseCode === 200) {
+          setUser({
+            user_id: userResponse.data.user_id,
+            username: userResponse.data.username,
+            role_name: userResponse.data.role_name,
+          });
+        } else {
+          throw new Error("Error fetching user data.");
+        }
       } else {
-        throw new Error(data.message || "Error al iniciar sesión.");
+        throw new Error(data.message || "Error logging in.");
       }
     } catch (error) {
-      console.error("Error durante el inicio de sesión:", error);
+      console.error("Login error:", error);
       throw error;
     }
   };

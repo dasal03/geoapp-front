@@ -29,4 +29,36 @@ button {
     font-size: 14px;
     color: inherit;
   }
+
+  &.hide-text {
+    width: 45px;
+    height: 45px;
+    padding: 10px;
+    gap: 0;
+    min-width: auto;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    i {
+      font-size: 1.5rem;
+    }
+
+    span {
+      visibility: hidden;
+      width: 0;
+      height: 0;
+      position: absolute;
+    }
+
+    &:hover {
+      transform: scale(1.1);
+      box-shadow: 0 8px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    &:active {
+      transform: scale(1);
+    }
+  }
 }

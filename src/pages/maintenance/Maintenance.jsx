@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { ReactComponent as SearchIcon } from "../../assets/search-icon.svg";
 import { useAuth } from "../../context/AuthContext";
-import LoadingSpinner from "../../components/loading/LoadingSpinner";
+import Loader from "../../components/ui/loader/Loader";
 import apiFetch from "../../utils/apiClient";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
@@ -240,7 +240,7 @@ function Maintenance() {
       </div>
 
       {isLoading ? (
-        <LoadingSpinner />
+        <Loader />
       ) : (
         <>
           {noMaintenanceMessage && (

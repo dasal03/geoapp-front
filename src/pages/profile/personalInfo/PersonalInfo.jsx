@@ -3,7 +3,7 @@ import { useOutletContext } from "react-router-dom";
 import { showAlert } from "../../../utils/generalTools";
 import apiFetch from "../../../utils/apiClient";
 import FormSection from "../../../components/formSection/FormSection";
-import Loader from "../../../components/loading/LoadingSpinner";
+import Loader from "../../../components/ui/loader/Loader";
 
 const PersonalInfo = () => {
   const { profileData } = useOutletContext();

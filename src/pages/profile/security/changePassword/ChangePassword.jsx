@@ -3,7 +3,7 @@ import { showAlert } from "../../../../utils/generalTools";
 import apiFetch from "../../../../utils/apiClient";
 import PasswordField from "../../../../components/ui/passwordField/PasswordField";
 import Button from "../../../../components/ui/button/Button";
-import Loader from "../../../../components/loading/LoadingSpinner";
+import Loader from "../../../../components/ui/loader/Loader";
 import "./ChangePassword.scss";
 
 const ChangePassword = () => {

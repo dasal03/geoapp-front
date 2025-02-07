@@ -22,7 +22,7 @@ const apiFetch = async (
 
     const { responseCode, responseReason, data, description } = response.data;
 
-    if (responseCode !== 200) {
+    if ([200, 201].includes(responseCode)) {
       return {
         responseCode,
         responseReason,
@@ -33,27 +33,37 @@ const apiFetch = async (
 
     return response.data;
   } catch (error) {
+    console.error("Error en apiFetch:", error);
+
     if (error.response) {
       const { status, data } = error.response;
 
       if (status === 401) {
         if (logout) logout();
-        throw new Error("No autorizado. Sesión cerrada.");
+        return {
+          responseCode: 401,
+          description: "No autorizado. Sesión cerrada.",
+        };
       }
 
       if ([400, 404].includes(status)) {
         return {
           responseCode: status,
+          description: data?.description || "Error en la solicitud.",
           data: [],
-          description: data?.data,
         };
       }
 
-      throw new Error(data?.description || "Error en la solicitud.");
+      return {
+        responseCode: status,
+        description: data?.description || "Error en la solicitud.",
+      };
     }
 
-    console.error("Error en apiFetch:", error);
-    throw new Error("Error inesperado. Intenta nuevamente.");
+    return {
+      responseCode: 500,
+      description: "Error inesperado. Intenta nuevamente.",
+    };
   }
 };
 

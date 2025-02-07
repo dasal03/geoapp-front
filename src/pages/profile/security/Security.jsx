@@ -1,6 +1,6 @@
 import { FaKey, FaMobileAlt } from "react-icons/fa";
 import { Outlet, useLocation, useOutletContext } from "react-router-dom";
-import LoadingSpinner from "../../../components/loading/LoadingSpinner";
+import Loader from "../../../components/ui/loader/Loader";
 import SectionCards from "../../../components/sectionCards/SectionCards";
 
 const Security = () => {
@@ -8,7 +8,7 @@ const Security = () => {
   const location = useLocation();
 
   if (!profileData) {
-    return <LoadingSpinner />;
+    return <Loader />;
   }
 
   const cards = [

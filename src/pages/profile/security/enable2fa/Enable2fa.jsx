@@ -1,11 +1,11 @@
 import { useOutletContext } from "react-router-dom";
-import LoadingSpinner from "../../../../components/loading/LoadingSpinner";
+import Loader from "../../../../components/ui/loader/Loader";
 
 const Enable2fa = () => {
   const { profileData } = useOutletContext();
 
   if (!profileData) {
-    return <LoadingSpinner />;
+    return <Loader />;
   }
 
   const handleSave = (updatedData) => {

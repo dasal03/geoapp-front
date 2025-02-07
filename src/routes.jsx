@@ -22,18 +22,20 @@ const AppRoutes = () => (
     <Route path="/" element={<Home />} />
     <Route path="/login" element={<Login />} />
     <Route path="/register" element={<Register />} />
+
     <Route
       path="/services/maintenance"
       element={
-        <PrivateRoute>
+        <PrivateRoute allowedRoles={["admin"]}>
           <Maintenance />
         </PrivateRoute>
       }
     />
+
     <Route
       path="/profile"
       element={
-        <PrivateRoute>
+        <PrivateRoute allowedRoles={["client", "admin"]}>
           <Profile />
         </PrivateRoute>
       }
@@ -47,9 +49,11 @@ const AppRoutes = () => (
       <Route path="cards" element={<Cards />} />
       <Route path="addresses" element={<Addresses />} />
     </Route>
+
     <Route path="/about" element={<About />} />
     <Route path="/privacy-policy" element={<PrivacyPolicy />} />
     <Route path="/contact-us" element={<ContactUs />} />
+
     <Route path="*" element={<NotFound />} />
   </Routes>
 );

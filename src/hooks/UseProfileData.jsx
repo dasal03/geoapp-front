@@ -1,53 +1,22 @@
 import { useState, useEffect } from "react";
+import { useAuth } from "../context/AuthContext";
 import apiFetch from "../utils/apiClient";
 import { showAlert, formatDate } from "../utils/generalTools";
 import Validator from "../utils/formValidator";
 
 const useProfileData = (onSuccess) => {
-  const [userId, setUserId] = useState(null);
+  const { user, isAuthenticated, isLoading: authLoading } = useAuth();
   const [profileData, setProfileData] = useState({});
   const [modifiedFields, setModifiedFields] = useState(new Set());
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    const fetchTokenData = async () => {
-      setLoading(true);
-      const token = localStorage.getItem("token");
-      if (!token) {
-        showAlert("error", "Error", "No se encuentra el token.");
-        setLoading(false);
-        return;
-      }
-
-      try {
-        const response = await apiFetch("/get_user_data_by_token", {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-
-        if (response.responseCode === 200) {
-          setUserId(response.data.user_id);
-        } else {
-          showAlert("error", "Error", response.description);
-        }
-      } catch (error) {
-        showAlert("error", "Error", "No se pudo cargar el perfil.");
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchTokenData();
-  }, []);
-
-  useEffect(() => {
-    if (userId) {
+    if (isAuthenticated && user?.user_id) {
       const fetchProfileData = async () => {
         setLoading(true);
         try {
-          const response = await apiFetch(`/get_user?user_id=${userId}`);
+          const response = await apiFetch(`/get_user?user_id=${user.user_id}`);
           if (response.responseCode === 200) {
             const datesToFormat = ["date_of_birth", "date_of_issue"];
             const formattedData = {
@@ -71,7 +40,11 @@ const useProfileData = (onSuccess) => {
       };
       fetchProfileData();
     }
-  }, [userId]);
+  }, [user, isAuthenticated]);
+
+  if (authLoading) {
+    return { loading: true };
+  }
 
   const handleChange = (name, value) => {
     setProfileData((prev) => ({
@@ -108,7 +81,7 @@ const useProfileData = (onSuccess) => {
     setLoading(true);
 
     const updatedData = {
-      user_id: userId,
+      user_id: user?.user_id,
     };
     modifiedFields.forEach((field) => {
       updatedData[field] = profileData[field];

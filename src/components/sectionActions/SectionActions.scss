@@ -16,7 +16,8 @@
     border-radius: 8px;
     border: none;
     cursor: pointer;
-    transition: transform 0.2s ease, box-shadow 0.3s ease, background-color 0.3s ease;
+    transition: transform 0.2s ease, box-shadow 0.3s ease,
+      background-color 0.3s ease;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -35,18 +36,6 @@
 
     i {
       font-size: 1.2rem;
-    }
-
-    &.hide-text {
-      padding: 10px;
-      gap: 0;
-      i {
-        font-size: 1.4rem;
-      }
-
-      span {
-        display: none;
-      }
     }
   }
 

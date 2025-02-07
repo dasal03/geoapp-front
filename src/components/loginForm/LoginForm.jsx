@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
-import LoadingSpinner from "../loading/LoadingSpinner";
+import Loader from "../ui/loader/Loader";
 import InputField from "../ui/inputField/InputField";
 import PasswordField from "../ui/passwordField/PasswordField";
 import Button from "../ui/button/Button";
@@ -47,7 +47,7 @@ const LoginForm = () => {
 
         <form onSubmit={handleSubmit}>
           {isLoading ? (
-            <LoadingSpinner />
+            <Loader />
           ) : (
             <>
               <div className="fields">

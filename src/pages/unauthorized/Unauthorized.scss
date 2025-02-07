@@ -1,0 +1,87 @@
+@import "../../styles/variables";
+
+.unauthorized-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background-color: $light-gray;
+  text-align: center;
+
+  .unauthorized-hero {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    .unauthorized-icon {
+      font-size: 80px;
+      color: $danger-color;
+      margin-bottom: 20px;
+    }
+
+    h1 {
+      font-size: 120px;
+      font-weight: bold;
+      color: $primary-color;
+      margin: 0;
+      animation: fadeIn 1s ease-in-out;
+    }
+
+    .unauthorized-message {
+      font-size: 20px;
+      color: $primary-color;
+      margin: 20px 0;
+    }
+
+    .h1-decorator {
+      width: 80px;
+      height: 8px;
+      background-color: $danger-color;
+      margin: 20px auto;
+    }
+
+    button {
+      padding: 12px 24px;
+      font-size: 18px;
+      font-weight: bold;
+      color: $white-color;
+      background-color: $danger-color;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: transform 0.3s ease, background-color 0.3s ease;
+      box-shadow: $box-shadow;
+
+      &:hover {
+        background-color: darken($danger-color, 10%);
+        transform: scale(1.05);
+      }
+    }
+  }
+
+  .unauthorized-content {
+    margin-top: 30px;
+
+    p {
+      font-size: 18px;
+      color: $primary-color;
+      line-height: 1.6;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+  }
+
+  @keyframes fadeIn {
+    0% {
+      opacity: 0;
+      transform: translateY(-20px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+}
