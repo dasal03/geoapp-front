@@ -10,7 +10,7 @@ import AccountInfo from "./pages/profile/accountInfo/AccountInfo";
 import Security from "./pages/profile/security/Security";
 import ChangePassword from "./pages/profile/security/changePassword/ChangePassword";
 import Enable2fa from "./pages/profile/security/enable2fa/Enable2fa";
-import Cards from "./pages/profile/cards/Cards";
+import PaymentCards from "./pages/profile/paymentCards/PaymentCards";
 import Addresses from "./pages/profile/addresses/Addresses";
 import About from "./pages/about/About";
 import ContactUs from "./pages/contactUs/ContactUs";
@@ -46,7 +46,7 @@ const AppRoutes = () => (
         <Route path="change-password" element={<ChangePassword />} />
         <Route path="enable-2fa" element={<Enable2fa />} />
       </Route>
-      <Route path="cards" element={<Cards />} />
+      <Route path="payment-cards" element={<PaymentCards />} />
       <Route path="addresses" element={<Addresses />} />
     </Route>
 

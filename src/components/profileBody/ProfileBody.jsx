@@ -16,14 +16,14 @@ const ProfileBody = ({ profileData }) => {
       icon: <FaIdCard className="profile-icon" />,
       title: "Información Personal",
       description:
-        "Gestiona tus datos personales como nombre, teléfono y fecha de nacimiento.",
+        "Información personal y de identidad.",
     },
     {
       path: "/profile/account-info",
       icon: <FaUser className="profile-icon" />,
       title: "Datos de tu Cuenta",
       description:
-        "Accede y edita tus datos de cuenta, como correo electrónico y contraseña.",
+        "Datos que representan a tu cuenta.",
     },
     {
       path: "/profile/security",
@@ -33,16 +33,16 @@ const ProfileBody = ({ profileData }) => {
         "Asegura tu cuenta con configuraciones de seguridad adicionales.",
     },
     {
-      path: "/profile/cards",
+      path: "/profile/payment-cards",
       icon: <FaCreditCard className="profile-icon" />,
       title: "Tarjetas",
-      description: "Agrega, edita o elimina tus tarjetas de pago.",
+      description: "Tarjetas guardadas en tu cuenta.",
     },
     {
       path: "/profile/addresses",
       icon: <FaMapMarkerAlt className="profile-icon" />,
       title: "Direcciones",
-      description: "Gestiona tus direcciones de envío y facturación.",
+      description: "Direcciones guardadas en tu cuenta.",
     },
   ];
 

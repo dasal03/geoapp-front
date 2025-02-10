@@ -18,7 +18,7 @@ const breadcrumbItems = [
     label: "Activar Verificación en dos pasos",
   },
   { path: "/profile/security/change-password", label: "Cambiar Contraseña" },
-  { path: "/profile/cards", label: "Tarjetas" },
+  { path: "/profile/payment-cards", label: "Tarjetas" },
   { path: "/profile/addresses", label: "Direcciones" },
 ];
 
@@ -26,8 +26,6 @@ const Profile = () => {
   const { user, isLoading } = useAuth();
   const location = useLocation();
   const [isEditing, setIsEditing] = useState(false);
-
-  console.log("user", user?.user_id);
 
   const { profileData, errors, handleChange, loading } = UseProfileData(
     user?.user_id,

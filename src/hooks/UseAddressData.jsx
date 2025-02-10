@@ -22,10 +22,10 @@ const useAddressData = (userId) => {
         setAddressData(formattedData);
         originalDataRef.current = formattedData;
       } else {
-        showAlert("error", "Error", response.description);
+        setAddressData([]);
       }
     } catch (error) {
-      showAlert("error", "Error", "No se pudo cargar el perfil.");
+      showAlert("error", "Error", "No se pudieron cargar las direcciones.");
       console.error(error);
     } finally {
       setLoading(false);
@@ -142,7 +142,7 @@ const useAddressData = (userId) => {
       await sendRequest(
         "/update_address",
         { method: "PUT", body: JSON.stringify(payload) },
-        "Dirección actualizada.",
+        "Dirección actualizada exitosamente.",
         callback
       );
     },
@@ -154,7 +154,7 @@ const useAddressData = (userId) => {
       await sendRequest(
         "/create_address",
         { method: "POST", body: JSON.stringify(newAddress) },
-        "Dirección añadida.",
+        "Dirección vinculada exitosamente.",
         callback
       );
     },
@@ -166,7 +166,7 @@ const useAddressData = (userId) => {
       await sendRequest(
         `/delete_address?address_id=${addressId.address_id || addressId}`,
         { method: "DELETE" },
-        "Dirección eliminada.",
+        "Dirección desvinculada exitosamente.",
         callback
       );
     },
@@ -178,9 +178,9 @@ const useAddressData = (userId) => {
     errors,
     loading,
     handleChange,
-    updateAddress,
     setAsPrimary,
     addAddress,
+    updateAddress,
     deleteAddress,
   };
 };

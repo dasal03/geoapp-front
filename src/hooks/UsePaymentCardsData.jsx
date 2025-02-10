@@ -1,191 +1,191 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import apiFetch from "../utils/apiClient";
 import { showAlert } from "../utils/generalTools";
 import Validator from "../utils/formValidator";
 
-const usePaymentCardsData = (userId, onSuccess) => {
-  const [paymentCardsData, setPaymentCardsData] = useState({});
+const usePaymentCardsData = (userId) => {
+  const [paymentCardsData, setPaymentCardsData] = useState([]);
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
   const originalDataRef = useRef([]);
 
-  useEffect(() => {
+  const fetchPaymentCardsData = useCallback(async () => {
     if (!userId) return;
-    const fetchPaymentCardsData = async () => {
+    setLoading(true);
+    try {
+      const response = await apiFetch(`/get_user_cards?user_id=${userId}`);
+      if (response.responseCode === 200) {
+        const formattedData = response.data.map((paymentCard) => ({
+          id: paymentCard.payment_card_id,
+          ...paymentCard,
+        }));
+        setPaymentCardsData(formattedData);
+        originalDataRef.current = formattedData;
+      } else {
+        setPaymentCardsData([]);
+      }
+    } catch (error) {
+      showAlert("error", "Error", "No se pudieron cargar las tarjetas.");
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  }, [userId]);
+
+  useEffect(() => {
+    fetchPaymentCardsData();
+  }, [fetchPaymentCardsData]);
+
+  const validateField = useCallback((field, value) => {
+    const validator = new Validator({ [field]: value });
+    const result = validator.validateField(field);
+    setErrors((prev) => ({
+      ...prev,
+      [field]: result.isValid ? undefined : result.message,
+    }));
+  }, []);
+
+  const handleChange = useCallback(
+    (paymentCardId, field, value) => {
+      setPaymentCardsData((prev) =>
+        prev.map((paymentCard) =>
+          paymentCard.payment_card_id === paymentCardId
+            ? { ...paymentCard, [field]: value }
+            : paymentCard
+        )
+      );
+      if (errors[field] !== undefined) {
+        validateField(field, value);
+      }
+    },
+    [errors, validateField]
+  );
+
+  const getModifiedFields = useCallback(
+    (paymentCard) => {
+      const original = originalDataRef.current.find(
+        (orig) => orig.payment_card_id === paymentCard.payment_card_id
+      );
+      if (!original) return null;
+
+      const modifiedFields = Object.fromEntries(
+        Object.entries(paymentCard).filter(
+          ([key, value]) =>
+            value !== original[key] && !["bank_name"].includes(key)
+        )
+      );
+
+      return Object.keys(modifiedFields).length > 0
+        ? {
+            payment_card_id: paymentCard.payment_card_id,
+            user_id: userId,
+            ...modifiedFields,
+          }
+        : null;
+    },
+    [userId]
+  );
+
+  const sendRequest = useCallback(
+    async (
+      url,
+      options,
+      successMessage = null,
+      callback,
+      shouldRefetch = true
+    ) => {
       setLoading(true);
       try {
-        const response = await apiFetch(`/get_user_cards?user_id=${userId}`);
-        if (response.responseCode === 200) {
-          const formattedData = response.data.map((paymentCard) => ({
-            id: paymentCard.payment_card_id,
-            ...paymentCard,
-          }));
-          setPaymentCardsData(formattedData);
-          originalDataRef.current = formattedData;
+        const response = await apiFetch(url, options);
+        if (response.responseCode === 200 || response.responseCode === 201) {
+          if (successMessage) {
+            showAlert("success", "Éxito", successMessage, callback);
+          }
+          if (shouldRefetch) {
+            await fetchPaymentCardsData();
+          }
         } else {
-          showAlert("error", "Error", response.description);
+          showAlert(
+            "error",
+            "Error",
+            response.description || "Ocurrió un error."
+          );
         }
-      } catch (error) {
-        showAlert("error", "Error", "No se pudo cargar el perfil.");
+      } catch {
+        showAlert("error", "Error", "Error al conectar con el servidor.");
       } finally {
         setLoading(false);
       }
-    };
-    fetchPaymentCardsData();
-  }, [userId]);
+    },
+    [fetchPaymentCardsData]
+  );
 
-  const handleChange = (paymentCardId, field, value) => {
-    setPaymentCardsData((prev) =>
-      prev.map((paymentCard) =>
-        paymentCard.payment_card_id === paymentCardId
-          ? { ...paymentCard, [field]: value }
-          : paymentCard
-      )
-    );
-    validateField(field, value);
-  };
+  const setAsPrimary = useCallback(
+    async (paymentCard, newValue) => {
+      const payload = {
+        payment_card_id: paymentCard.payment_card_id,
+        user_id: userId,
+        is_principal: newValue ? 1 : 0,
+      };
 
-  const validateField = (fieldName, value) => {
-    const validator = new Validator({ [fieldName]: value });
-    const result = validator.validate(fieldName);
-    setErrors((prev) => ({
-      ...prev,
-      [fieldName]: result.isValid ? undefined : result.message,
-    }));
-  };
-
-  const getModifiedFields = (paymentCard) => {
-    const original = originalDataRef.current.find(
-      (orig) => orig.payment_card_id === paymentCard.payment_card_id
-    );
-
-    if (!original) return null;
-
-    const modifiedFields = {};
-    Object.keys(paymentCard).forEach((key) => {
-      if (paymentCard[key] !== original[key] && key !== "bank_name") {
-        modifiedFields[key] = paymentCard[key];
-      }
-    });
-
-    return Object.keys(modifiedFields).length > 0
-      ? { payment_card_id: paymentCard.address_id, ...modifiedFields }
-      : null;
-  };
-
-  const updatePaymentCard = async (paymentCard) => {
-    const payload = getModifiedFields(paymentCard);
-    if (!payload) return;
-
-    try {
-      const response = await apiFetch("/update_payment_card", {
-        method: "PUT",
-        body: JSON.stringify({ data: [payload] }),
-      });
-      if (response.responseCode === 200) {
-        showAlert("success", "Éxito", "Método de pago actualizado.");
-        onSuccess();
-      } else {
-        showAlert("error", "Error", response.description);
-      }
-    } catch (error) {
-      showAlert("error", "Error", "No se pudo actualizar la tarjeta.");
-    }
-  };
-
-  const setAsPrimary = async (paymentCardId) => {
-    if (Array.isArray(paymentCardId)) {
-      paymentCardId = paymentCardId[0].payment_card_id;
-    }
-
-    const currentPrimary = paymentCardsData.find(
-      (paymentCard) => paymentCard.is_principal === 1
-    );
-    if (currentPrimary?.address_id === paymentCardId) {
-      showAlert("info", "Info", "Esta dirección ya es la principal.");
-      return;
-    }
-
-    const updatedPaymentCards = paymentCardsData
-      .filter(
-        (paymentCard) =>
-          paymentCard.is_principal === 1 ||
-          paymentCard.payment_card_id === paymentCardId
-      )
-      .map(({ id, bank_name, active, ...paymentCard }) => ({
-        ...paymentCard,
-        user_id: paymentCard.user_id,
-        is_principal: paymentCard.payment_card_id === paymentCardId ? 1 : 0,
-      }));
-
-    setPaymentCardsData(updatedPaymentCards);
-
-    try {
-      const response = await apiFetch("/update_payment_card", {
-        method: "PUT",
-        body: JSON.stringify(updatedPaymentCards),
-      });
-
-      if (response.responseCode === 200) {
-        showAlert("success", "Éxito", "Tarjeta principal actualizada.");
-      } else {
-        showAlert("error", "Error", response.description);
-        setPaymentCardsData(paymentCardsData);
-      }
-    } catch (error) {
-      showAlert(
-        "error",
-        "Error",
-        "No se pudo actualizar la tarjeta principal."
+      await sendRequest(
+        "/update_payment_card",
+        { method: "PUT", body: JSON.stringify(payload) },
+        null,
+        true
       );
-      setPaymentCardsData(paymentCardsData);
-    }
-  };
+    },
+    [sendRequest, userId]
+  );
 
-  const addPaymentCard = async () => {
-    try {
-      const response = await apiFetch("/create_address", {
-        method: "POST",
-        body: JSON.stringify(paymentCardsData),
-      });
-
-      if (response.responseCode === 201) {
-        onSuccess();
-      } else {
-        showAlert("error", "Error", response.description);
-      }
-    } catch (error) {
-      showAlert("error", "Error", "No se pudo añadir el método de pago");
-    }
-  };
-
-  const deletePaymentCard = async (paymentCardId) => {
-    try {
-      const response = await apiFetch(
-        `/delete_payment_card?payment_card_id=${paymentCardId}`,
-        {
-          method: "DELETE",
-        }
+  const updatePaymentCard = useCallback(
+    async (paymentCard, callback) => {
+      const payload = getModifiedFields(paymentCard);
+      if (!payload) return;
+      await sendRequest(
+        "/update_payment_card",
+        { method: "PUT", body: JSON.stringify(payload) },
+        "Tarjeta actualizada exitosamente.",
+        callback
       );
+    },
+    [sendRequest, getModifiedFields]
+  );
 
-      if (response.responseCode === 200) {
-        onSuccess();
-      } else {
-        showAlert("error", "Error", response.description);
-      }
-    } catch (error) {
-      showAlert("error", "Error", "No se pudo eliminar el método de pago");
-    }
-  };
+  const addPaymentCard = useCallback(
+    async (newPaymentCard, callback) => {
+      await sendRequest(
+        "/create_payment_card",
+        { method: "POST", body: JSON.stringify(newPaymentCard) },
+        "Tarjeta vinculada exitosamente.",
+        callback
+      );
+    },
+    [sendRequest]
+  );
+
+  const deletePaymentCard = useCallback(
+    async (paymentCardId, callback) => {
+      await sendRequest(
+        `/delete_payment_card?payment_card_id=${
+          paymentCardId.payment_card_id || paymentCardId
+        }`,
+        { method: "DELETE" },
+        "Tarjeta desvinculada exitosamente.",
+        callback
+      );
+    },
+    [sendRequest]
+  );
 
   return {
     paymentCardsData,
     errors,
     loading,
     handleChange,
-    updatePaymentCard,
     setAsPrimary,
     addPaymentCard,
+    updatePaymentCard,
     deletePaymentCard,
   };
 };

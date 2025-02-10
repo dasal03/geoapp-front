@@ -2,6 +2,7 @@ import { memo, useState } from "react";
 import InputField from "../ui/inputField/InputField";
 import Button from "../ui/button/Button";
 import SectionActions from "../sectionActions/SectionActions";
+import DynamicModal from "../modals/DynamicModal";
 import "./EditableListSection.scss";
 
 const EditableListSection = memo(
@@ -10,30 +11,47 @@ const EditableListSection = memo(
     sectionData = [],
     sectionConfig = [],
     onCheckChange,
+    onAddItem,
     onEditItem,
     onDeleteItem,
-    handleAddItem,
+    userId,
   }) => {
-    const [loading, setLoading] = useState(false);
+    const [loadingItems, setLoadingItems] = useState({});
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [selectedItem, setSelectedItem] = useState(null);
 
     const handleCheckChange = async (item, newValue) => {
-      setLoading(true);
+      setLoadingItems((prev) => ({ ...prev, [item.id]: true }));
       await onCheckChange?.(item, newValue);
-      setLoading(false);
+      setLoadingItems((prev) => ({ ...prev, [item.id]: false }));
+    };
+
+    const openModal = (item = null) => {
+      setSelectedItem(item);
+      setIsModalOpen(true);
+    };
+
+    const handleSave = (newData) => {
+      if (selectedItem) {
+        onEditItem?.({ ...selectedItem, ...newData });
+      } else {
+        onAddItem?.(newData);
+      }
+      setIsModalOpen(false);
     };
 
     return (
       <section className="editable-list-section">
-        {loading && (
-          <div className="spinner-overlay">
-            <div className="spinner"></div>
-          </div>
-        )}
         <h3 className="section-title">{title}</h3>
         <div className="section-fields">
-          {sectionData.length > 0 ? (
+          {sectionData && sectionData.length ? (
             sectionData.map((item) => (
               <div key={item.id || item.name} className="editable-item">
+                {loadingItems[item.id] && (
+                  <div className="spinner-overlay">
+                    <div className="spinner"></div>
+                  </div>
+                )}
                 <InputField
                   type="checkbox"
                   name="principal"
@@ -50,23 +68,33 @@ const EditableListSection = memo(
                 </div>
                 <SectionActions
                   isEditing={false}
-                  onEdit={() => onEditItem?.(item)}
+                  onEdit={() => openModal(item)}
                   onDelete={() => onDeleteItem?.(item)}
                   hideText
                 />
               </div>
             ))
           ) : (
-            <p className="no-data">No hay datos disponibles.</p>
+            <p className="no-data">No hay {title} vinculadas.</p>
           )}
           <Button
             type="button"
-            text={`Añadir ${title}`}
+            text={`Agregar ${title}`}
             icon="fa fa-plus"
-            onClick={handleAddItem}
+            onClick={() => openModal()}
             styleType="add-item-btn"
           />
         </div>
+
+        <DynamicModal
+          open={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          data={selectedItem}
+          onSave={handleSave}
+          fields={sectionConfig}
+          title={selectedItem ? `Editar ${title}` : `Añadir ${title}`}
+          userId={userId}
+        />
       </section>
     );
   }

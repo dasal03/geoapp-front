@@ -4,7 +4,6 @@ import apiFetch from "../../../utils/apiClient";
 import { showAlert } from "../../../utils/generalTools";
 import useAddressData from "../../../hooks/UseAddressData";
 import EditableListSection from "../../../components/editableListSection/EditableListSection";
-import AddressModal from "../../../components/modals/AddressModal";
 import Loader from "../../../components/ui/loader/Loader";
 
 const Addresses = () => {
@@ -21,10 +20,9 @@ const Addresses = () => {
   } = useAddressData(userId);
 
   const [states, setStates] = useState([]);
+  const [selectedState, setSelectedState] = useState(null);
   const [cities, setCities] = useState([]);
   const [loadingCities, setLoadingCities] = useState(false);
-  const [selectedAddress, setSelectedAddress] = useState(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     const fetchStates = async () => {
@@ -32,9 +30,9 @@ const Addresses = () => {
         const response = await apiFetch("/get_states");
         if (response.responseCode === 200) {
           setStates(
-            response.data.map((state) => ({
-              value: state.state_id,
-              label: state.state_name,
+            response.data.map(({ state_id, state_name }) => ({
+              value: state_id,
+              label: state_name,
             }))
           );
         }
@@ -51,9 +49,9 @@ const Addresses = () => {
       const response = await apiFetch(`/get_cities?state_id=${stateId}`);
       if (response.responseCode === 200) {
         setCities(
-          response.data.map((city) => ({
-            value: city.city_id,
-            label: city.city_name,
+          response.data.map(({ city_id, city_name }) => ({
+            value: city_id,
+            label: city_name,
           }))
         );
       }
@@ -64,41 +62,38 @@ const Addresses = () => {
     }
   }, []);
 
+  useEffect(() => {
+    if (selectedState) {
+      fetchCities(selectedState);
+    }
+  }, [selectedState, fetchCities]);
+
   const sectionConfig = [
     {
+      id: "state_id",
       name: "state_name",
       label: "Departamento",
       type: "select",
       options: states,
+      onChange: (e) => setSelectedState(e.target.value),
     },
     {
+      id: "city_id",
       name: "city_name",
       label: "Ciudad",
       type: "select",
       options: cities,
-      disabled: loadingCities,
+      disabled: loadingCities || !selectedState,
     },
     {
+      id: "address",
       name: "address",
       label: "Dirección",
       type: "text",
-      placeholder: "Dirección",
     },
   ];
 
-  const handleAddAddress = () => {
-    setSelectedAddress(null);
-    setIsModalOpen(true);
-  };
-
-  const handleEditAddress = (address) => {
-    setSelectedAddress(address);
-    setIsModalOpen(true);
-  };
-
-  if (loading) {
-    return <Loader />;
-  }
+  if (loading) return <Loader />;
 
   return (
     <div className="profile-section">
@@ -107,29 +102,9 @@ const Addresses = () => {
         sectionData={addressData}
         sectionConfig={sectionConfig}
         onCheckChange={setAsPrimary}
-        onEditItem={handleEditAddress}
+        onAddItem={addAddress}
+        onEditItem={updateAddress}
         onDeleteItem={deleteAddress}
-        handleAddItem={handleAddAddress}
-      />
-
-      <AddressModal
-        open={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        address={selectedAddress}
-        onSave={(newAddress) => {
-          if (selectedAddress) {
-            updateAddress({
-              ...newAddress,
-              address_id: selectedAddress.address_id,
-            });
-          } else {
-            addAddress(newAddress);
-          }
-          setIsModalOpen(false);
-        }}
-        states={states}
-        cities={cities}
-        fetchCities={fetchCities}
         userId={userId}
       />
     </div>
