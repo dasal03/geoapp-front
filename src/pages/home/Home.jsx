@@ -1,9 +1,9 @@
 import Hero from "../../components/hero/Hero";
-import MoreInfo from "../../components/moreInfo/MoreInfo";
 import Footer from "../../components/footer/Footer";
-import maintenanceImage from "../../assets/maintenance.jpg";
+import MoreInfo from "../../components/moreInfo/MoreInfo";
 import saleImage from "../../assets/sale.jpg";
 import rentalImage from "../../assets/rental.jpg";
+import maintenanceImage from "../../assets/maintenance.jpg";
 import "./Home.scss";
 
 function Home() {
@@ -44,7 +44,9 @@ function Home() {
   return (
     <div className="home-container">
       <Hero onReadMore={handleReadMore} />
-      <MoreInfo cards={serviceCards} />
+      <section id="cards-section">
+        <MoreInfo cards={serviceCards} />
+      </section>
       <Footer />
     </div>
   );

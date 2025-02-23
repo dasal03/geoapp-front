@@ -1,5 +1,3 @@
-import Swal from "sweetalert2";
-
 export const convertImageToBase64 = (imageFile) => {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
@@ -50,15 +48,6 @@ export const getCroppedImg = (imageSrc, pixelCrop) => {
       }, "image/jpeg");
     };
     image.onerror = reject;
-  });
-};
-
-
-export const showAlert = (type, title, text) => {
-  Swal.fire({
-    icon: type,
-    title: title,
-    text: text,
   });
 };
 

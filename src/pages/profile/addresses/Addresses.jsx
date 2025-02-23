@@ -1,99 +1,40 @@
-import { useState, useEffect, useCallback } from "react";
-import { useOutletContext } from "react-router-dom";
-import apiFetch from "../../../utils/apiClient";
-import { showAlert } from "../../../utils/generalTools";
-import useAddressData from "../../../hooks/UseAddressData";
+import { useNavigate, useOutletContext } from "react-router-dom";
 import EditableListSection from "../../../components/editableListSection/EditableListSection";
 import Loader from "../../../components/ui/loader/Loader";
+import useAddressData from "../../../hooks/UseAddressData";
 
 const Addresses = () => {
+  const navigate = useNavigate();
   const { profileData } = useOutletContext();
   const userId = profileData?.user_id;
 
-  const {
-    loading,
-    addressData,
-    updateAddress,
-    addAddress,
-    deleteAddress,
-    setAsPrimary,
-  } = useAddressData(userId);
+  const { loading, addressData, deleteAddress, setAsPrimary } =
+    useAddressData(userId);
 
-  const [states, setStates] = useState([]);
-  const [selectedState, setSelectedState] = useState(null);
-  const [cities, setCities] = useState([]);
-  const [loadingCities, setLoadingCities] = useState(false);
-
-  useEffect(() => {
-    const fetchStates = async () => {
-      try {
-        const response = await apiFetch("/get_states");
-        if (response.responseCode === 200) {
-          setStates(
-            response.data.map(({ state_id, state_name }) => ({
-              value: state_id,
-              label: state_name,
-            }))
-          );
-        }
-      } catch {
-        showAlert("error", "Error", "Error al conectar con el servidor.");
-      }
-    };
-    fetchStates();
-  }, []);
-
-  const fetchCities = useCallback(async (stateId) => {
-    setLoadingCities(true);
-    try {
-      const response = await apiFetch(`/get_cities?state_id=${stateId}`);
-      if (response.responseCode === 200) {
-        setCities(
-          response.data.map(({ city_id, city_name }) => ({
-            value: city_id,
-            label: city_name,
-          }))
-        );
-      }
-    } catch {
-      showAlert("error", "Error", "Error al obtener ciudades.");
-    } finally {
-      setLoadingCities(false);
-    }
-  }, []);
-
-  useEffect(() => {
-    if (selectedState) {
-      fetchCities(selectedState);
-    }
-  }, [selectedState, fetchCities]);
+  if (loading) return <Loader />;
 
   const sectionConfig = [
     {
-      id: "state_id",
-      name: "state_name",
+      name: "state",
       label: "Departamento",
-      type: "select",
-      options: states,
-      onChange: (e) => setSelectedState(e.target.value),
     },
     {
-      id: "city_id",
-      name: "city_name",
+      name: "city",
       label: "Ciudad",
-      type: "select",
-      options: cities,
-      disabled: loadingCities || !selectedState,
     },
     {
-      id: "address",
-      name: "address",
+      name: "full_address",
       label: "Dirección",
-      type: "text",
+    },
+    {
+      name: "postcode",
+      label: "Código Postal",
+    },
+    {
+      name: "description",
+      label: "Descripción",
     },
   ];
-
-  if (loading) return <Loader />;
 
   return (
     <div className="profile-section">
@@ -102,10 +43,13 @@ const Addresses = () => {
         sectionData={addressData}
         sectionConfig={sectionConfig}
         onCheckChange={setAsPrimary}
-        onAddItem={addAddress}
-        onEditItem={updateAddress}
+        onAddItem={() => navigate(`/profile/addresses-form?user_id=${userId}`)}
+        onEditItem={(item) =>
+          navigate(
+            `/profile/addresses-form?user_id=${userId}&address_id=${item.id}`
+          )
+        }
         onDeleteItem={deleteAddress}
-        userId={userId}
       />
     </div>
   );

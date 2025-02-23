@@ -1,0 +1,129 @@
+@import "../../../styles/variables";
+@import "../../../styles/mixins";
+
+.addresses-form-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 800px;
+  background-color: $light-gray;
+  border-radius: 12px;
+  box-shadow: $box-shadow;
+  padding: 20px;
+  margin: 0 auto 24px;
+  transition: all 0.3s ease-in-out;
+
+  form {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+    width: 100%;
+
+    .full-width {
+      grid-column: span 2;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid $border-color;
+      border-radius: 8px;
+      font-size: 16px;
+      background-color: $white-color;
+      transition: all 0.3s ease;
+
+      &:focus {
+        border-color: $primary-color;
+        outline: none;
+        box-shadow: 0 0 5px rgba(0, 123, 255, 0.3);
+      }
+    }
+
+    .buttons {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      grid-column: span 2;
+      margin-top: 18px;
+
+      button {
+        flex: 1;
+        padding: 12px;
+        font-size: 16px;
+        font-weight: bold;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-transform: uppercase;
+        box-shadow: 0 3px 6px rgba(0, 0, 0, 0.15);
+        min-width: 120px;
+
+        &:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        &:active {
+          transform: translateY(0);
+          box-shadow: 0 3px 6px rgba(0, 0, 0, 0.15);
+        }
+      }
+
+      .save-btn {
+        background: linear-gradient(135deg, $primary-color, darken($primary-color, 10%));
+        color: $text-light;
+        margin-right: 12px;
+      }
+
+      .cancel-btn {
+        background: linear-gradient(135deg, $danger-color, darken($danger-color, 10%));
+        color: $text-light;
+      }
+    }
+  }
+}
+
+// 📱 Estilos Responsivos
+@include respond-to(mobile) {
+  .addresses-form-container {
+    padding: 16px;
+  }
+
+  form {
+    grid-template-columns: 1fr; // Apila inputs en móvil
+
+    input {
+      font-size: 14px;
+    }
+
+    .buttons {
+      flex-direction: column;
+      gap: 10px;
+
+      button {
+        width: 100%;
+        min-width: unset;
+      }
+    }
+  }
+}
+
+@include respond-to(tablet) {
+  .addresses-form-container {
+    padding: 20px;
+  }
+
+  form {
+    grid-template-columns: repeat(2, 1fr);
+
+    .buttons {
+      flex-direction: row;
+      gap: 12px;
+
+      button {
+        width: auto;
+      }
+    }
+  }
+}

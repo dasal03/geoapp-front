@@ -1,4 +1,5 @@
-@import "../../styles/variables.scss";
+@import "../../styles/variables";
+@import "../../styles/mixins";
 
 .card {
   background: $white-color;
@@ -36,5 +37,17 @@
   &:hover {
     transform: translateY(-5px);
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+  }
+}
+
+@include respond-to(mobile) {
+  .card {
+    flex: 1 1 calc(50% - 20px);
+  }
+}
+
+@include respond-to(tablet) {
+  .card {
+    flex: 1 1 calc(33.333% - 20px);
   }
 }

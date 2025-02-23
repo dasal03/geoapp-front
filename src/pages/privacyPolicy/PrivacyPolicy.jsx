@@ -31,8 +31,8 @@ function PrivacyPolicy() {
         <section>
           <h2>Recopilación de Datos</h2>
           <p>
-            Recopilamos información que compartes con nosotros al interactuar
-            con nuestro sitio:
+            Recopilamos la información que compartes al interactuar con nuestro
+            sitio, incluyendo:
           </p>
           <ul>
             <li>Nombre, correo electrónico y número de contacto.</li>
@@ -43,12 +43,12 @@ function PrivacyPolicy() {
         <section>
           <h2>Uso de la Información</h2>
           <p>
-            Usamos tus datos para mejorar tu experiencia y ofrecerte servicios
-            personalizados:
+            Utilizamos tus datos para mejorar tu experiencia y ofrecer servicios
+            personalizados, tales como:
           </p>
           <ul>
             <li>Procesar solicitudes y transacciones.</li>
-            <li>Mejorar la funcionalidad de nuestra página.</li>
+            <li>Optimizar la funcionalidad de nuestro sitio.</li>
             <li>Enviar información relevante sobre productos y servicios.</li>
           </ul>
         </section>

@@ -1,4 +1,4 @@
-import { FaKey, FaMobileAlt } from "react-icons/fa";
+import { FaKey } from "react-icons/fa";
 import { Outlet, useLocation, useOutletContext } from "react-router-dom";
 import Loader from "../../../components/ui/loader/Loader";
 import SectionCards from "../../../components/sectionCards/SectionCards";
@@ -17,12 +17,6 @@ const Security = () => {
       icon: <FaKey className="profile-icon" />,
       title: "Cambiar Contraseña",
       description: "Actualiza tu contraseña de acceso a tu cuenta.",
-    },
-    {
-      path: "/profile/security/enable-2fa",
-      icon: <FaMobileAlt className="profile-icon" />,
-      title: "Activar Verificación en dos pasos",
-      description: "Activa la verificación en dos pasos para tu cuenta.",
     },
   ];
 

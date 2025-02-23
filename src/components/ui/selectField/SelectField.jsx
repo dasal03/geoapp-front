@@ -17,18 +17,19 @@ const SelectField = ({
 
   return (
     <div className="select-field">
-      {label && <label htmlFor={name}>{label}</label>}
+      <label>{label}</label>
       <select
         className={styleType}
         name={name}
         value={value}
-        onChange={(e) => onChange(e.target.value)}
+        onChange={(e) => onChange(e, name)}
         required={required}
         disabled={disabled}
       >
-        <option value="" disabled>
+        <option value="" selected>
           {placeholder || "Seleccione una opción"}
         </option>
+
         {normalizedOptions.map((option) => (
           <option key={option.value} value={option.value}>
             {option.label}

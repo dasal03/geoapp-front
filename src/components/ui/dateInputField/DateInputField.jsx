@@ -1,6 +1,6 @@
 import "./DateInputField.scss";
 
-const DateInput = ({
+const DateInputField = ({
   label,
   value,
   onChange,
@@ -14,7 +14,7 @@ const DateInput = ({
 
   return (
     <div className="date-input">
-      <label htmlFor={label}>{label}</label>
+      <label>{label}</label>
       <input
         type="date"
         value={value || ""}
@@ -27,4 +27,4 @@ const DateInput = ({
   );
 };
 
-export default DateInput;
+export default DateInputField;

@@ -27,7 +27,6 @@ function Maintenance() {
   const [equipmentId, setEquipmentId] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
-  // Fetches the maintenance list
   const fetchMaintenances = async () => {
     setIsLoading(true);
     try {
@@ -52,7 +51,6 @@ function Maintenance() {
     }
   };
 
-  // Fetches the equipment list
   const fetchEquipment = async () => {
     setIsLoading(true);
     try {

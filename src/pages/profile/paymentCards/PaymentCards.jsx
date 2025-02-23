@@ -1,75 +1,37 @@
-import { useState, useEffect } from "react";
-import { useOutletContext } from "react-router-dom";
-import apiFetch from "../../../utils/apiClient";
-import { showAlert } from "../../../utils/generalTools";
-import usePaymentCardsData from "../../../hooks/UsePaymentCardsData";
+import { useNavigate, useOutletContext } from "react-router-dom";
 import EditableListSection from "../../../components/editableListSection/EditableListSection";
 import Loader from "../../../components/ui/loader/Loader";
+import usePaymentCardsData from "../../../hooks/UsePaymentCardsData";
 
 const PaymentCards = () => {
+  const navigate = useNavigate();
   const { profileData } = useOutletContext();
   const userId = profileData?.user_id;
 
-  const {
-    loading,
-    paymentCardsData,
-    updatePaymentCard,
-    addPaymentCard,
-    deletePaymentCard,
-    setAsPrimary,
-  } = usePaymentCardsData(userId);
+  const { loading, paymentCardsData, deletePaymentCard, setAsPrimary } =
+    usePaymentCardsData(userId);
 
-  const [banks, setBanks] = useState([]);
-
-  useEffect(() => {
-    const fetchBanks = async () => {
-      try {
-        const response = await apiFetch("/get_banks");
-        if (response.responseCode === 200) {
-          setBanks(
-            response.data.map(({ bank_id, bank_name }) => ({
-              value: bank_id,
-              label: bank_name,
-            }))
-          );
-        }
-      } catch {
-        showAlert("error", "Error", "Error al conectar con el servidor.");
-      }
-    };
-    fetchBanks();
-  }, []);
+  if (loading) return <Loader />;
 
   const sectionConfig = [
     {
-      id: "bank_id",
-      name: "bank_name",
-      label: "Banco",
-      type: "select",
-      options: banks,
+      name: "name",
+      label: "Titular de la Tarjeta",
     },
     {
-      id: "card_number",
-      name: "card_number",
-      label: "Número de tarjeta",
-      type: "number",
+      name: "number",
+      label: "Número de Tarjeta",
     },
     {
-      id: "expiration_date",
-      name: "expiration_date",
-      label: "Fecha de expiración",
-      placeholder: "MM/AA",
-      type: "date",
+      name: "expiry",
+      label: "Fecha de Vencimiento",
     },
     {
-      id: "cvv",
-      name: "cvv",
-      label: "CVV",
-      type: "password",
+      cvc: "cvc",
+      label: "CVC",
+      isVisible: false,
     },
   ];
-
-  if (loading) return <Loader />;
 
   return (
     <div className="profile-section">
@@ -78,10 +40,16 @@ const PaymentCards = () => {
         sectionData={paymentCardsData}
         sectionConfig={sectionConfig}
         onCheckChange={setAsPrimary}
-        onAddItem={addPaymentCard}
-        onEditItem={updatePaymentCard}
+        onAddItem={() =>
+          navigate(`/profile/payment-cards-form?user_id=${userId}`)
+        }
+        onEditItem={(item) => {
+          navigate(
+            `/profile/payment-cards-form?user_id=${userId}&payment_card_id=${item.id}`,
+            { state: item }
+          );
+        }}
         onDeleteItem={deletePaymentCard}
-        userId={userId}
       />
     </div>
   );

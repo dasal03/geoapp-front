@@ -1,14 +1,17 @@
 import { AuthProvider } from "./context/AuthContext";
-import AppRoutes from "./routes";
+import { AlertProvider } from "./context/alertProvider";
+import AppRoutes from "./AppRoutes";
 import Navbar from "./components/navbar/Navbar";
-import "./App.css";
+import "./App.scss";
 
 function App() {
   return (
-    <AuthProvider>
-      <Navbar />
-      <AppRoutes />
-    </AuthProvider>
+    <AlertProvider>
+      <AuthProvider>
+        <Navbar />
+        <AppRoutes />
+      </AuthProvider>
+    </AlertProvider>
   );
 }
 

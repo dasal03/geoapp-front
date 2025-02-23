@@ -1,4 +1,5 @@
 import RegisterForm from "../../components/registerForm/RegisterForm";
+import "./Register.scss";
 
 const Register = () => {
   return (

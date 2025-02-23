@@ -1,19 +1,27 @@
 import { useState, useEffect, useRef, useCallback } from "react";
+import { useAlert } from "../context/alertProvider";
 import apiFetch from "../utils/apiClient";
-import { showAlert } from "../utils/generalTools";
 import Validator from "../utils/formValidator";
 
-const useAddressData = (userId) => {
+const useAddressData = (userId, addressId) => {
   const [addressData, setAddressData] = useState([]);
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
   const originalDataRef = useRef([]);
+  const isProcessingRef = useRef(false);
+
+  const { showAlert, showConfirm } = useAlert();
 
   const fetchAddressData = useCallback(async () => {
     if (!userId) return;
     setLoading(true);
     try {
-      const response = await apiFetch(`/get_address?user_id=${userId}`);
+      let url = `/get_address?user_id=${userId}`;
+      if (addressId) {
+        url += `&address_id=${addressId}`;
+      }
+
+      const response = await apiFetch(url);
       if (response.responseCode === 200) {
         const formattedData = response.data.map((address) => ({
           id: address.address_id,
@@ -21,6 +29,7 @@ const useAddressData = (userId) => {
         }));
         setAddressData(formattedData);
         originalDataRef.current = formattedData;
+        return formattedData;
       } else {
         setAddressData([]);
       }
@@ -30,7 +39,7 @@ const useAddressData = (userId) => {
     } finally {
       setLoading(false);
     }
-  }, [userId]);
+  }, [userId, addressId, setAddressData, setLoading]);
 
   useEffect(() => {
     fetchAddressData();
@@ -61,116 +70,137 @@ const useAddressData = (userId) => {
     [errors, validateField]
   );
 
-  const getModifiedFields = useCallback(
-    (address) => {
-      const original = originalDataRef.current.find(
-        (orig) => orig.address_id === address.address_id
-      );
-      if (!original) return null;
+  const deleteAddress = useCallback(
+    async (addressId) => {
+      if (isProcessingRef.current) return;
+      isProcessingRef.current = true;
 
-      const modifiedFields = Object.fromEntries(
-        Object.entries(address).filter(
-          ([key, value]) =>
-            value !== original[key] &&
-            !["state_name", "city_name"].includes(key)
-        )
-      );
-
-      return Object.keys(modifiedFields).length > 0
-        ? { address_id: address.address_id, user_id: userId, ...modifiedFields }
-        : null;
+      try {
+        const response = await apiFetch(
+          `/delete_address?address_id=${addressId}`
+        );
+        if (response.responseCode === 200) {
+          const updatedData = addressData.filter(
+            (address) => address.address_id !== addressId
+          );
+          setAddressData(updatedData);
+          originalDataRef.current = updatedData;
+          showAlert("success", "Eliminado", "Dirección eliminada.");
+        } else {
+          showAlert("error", "Error", response.description);
+        }
+      } catch (error) {
+        showAlert("error", "Error", "No se pudo eliminar la direccion.");
+        console.error(error);
+      } finally {
+        isProcessingRef.current = false;
+      }
     },
-    [userId]
+    [addressData, setAddressData]
   );
 
-  const sendRequest = useCallback(
-    async (
-      url,
-      options,
-      successMessage = null,
-      callback,
-      shouldRefetch = true
-    ) => {
-      setLoading(true);
-      try {
-        const response = await apiFetch(url, options);
-        if (response.responseCode === 200 || response.responseCode === 201) {
-          if (successMessage) {
-            showAlert("success", "Éxito", successMessage, callback);
-          }
-          if (shouldRefetch) {
-            await fetchAddressData();
-          }
-        } else {
-          showAlert(
-            "error",
-            "Error",
-            response.description || "Ocurrió un error."
-          );
+  const confirmDelete = useCallback(
+    (addressId) => {
+      showConfirm(
+        "¿Eliminar dirección?",
+        "Esta acción no se puede deshacer.",
+        () => {
+          deleteAddress(addressId);
         }
-      } catch {
-        showAlert("error", "Error", "Error al conectar con el servidor.");
+      );
+    },
+    [deleteAddress]
+  );
+
+  const setAsPrimary = useCallback(
+    async (address, newValue) => {
+      if (isProcessingRef.current) return;
+      isProcessingRef.current = true;
+
+      try {
+        const payload = {
+          address_id: address.address_id,
+          user_id: userId,
+          is_principal: newValue ? 1 : 0,
+        };
+
+        const response = await apiFetch("/update_address", {
+          method: "PUT",
+          body: JSON.stringify(payload),
+        });
+
+        if (response.responseCode === 200) {
+          await fetchAddressData();
+          showAlert(
+            "success",
+            "Éxito",
+            "Dirección principal actualizada correctamente."
+          );
+        } else {
+          showAlert("error", "Error", response.description);
+        }
+      } catch (error) {
+        showAlert("error", "Error", "No se pudo actualizar la direccion.");
+        console.error(error);
       } finally {
-        setLoading(false);
+        isProcessingRef.current = false;
+      }
+    },
+    [userId, fetchAddressData]
+  );
+
+  const addAddress = useCallback(
+    async (newAddress) => {
+      if (isProcessingRef.current) return;
+      isProcessingRef.current = true;
+
+      try {
+        const response = await apiFetch("/create_address", {
+          method: "POST",
+          body: JSON.stringify(newAddress),
+        });
+
+        if (response.responseCode === 200) {
+          await fetchAddressData();
+          showAlert("success", "Éxito", "Dirección creada correctamente.");
+        } else {
+          showAlert("error", "Error", response.description);
+        }
+      } catch (error) {
+        showAlert("error", "Error", "No se pudo crear la direccion.");
+        console.error(error);
+      } finally {
+        isProcessingRef.current = false;
       }
     },
     [fetchAddressData]
   );
 
-  const setAsPrimary = useCallback(
-    async (address, newValue) => {
-      const payload = {
-        address_id: address.address_id,
-        user_id: userId,
-        is_principal: newValue ? 1 : 0,
-      };
-
-      await sendRequest(
-        "/update_address",
-        { method: "PUT", body: JSON.stringify(payload) },
-        null,
-        true
-      );
-    },
-    [sendRequest, userId]
-  );
-
   const updateAddress = useCallback(
-    async (address, callback) => {
-      const payload = getModifiedFields(address);
-      if (!payload) return;
-      await sendRequest(
-        "/update_address",
-        { method: "PUT", body: JSON.stringify(payload) },
-        "Dirección actualizada exitosamente.",
-        callback
-      );
-    },
-    [sendRequest, getModifiedFields]
-  );
+    async (address) => {
+      if (isProcessingRef.current) return;
+      isProcessingRef.current = true;
 
-  const addAddress = useCallback(
-    async (newAddress, callback) => {
-      await sendRequest(
-        "/create_address",
-        { method: "POST", body: JSON.stringify(newAddress) },
-        "Dirección vinculada exitosamente.",
-        callback
-      );
-    },
-    [sendRequest]
-  );
+      try {
+        const response = await apiFetch("/update_address", {
+          method: "PUT",
+          body: JSON.stringify(address),
+        });
 
-  const deleteAddress = useCallback(
-    async (addressId, callback) => {
-      await sendRequest(
-        `/delete_address?address_id=${addressId.address_id || addressId}`,
-        { method: "DELETE" },
-        "Dirección desvinculada exitosamente.",
-        callback
-      );
+        if (response.responseCode === 200) {
+          await fetchAddressData();
+          showAlert("success", "Éxito", "Dirección actualizada correctamente.");
+        } else {
+          showAlert("error", "Error", response.description);
+        }
+      } catch (error) {
+        showAlert("error", "Error", "No se pudo actualizar la direccion.");
+        console.error(error);
+      } finally {
+        isProcessingRef.current = false;
+      }
     },
-    [sendRequest]
+    [fetchAddressData]
   );
 
   return {
@@ -178,10 +208,11 @@ const useAddressData = (userId) => {
     errors,
     loading,
     handleChange,
-    setAsPrimary,
+    fetchAddressData,
     addAddress,
     updateAddress,
-    deleteAddress,
+    deleteAddress: confirmDelete,
+    setAsPrimary,
   };
 };
 

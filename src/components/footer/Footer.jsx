@@ -4,11 +4,15 @@ import "./Footer.scss";
 function Footer() {
   return (
     <footer className="footer">
-      <p>© 2024 GeoApp. Todos los derechos reservados.</p>
-      <p>
-        <Link to="/contact">Contáctanos</Link> |{" "}
-        <Link to="/privacy-policy">Política de privacidad</Link>
-      </p>
+      <div className="footer-content">
+        <p className="footer-copyright">
+          © 2024 GeoApp. Todos los derechos reservados.
+        </p>
+        <p className="footer-links">
+          <Link to="/contact-us">Contáctanos</Link> |{" "}
+          <Link to="/privacy-policy">Política de privacidad</Link>
+        </p>
+      </div>
     </footer>
   );
 }

@@ -1,59 +1,49 @@
 import { useState, useEffect } from "react";
-import { useAuth } from "../context/AuthContext";
+import { useAlert } from "../context/alertProvider";
 import apiFetch from "../utils/apiClient";
-import { showAlert, formatDate } from "../utils/generalTools";
+import { formatDate } from "../utils/generalTools";
 import Validator from "../utils/formValidator";
 
-const useProfileData = (onSuccess) => {
-  const { user, isAuthenticated, isLoading: authLoading } = useAuth();
+const useProfileData = (userId) => {
   const [profileData, setProfileData] = useState({});
   const [modifiedFields, setModifiedFields] = useState(new Set());
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    if (isAuthenticated && user?.user_id) {
-      const fetchProfileData = async () => {
-        setLoading(true);
-        try {
-          const response = await apiFetch(`/get_user?user_id=${user.user_id}`);
-          if (response.responseCode === 200) {
-            const datesToFormat = ["date_of_birth", "date_of_issue"];
-            const formattedData = {
-              ...response.data,
-              ...Object.fromEntries(
-                datesToFormat.map((key) => [
-                  key,
-                  formatDate(response.data[key]),
-                ])
-              ),
-            };
-            setProfileData(formattedData);
-          } else {
-            showAlert("error", "Error", response.description);
-          }
-        } catch (error) {
-          showAlert("error", "Error", "No se pudo cargar el perfil.");
-        } finally {
-          setLoading(false);
-        }
-      };
-      fetchProfileData();
-    }
-  }, [user, isAuthenticated]);
+  const { showAlert } = useAlert();
 
-  if (authLoading) {
-    return { loading: true };
-  }
+  useEffect(() => {
+    const fetchProfileData = async () => {
+      setLoading(true);
+      try {
+        const response = await apiFetch(`/get_user?user_id=${userId}`);
+        if (response.responseCode === 200) {
+          const datesToFormat = ["date_of_birth", "date_of_issue"];
+          const formattedData = {
+            ...response.data,
+            ...Object.fromEntries(
+              datesToFormat.map((key) => [key, formatDate(response.data[key])])
+            ),
+          };
+          setProfileData(formattedData);
+        } else {
+          showAlert("error", "Error", response.description);
+        }
+      } catch (error) {
+        showAlert("error", "Error", "No se pudo cargar el perfil.");
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchProfileData();
+  }, [userId, showAlert]);
 
   const handleChange = (name, value) => {
-    setProfileData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-
-    setModifiedFields((prev) => new Set([...prev, name]));
-
+    setProfileData((prev) => ({ ...prev, [name]: value }));
+    setModifiedFields((prev) => {
+      const newSet = new Set([...prev, name]);
+      return newSet;
+    });
     validateField(name, value);
   };
 
@@ -77,12 +67,14 @@ const useProfileData = (onSuccess) => {
     }));
   };
 
-  const updateProfile = async () => {
+  const updateProfile = async (updatedDataFromForm) => {
     setLoading(true);
 
-    const updatedData = {
-      user_id: user?.user_id,
+    const updatedData = updatedDataFromForm || {
+      user_id: userId,
     };
+    updatedData.user_id = userId;
+
     modifiedFields.forEach((field) => {
       updatedData[field] = profileData[field];
     });
@@ -99,11 +91,15 @@ const useProfileData = (onSuccess) => {
           "Información actualizada con éxito."
         );
         setModifiedFields(new Set());
-        if (onSuccess) onSuccess();
+        setProfileData((prevData) => ({
+          ...prevData,
+          ...updatedData,
+        }));
       } else {
         showAlert("error", "Error", response.description);
       }
     } catch (error) {
+      console.error("Error en updateProfile:", error);
       showAlert("error", "Error", "No se pudo actualizar la información.");
     } finally {
       setLoading(false);

@@ -1,36 +1,120 @@
 @import "../../styles/variables";
+@import "../../styles/mixins";
 
-.contact-us-page {
-  .contact-us {
-    padding: 40px 20px;
-    background-color: $white-color;
+.contact-us {
+  margin-top: 80px;
+  padding: 60px 20px;
+  background: linear-gradient(to right, $background-light, $background-dark);
+  color: $text-dark;
+  text-align: center;
 
-    .container {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 20px;
+  .container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+
+  .contact-title {
+    font-size: 42px;
+    font-weight: 700;
+    margin-bottom: 10px;
+    color: $primary-color;
+  }
+
+  .contact-subtitle {
+    font-size: 18px;
+    margin-bottom: 40px;
+    color: $secondary-color;
+  }
+
+  .contact-info {
+    background: $white-color;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: $box-shadow;
+    text-align: left;
+    margin-bottom: 40px;
+
+    h2 {
+      font-size: 28px;
+      color: $primary-color;
+      margin-bottom: 15px;
     }
 
-    .contact-title {
-      text-align: center;
-      font-size: 36px;
-      margin-bottom: 40px;
+    p {
+      font-size: 18px;
+      margin-bottom: 15px;
+      color: $text-dark;
     }
 
-    .contact-info {
-      margin-bottom: 40px;
-
-      ul {
-        padding-left: 20px;
-      }
+    ul {
+      list-style: none;
+      padding: 0;
+      margin-top: 10px;
 
       li {
-        margin-bottom: 10px;
-      }
+        display: flex;
+        align-items: center;
+        font-size: 18px;
+        margin-bottom: 12px;
+        color: $text-dark;
 
-      li strong {
-        font-weight: bold;
+        .contact-icon {
+          font-size: 22px;
+          margin-right: 12px;
+          color: $accent-color;
+        }
+
+        span {
+          flex-grow: 1;
+        }
       }
+    }
+  }
+
+  .contact-form-section {
+    background: $white-color;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: $box-shadow;
+    text-align: left;
+
+    h2 {
+      font-size: 26px;
+      color: $primary-color;
+      margin-bottom: 15px;
+    }
+
+    p {
+      font-size: 18px;
+      color: $text-dark;
+      margin-bottom: 20px;
+    }
+  }
+}
+
+@include respond-to(mobile) {
+  .contact-us {
+    margin-top: 60px;
+    padding: 40px 15px;
+
+    .contact-title {
+      font-size: 32px;
+    }
+
+    .contact-info, .contact-form-section {
+      padding: 20px;
+    }
+  }
+}
+
+@include respond-to(tablet) {
+  .contact-us {
+    margin-top: 70px;
+    padding: 50px 20px;
+
+    .contact-title {
+      font-size: 36px;
     }
   }
 }

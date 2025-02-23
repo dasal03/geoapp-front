@@ -1,29 +1,54 @@
-.crop-container {
-  position: relative;
-  width: 100%;
-  height: 300px;
-  background: #f3f3f3;
-  border-radius: 10px;
-  overflow: hidden;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
+@import "../../styles/variables";
+@import "../../styles/mixins";
 
-.cropper-wrapper {
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
-  background: #f3f3f3;
-  border-radius: 10px;
-  position: relative;
-}
-
-.cropper {
-  width: 100%;
-  height: 100%;
-}
-
-.cropper-overlay {
   background: rgba(0, 0, 0, 0.5);
-  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+
+  .modal-content {
+    background: $background-light;
+    padding: 20px;
+    border-radius: 8px;
+    width: 400px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    .cropper-container {
+      width: 100%;
+      height: 300px;
+      position: relative;
+    }
+
+    .slider-container {
+      width: 80%;
+      margin: 10px 0;
+    }
+
+    .buttons-container {
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+    }
+  }
+}
+
+@include respond-to(mobile) {
+  .modal-content {
+    width: 300px;
+  }
+}
+
+@include respond-to(tablet) {
+  .modal-content {
+    width: 400px;
+  }
 }

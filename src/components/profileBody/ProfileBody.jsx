@@ -15,22 +15,20 @@ const ProfileBody = ({ profileData }) => {
       path: "/profile/personal-info",
       icon: <FaIdCard className="profile-icon" />,
       title: "Información Personal",
-      description:
-        "Información personal y de identidad.",
+      description: "Información personal y de identidad.",
     },
     {
       path: "/profile/account-info",
       icon: <FaUser className="profile-icon" />,
       title: "Datos de tu Cuenta",
-      description:
-        "Datos que representan a tu cuenta.",
+      description: "Datos que representan a tu cuenta.",
     },
     {
       path: "/profile/security",
       icon: <FaLock className="profile-icon" />,
       title: "Seguridad",
       description:
-        "Asegura tu cuenta con configuraciones de seguridad adicionales.",
+        "configuraciones de seguridad.",
     },
     {
       path: "/profile/payment-cards",

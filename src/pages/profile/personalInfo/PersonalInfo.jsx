@@ -1,12 +1,10 @@
 import { useState } from "react";
 import { useOutletContext } from "react-router-dom";
-import { showAlert } from "../../../utils/generalTools";
-import apiFetch from "../../../utils/apiClient";
 import FormSection from "../../../components/formSection/FormSection";
 import Loader from "../../../components/ui/loader/Loader";
 
 const PersonalInfo = () => {
-  const { profileData } = useOutletContext();
+  const { profileData, updateProfile } = useOutletContext();
   const [isLoading, setIsLoading] = useState(false);
 
   if (!profileData) {
@@ -79,25 +77,12 @@ const PersonalInfo = () => {
     ],
   };
 
-  const handleSave = async (updatedData) => {
+  const handleSave = async (finalData) => {
     setIsLoading(true);
-
     try {
-      const response = await apiFetch("/update_user", {
-        method: "PUT",
-        body: JSON.stringify(updatedData),
-      });
-      if (response.responseCode === 200) {
-        showAlert(
-          "success",
-          "Actualizado",
-          "Información actualizada con éxito."
-        );
-      } else {
-        showAlert("error", "Error", response.description);
-      }
+      await updateProfile(finalData);
     } catch (error) {
-      showAlert("error", "Error", "No se pudo actualizar la información.");
+      console.error("Error en updateProfile", error);
     } finally {
       setIsLoading(false);
     }
@@ -113,7 +98,6 @@ const PersonalInfo = () => {
             section={sectionConfig}
             initialData={profileData}
             onSave={handleSave}
-            userId={profileData.user_id}
           />
         </>
       )}

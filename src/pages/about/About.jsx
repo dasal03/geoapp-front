@@ -11,8 +11,8 @@ function About() {
             <h1 className="about-title">Acerca de Nosotros</h1>
             <div className="h1-decorator"></div>
             <p className="about-description">
-              Conoce nuestra historia, misión y compromiso con la excelencia en
-              la tecnología biomédica.
+              Descubre nuestra historia, misión, visión y el equipo que impulsa
+              la innovación en tecnología biomédica.
             </p>
           </div>
         </div>
@@ -22,37 +22,33 @@ function About() {
             <p>
               Proveer soluciones innovadoras en el ámbito biomédico a través del
               alquiler, mantenimiento y venta de dispositivos que cumplen con
-              los más altos estándares de calidad.
+              los más altos estándares de calidad, mejorando la vida de las
+              personas.
             </p>
           </section>
-          <section className="values-section">
-            <h2>Nuestros Valores</h2>
-            <ul>
-              <li>Compromiso con la salud y bienestar.</li>
-              <li>Innovación constante.</li>
-              <li>Calidad y excelencia en el servicio.</li>
-              <li>Integridad en nuestras acciones.</li>
-            </ul>
+          <section className="vision-section">
+            <h2>Nuestra Visión</h2>
+            <p>
+              Ser líderes en innovación tecnológica biomédica a nivel global,
+              creando un impacto positivo en la salud y el bienestar de nuestras
+              comunidades.
+            </p>
+          </section>
+          <section className="history-section">
+            <h2>Nuestra Historia</h2>
+            <p>
+              Fundada hace más de una década, GeoApp ha evolucionado de una
+              pequeña startup a una empresa internacional, siempre comprometida
+              con la excelencia y la innovación.
+            </p>
           </section>
           <section className="team-section">
-            <h2>Conoce a Nuestro Equipo</h2>
-            <div className="team-grid">
-              <div className="team-member">
-                <img src="/path/to/team-member1.jpg" alt="Miembro 1" />
-                <h3>Nombre Apellido</h3>
-                <p>Rol del Equipo</p>
-              </div>
-              <div className="team-member">
-                <img src="/path/to/team-member2.jpg" alt="Miembro 2" />
-                <h3>Nombre Apellido</h3>
-                <p>Rol del Equipo</p>
-              </div>
-              <div className="team-member">
-                <img src="/path/to/team-member3.jpg" alt="Miembro 3" />
-                <h3>Nombre Apellido</h3>
-                <p>Rol del Equipo</p>
-              </div>
-            </div>
+            <h2>Nuestro Equipo</h2>
+            <p>
+              Contamos con profesionales altamente calificados y apasionados por
+              la tecnología, que trabajan juntos para transformar el sector
+              biomédico.
+            </p>
           </section>
         </div>
       </div>

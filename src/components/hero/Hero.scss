@@ -1,74 +1,171 @@
+@import "../../styles/variables";
+@import "../../styles/mixins";
+
 .hero {
   position: relative;
-  height: 70vh;
+  height: 90vh;
   display: flex;
-  align-items: flex-end;
-  background-image: url("../../assets/hero.avif");
-  background-size: cover;
-  background-position: center;
-  border-bottom: 4px solid #ff6600;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.7)),
+    url("../../assets/hero.jpg") center/cover no-repeat;
+  border-bottom: 5px solid $accent-color;
+  padding: 50px;
+  margin-bottom: 50px;
+  transition: all 0.3s ease-in-out;
+  box-sizing: border-box;
+  overflow: hidden;
 
   .hero-overlay {
     position: absolute;
-    top: 0;
-    left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.4);
+    background: rgba(0, 0, 0, 0.3);
   }
 
   .hero-text {
     position: relative;
-    z-index: 1;
-    text-align: left;
-    margin-left: 50px;
-    margin-bottom: 40px;
+    max-width: 600px;
+    width: 100%;
+    margin: 0 auto;
+    z-index: 2;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeInUp 0.8s ease-out forwards;
 
     .hero-title {
       font-family: "Aperçu", sans-serif;
-      font-size: 68px;
-      font-weight: 700;
-      color: #fff;
+      font-size: clamp(38px, 5vw, 72px);
+      font-weight: bold;
+      color: $text-light;
       margin: 0;
+      line-height: 1.2;
+      text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
     }
 
     .h1-decorator {
-      width: 60px;
+      width: 80px;
       height: 6px;
-      background-color: #ff6600;
-      margin: 25px 0 0;
+      background-color: $accent-color;
+      margin: 20px 0;
+      border-radius: 5px;
     }
 
     .hero-description {
-      margin-top: 25px;
-      font-size: 22px;
-      line-height: 1.4;
-      color: #fff;
-      white-space: pre-wrap;
+      font-size: clamp(18px, 2vw, 22px);
+      line-height: 1.5;
+      color: $text-light;
+      opacity: 0.9;
+      text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+    }
+
+    button {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 14px 26px;
+      background: $accent-color;
+      color: $text-light;
+      font-size: 18px;
+      font-weight: 600;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
+      margin-top: 20px;
+
+      &:hover {
+        background: darken($accent-color, 10%);
+        transform: scale(1.05);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+      }
+
+      .arrow {
+        transition: transform 0.3s ease;
+      }
+
+      &:hover .arrow {
+        transform: translateX(5px);
+      }
     }
   }
+}
 
-  button {
-    margin-top: 35px;
-    padding: 10px 20px;
-    width: fit-content;
-    background-color: #ff6600;
-    color: #fff;
-    font-size: 18px;
-    font-weight: 600;
-    border-radius: 5px;
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
 
-    &:hover {
-      background-color: #cc5200;
+@include respond-to(mobile) {
+  .hero {
+    height: auto;
+    min-height: 90vh;
+    padding: 20px;
+    justify-content: center;
+    text-align: center;
+  }
+
+  .hero-text {
+    max-width: 90%;
+    margin: 0 auto;
+
+    .hero-title {
+      font-size: 32px;
     }
 
-    span {
+    .h1-decorator {
+      display: inline-block;
+      width: 50px;
+      margin: 15px auto;
+    }
+
+    .hero-description {
+      font-size: 16px;
+    }
+
+    button {
+      font-size: 16px;
+      padding: 12px 22px;
+    }
+  }
+}
+
+@include respond-to(tablet) {
+  .hero {
+    height: auto;
+    min-height: 90vh;
+    padding: 30px;
+    justify-content: center;
+    text-align: center;
+  }
+
+  .hero-text {
+    max-width: 80%;
+    margin: 0 auto;
+
+    .hero-title {
+      font-size: 48px;
+    }
+
+    .h1-decorator {
+      display: inline-block;
+      width: 60px;
+      margin: 15px auto;
+    }
+
+    .hero-description {
       font-size: 20px;
     }
 
-    i {
-      margin-left: 10px;
-      transition: visibility 0.3s ease;
+    button {
+      font-size: 18px;
+      padding: 14px 26px;
     }
   }
 }

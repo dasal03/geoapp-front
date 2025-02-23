@@ -1,10 +1,30 @@
 @import "../../styles/variables";
+@import "../../styles/mixins";
 
 .profile-body {
   display: flex;
   justify-content: center;
-  padding: 20px;
-  min-height: calc(100vh - 80px);
+  align-items: center;
+  padding: clamp(15px, 2vw, 25px);
   width: 100%;
-  background-color: $white-color;
+  max-width: 1200px;
+  min-height: calc(100vh - 100px);
+  background-color: #f9f9f9;
+  border-radius: 12px;
+  gap: 20px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+
+@include respond-to(mobile) {
+  .profile-body {
+    padding: 10px;
+    flex-direction: column;
+    min-height: auto;
+  }
+}
+
+@include respond-to(tablet) {
+  .profile-body {
+    padding: 15px;
+  }
 }

@@ -1,4 +1,5 @@
 @import "../../styles/variables";
+@import "../../styles/mixins";
 
 .unauthorized-container {
   display: flex;
@@ -8,65 +9,68 @@
   height: 100vh;
   background-color: $light-gray;
   text-align: center;
+  padding: 20px;
 
   .unauthorized-hero {
-    position: relative;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    animation: fadeInUp 1s ease-in-out;
 
     .unauthorized-icon {
       font-size: 80px;
       color: $danger-color;
-      margin-bottom: 20px;
+      margin-bottom: 15px;
     }
 
     h1 {
-      font-size: 120px;
+      font-size: clamp(60px, 12vw, 120px);
       font-weight: bold;
       color: $primary-color;
       margin: 0;
-      animation: fadeIn 1s ease-in-out;
     }
 
     .unauthorized-message {
-      font-size: 20px;
+      font-size: clamp(16px, 3vw, 22px);
       color: $primary-color;
-      margin: 20px 0;
+      margin: 15px 0;
+      max-width: 600px;
     }
 
     .h1-decorator {
       width: 80px;
-      height: 8px;
+      height: 6px;
       background-color: $danger-color;
-      margin: 20px auto;
+      margin: 15px auto;
+      border-radius: 3px;
     }
 
     button {
-      padding: 12px 24px;
+      padding: 12px 28px;
       font-size: 18px;
       font-weight: bold;
       color: $white-color;
       background-color: $danger-color;
       border: none;
-      border-radius: 4px;
+      border-radius: 6px;
       cursor: pointer;
-      transition: transform 0.3s ease, background-color 0.3s ease;
-      box-shadow: $box-shadow;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 
       &:hover {
         background-color: darken($danger-color, 10%);
-        transform: scale(1.05);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 14px rgba(0, 0, 0, 0.3);
       }
     }
   }
 
   .unauthorized-content {
-    margin-top: 30px;
+    margin-top: 20px;
 
     p {
-      font-size: 18px;
+      font-size: clamp(14px, 2vw, 18px);
       color: $primary-color;
       line-height: 1.6;
       max-width: 600px;
@@ -74,14 +78,45 @@
     }
   }
 
-  @keyframes fadeIn {
+  @keyframes fadeInUp {
     0% {
       opacity: 0;
-      transform: translateY(-20px);
+      transform: translateY(20px);
     }
     100% {
       opacity: 1;
       transform: translateY(0);
+    }
+  }
+}
+
+@include respond-to(mobile) {
+  .unauthorized-container {
+    padding: 15px;
+
+    .unauthorized-hero {
+      .unauthorized-icon {
+        font-size: 60px;
+      }
+
+      h1 {
+        font-size: 70px;
+      }
+
+      button {
+        font-size: 16px;
+        padding: 10px 24px;
+      }
+    }
+  }
+}
+
+@include respond-to(tablet) {
+  .unauthorized-container {
+    .unauthorized-hero {
+      h1 {
+        font-size: 90px;
+      }
     }
   }
 }

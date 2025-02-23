@@ -8,14 +8,12 @@ const Hero = ({ onReadMore }) => (
       <h1 className="hero-title">GeoApp</h1>
       <div className="h1-decorator"></div>
       <p className="hero-description">
-        Somos una compañía{"\n"}
-        especializada en el alquiler,{"\n"}
-        mantenimiento y venta de{"\n"}
-        dispositivos biomédicos.
+        Somos una compañía especializada en el alquiler, mantenimiento y venta
+        de dispositivos biomédicos.
       </p>
       <Button
         type="button"
-        text="Conocenos"
+        text="Conócenos"
         icon="fas fa-arrow-down"
         onClick={onReadMore}
       />

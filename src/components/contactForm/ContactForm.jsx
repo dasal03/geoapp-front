@@ -13,10 +13,10 @@ const ContactForm = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData({
-      ...formData,
+    setFormData((prev) => ({
+      ...prev,
       [name]: value,
-    });
+    }));
   };
 
   const handleSubmit = (e) => {
@@ -38,7 +38,6 @@ const ContactForm = () => {
             required
           />
         </div>
-
         <div className="form-group">
           <InputField
             label="Correo"
@@ -50,13 +49,12 @@ const ContactForm = () => {
             required
           />
         </div>
-
         <div className="form-group">
           <TextAreaField
             label="Mensaje"
             id="message"
             name="message"
-            placeholder="Escribe tu mensaje aqui..."
+            placeholder="Escribe tu mensaje aquí..."
             value={formData.message}
             onChange={handleChange}
             required

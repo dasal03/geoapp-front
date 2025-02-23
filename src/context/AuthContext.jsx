@@ -1,4 +1,11 @@
-import { createContext, useState, useContext, useEffect } from "react";
+import {
+  createContext,
+  useState,
+  useContext,
+  useEffect,
+  useCallback,
+} from "react";
+import { useNavigate } from "react-router-dom";
 import apiFetch from "../utils/apiClient";
 
 const AuthContext = createContext();
@@ -9,18 +16,34 @@ export const AuthProvider = ({ children }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [user, setUser] = useState(null);
 
-  useEffect(() => {
-    const initializeAuth = async () => {
-      const storedToken = localStorage.getItem("token");
-      if (storedToken) {
-        try {
-          setToken(storedToken);
-          setIsAuthenticated(true);
+  const navigate = useNavigate();
 
+  const logout = useCallback(() => {
+    localStorage.removeItem("token");
+    setToken(null);
+    setUser(null);
+    setIsAuthenticated(false);
+    navigate("/login");
+  }, [navigate]);
+
+  useEffect(() => {
+    const storedToken = localStorage.getItem("token");
+    if (storedToken && !token) {
+      setToken(storedToken);
+      setIsAuthenticated(true);
+    } else {
+      setIsLoading(false);
+    }
+  }, [token]);
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      if (token && !user) {
+        try {
           const response = await apiFetch("/get_user_data_by_token", {
             method: "GET",
             headers: {
-              Authorization: `Bearer ${storedToken}`,
+              Authorization: `Bearer ${token}`,
             },
           });
 
@@ -28,23 +51,25 @@ export const AuthProvider = ({ children }) => {
             setUser({
               user_id: response.data.user_id,
               username: response.data.username,
+              profile_img: response.data.profile_img || "",
               role_name: response.data.role_name,
             });
           } else if (response.responseCode === 401) {
             logout();
           }
         } catch (error) {
-          console.error("Error during initialization:", error);
+          console.error("Error during fetching user data:", error);
           logout();
+        } finally {
+          setIsLoading(false);
         }
       } else {
-        setIsAuthenticated(false);
+        setIsLoading(false);
       }
-      setIsLoading(false);
     };
 
-    initializeAuth();
-  }, []);
+    fetchUserData();
+  }, [token, user, logout]);
 
   const login = async (username, password) => {
     try {
@@ -57,23 +82,6 @@ export const AuthProvider = ({ children }) => {
         localStorage.setItem("token", data.data.token);
         setToken(data.data.token);
         setIsAuthenticated(true);
-
-        const userResponse = await apiFetch("/get_user_data_by_token", {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${data.data.token}`,
-          },
-        });
-
-        if (userResponse.responseCode === 200) {
-          setUser({
-            user_id: userResponse.data.user_id,
-            username: userResponse.data.username,
-            role_name: userResponse.data.role_name,
-          });
-        } else {
-          throw new Error("Error fetching user data.");
-        }
       } else {
         throw new Error(data.message || "Error logging in.");
       }
@@ -81,13 +89,6 @@ export const AuthProvider = ({ children }) => {
       console.error("Login error:", error);
       throw error;
     }
-  };
-
-  const logout = () => {
-    localStorage.removeItem("token");
-    setToken(null);
-    setUser(null);
-    setIsAuthenticated(false);
   };
 
   return (

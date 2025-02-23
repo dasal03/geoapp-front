@@ -3,7 +3,7 @@ import ProfileImage from "../profileImage/ProfileImage";
 import { formatDate } from "../../utils/generalTools";
 import "./ProfileHeader.scss";
 
-const ProfileHeader = ({ profileData, isEditing, handleChange, errors }) => {
+const ProfileHeader = ({ profileData, handleChange }) => {
   const profileImage = profileData?.profile_image || null;
   const fullName = profileData?.full_name || "N/A";
   const username = profileData?.username || "N/A";
@@ -13,10 +13,9 @@ const ProfileHeader = ({ profileData, isEditing, handleChange, errors }) => {
     <div className="profile-header">
       <ProfileImage
         profileImage={profileImage}
-        isEditing={isEditing}
-        handleChange={(value) => handleChange("profile_image", value)}
-        errors={errors?.profile_image}
+        onSaveImage={(value) => handleChange("profile_image", value)}
       />
+
       <div className="profile-info">
         <h1 className="profile-name">{fullName}</h1>
         <p className="profile-username">
@@ -38,15 +37,7 @@ ProfileHeader.propTypes = {
     username: PropTypes.string,
     created_at: PropTypes.string,
   }),
-};
-
-ProfileHeader.defaultProps = {
-  profileData: {
-    profile_image: null,
-    full_name: "N/A",
-    username: "N/A",
-    created_at: null,
-  },
+  handleChange: PropTypes.func.isRequired,
 };
 
 export default ProfileHeader;

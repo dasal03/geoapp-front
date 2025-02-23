@@ -1,19 +1,40 @@
 @import "../../styles/variables";
+@import "../../styles/mixins";
 
 .profile-header {
   display: flex;
   align-items: center;
-  background-color: $light-gray;
+  background-color: #f9f9f9;
   padding: 20px;
-  border-radius: 10px;
-  box-shadow: $box-shadow;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   width: 100%;
   max-width: 800px;
   margin-bottom: 30px;
+  transition: all 0.3s ease-in-out;
+  margin: 80px auto 30px;
 
-  &:hover .profile-actions {
-    opacity: 1;
-    visibility: visible;
+  &:hover {
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+    transform: translateY(-2px);
+
+    .profile-actions {
+      opacity: 1;
+      visibility: visible;
+    }
+  }
+
+  .profile-avatar {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    object-fit: cover;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease-in-out;
+
+    &:hover {
+      transform: scale(1.1);
+    }
   }
 
   .profile-info {
@@ -22,23 +43,56 @@
 
     .profile-name {
       margin: 0;
-      font-size: 24px;
-      color: #333;
+      font-size: clamp(20px, 4vw, 24px);
+      font-weight: bold;
+      color: $text-dark;
     }
 
     .profile-username {
-      margin: 5px 0 0;
-      color: #666;
+      margin: 5px 0;
+      font-size: 16px;
+      color: $text-dark;
 
       .username-decorator {
         color: $accent-color;
+        font-weight: 600;
       }
     }
 
     .profile-member-date {
-      margin: 5px 0 0;
+      margin-top: 5px;
       font-size: 14px;
-      color: #999;
+      color: $text-dark;
     }
+  }
+
+  .profile-actions {
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
+  }
+}
+
+@include respond-to(mobile) {
+  .profile-header {
+    flex-direction: column;
+    text-align: center;
+    padding: 15px;
+
+    .profile-avatar {
+      width: 70px;
+      height: 70px;
+    }
+
+    .profile-info {
+      margin-left: 0;
+      margin-top: 10px;
+    }
+  }
+}
+
+@include respond-to(tablet) {
+  .profile-header {
+    padding: 18px;
   }
 }

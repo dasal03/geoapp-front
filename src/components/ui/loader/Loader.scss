@@ -1,13 +1,30 @@
+@import "../../../styles/mixins";
+
 .loader {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 50px;
+  width: 35px;
   aspect-ratio: 1;
-  border-radius: 50%;
-  border: 8px solid lightblue;
-  border-right-color: orange;
-  animation: l2 1s infinite linear;
-  z-index: 1000;
+  --_g: no-repeat radial-gradient(farthest-side, #000 94%, #0000);
+  background: var(--_g) 0 0, var(--_g) 100% 0, var(--_g) 100% 100%,
+    var(--_g) 0 100%;
+  background-size: 40% 40%;
+  animation: l38 0.5s infinite;
+}
+@keyframes l38 {
+  100% {
+    background-position: 100% 0, 100% 100%, 0 100%, 0 0;
+  }
+}
+
+@include respond-to(mobile) {
+  .loader {
+    width: 40px;
+    border-width: 5px;
+  }
+}
+
+@include respond-to(tablet) {
+  .loader {
+    width: 45px;
+    border-width: 5px;
+  }
 }

@@ -9,7 +9,7 @@ class Validator {
     };
 
     this.messages = {
-      required: (field) => `${field} es requerido.`,
+      required: () => "Este campo es obligatorio.",
       email: "Ingrese un correo electrónico válido.",
       phone: "Ingrese un número de teléfono válido.",
       username:

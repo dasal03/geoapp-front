@@ -1,49 +1,55 @@
 @import "../../styles/variables";
+@import "../../styles/mixins";
 
 .section-cards {
-  padding: 15px;
+  padding: clamp(10px, 2vw, 20px);
   margin: 0 auto;
   width: 100%;
   max-width: 800px;
-  background-color: $light-gray;
+  background-color: #f9f9f9;
   border-radius: 12px;
   box-shadow: $box-shadow;
-  list-style-type: none;
+  list-style: none;
   display: grid;
-  grid-template-rows: repeat(auto-fill, auto);
-  gap: 10px;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); // Mejor aprovechamiento del espacio
+  gap: 15px;
 }
 
 .section-card {
   display: flex;
   align-items: center;
-  height: auto;
+  width: 100%;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+  &:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+  }
 }
 
 .section-card a {
   text-decoration: none;
-  color: #333;
-  font-size: 1.2rem;
-  padding: 10px 20px;
+  color: $text-dark;
+  font-size: 1.1rem;
+  padding: 14px 18px;
   display: flex;
-  justify-content: flex-start;
   align-items: center;
-  background-color: #fff;
+  background-color: $background-light;
   border-radius: 10px;
-  transition: all 0.3s ease;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.3s ease, transform 0.3s ease;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
   width: 100%;
-}
 
-.section-card a:hover {
-  background-color: #f9f9f9;
-  transform: translateY(-4px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-}
+  &:hover {
+    background-color: darken(#f9f9f9, 4%);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+  }
 
-.section-card a:active {
-  background-color: #f0f0f0;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  &:active {
+    background-color: lighten($background-light, 5%);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
 }
 
 .section-icon-container {
@@ -54,13 +60,14 @@
   height: 50px;
   border-radius: 50%;
   background-color: $white-color;
-  margin-right: 15px;
+  margin-right: 12px;
   flex-shrink: 0;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }
 
 .section-icon {
   font-size: 1.8rem;
-  color: #fff;
+  color: $border-color;
 }
 
 .section-text {
@@ -71,11 +78,40 @@
 
 .section-text span {
   font-weight: bold;
-  font-size: 1.1rem;
+  font-size: 1rem;
 }
 
 .section-text p {
   font-size: 0.9rem;
-  color: #6c757d;
+  color: $light-black;
   margin: 0;
+}
+
+@include respond-to(mobile) {
+  .section-cards {
+    padding: 10px;
+    grid-template-columns: 1fr;
+  }
+
+  .section-card a {
+    font-size: 1rem;
+    padding: 12px 16px;
+  }
+
+  .section-icon-container {
+    width: 45px;
+    height: 45px;
+    margin-right: 10px;
+  }
+
+  .section-icon {
+    font-size: 1.6rem;
+  }
+}
+
+@include respond-to(tablet) {
+  .section-cards {
+    padding: 15px;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  }
 }

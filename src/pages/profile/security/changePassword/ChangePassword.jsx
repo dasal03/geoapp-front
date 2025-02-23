@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { showAlert } from "../../../../utils/generalTools";
+import { useSearchParams } from "react-router-dom";
+import { useAlert } from "../../../../context/alertProvider";
 import apiFetch from "../../../../utils/apiClient";
 import PasswordField from "../../../../components/ui/passwordField/PasswordField";
 import Button from "../../../../components/ui/button/Button";
@@ -7,6 +8,9 @@ import Loader from "../../../../components/ui/loader/Loader";
 import "./ChangePassword.scss";
 
 const ChangePassword = () => {
+  const [searchParams] = useSearchParams();
+  const userId = searchParams.get("user_id");
+
   const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
     password: "",
@@ -14,6 +18,8 @@ const ChangePassword = () => {
     confirm_new_password: "",
   });
   const [errors, setErrors] = useState({});
+
+  const { showAlert } = useAlert();
 
   const validateFields = () => {
     const newErrors = {};
@@ -71,12 +77,16 @@ const ChangePassword = () => {
     }
 
     setIsLoading(true);
-    const { password, new_password } = formData;
+    const { new_password, confirm_password } = formData;
 
     try {
-      const response = await apiFetch("/change_password", {
-        method: "POST",
-        body: JSON.stringify({ password, new_password }),
+      const response = await apiFetch("/update_user", {
+        method: "PUT",
+        body: JSON.stringify({
+          user_id: userId,
+          new_password,
+          confirm_password,
+        }),
       });
 
       if (response.responseCode === 200) {
@@ -86,7 +96,6 @@ const ChangePassword = () => {
           "Tu contraseña ha sido actualizada correctamente."
         );
         setFormData({
-          password: "",
           new_password: "",
           confirm_new_password: "",
         });
@@ -108,13 +117,6 @@ const ChangePassword = () => {
   const section = {
     title: "Cambio de Contraseña",
     fields: [
-      {
-        name: "password",
-        label: "Contraseña Actual",
-        type: "password",
-        placeholder: "Contraseña Actual",
-        required: true,
-      },
       {
         name: "new_password",
         label: "Nueva Contraseña",

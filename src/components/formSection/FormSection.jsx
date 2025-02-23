@@ -3,20 +3,16 @@ import InputField from "../ui/inputField/InputField";
 import PasswordField from "../ui/passwordField/PasswordField";
 import SelectField from "../ui/selectField/SelectField";
 import PhoneField from "../ui/phoneField/PhoneField";
-import DateInput from "../ui/dateInputField/DateInputField";
+import DateInputField from "../ui/dateInputField/DateInputField";
 import SectionActions from "../sectionActions/SectionActions";
 import "./FormSection.scss";
 
-const FormSection = ({
-  section,
-  initialData = {},
-  onSave,
-  onCancel,
-  userId = null,
-}) => {
+const FormSection = ({ section, initialData = {}, onSave, onCancel }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [formValues, setFormValues] = useState(initialData);
   const [changedFields, setChangedFields] = useState({});
+
+  const userId = initialData.user_id;
 
   const handleEditClick = () => setIsEditing(true);
 
@@ -79,7 +75,7 @@ const FormSection = ({
           />
         );
       case "date":
-        return <DateInput {...commonProps} />;
+        return <DateInputField {...commonProps} />;
       case "select":
         return <SelectField {...commonProps} options={field.options} />;
       default:
@@ -88,21 +84,32 @@ const FormSection = ({
   };
 
   return (
-    <section className="form-section">
+    <section
+      className={`form-section ${
+        section.fields.length > 0 ? "has-items" : "empty"
+      }`}
+    >
       <h3 className="form-section-title">{section.title}</h3>
-      <div className="form-fields">
-        {section.fields.map((field, index) => (
-          <div key={index} className="form-field">
-            {renderField(field)}
+
+      {section.fields.length > 0 ? (
+        <>
+          <div className="form-section-fields">
+            {section.fields.map((field, index) => (
+              <div key={index} className="form-field">
+                {renderField(field)}
+              </div>
+            ))}
           </div>
-        ))}
-      </div>
-      <SectionActions
-        isEditing={isEditing}
-        onSave={handleSaveClick}
-        onCancel={handleCancelClick}
-        onEdit={handleEditClick}
-      />
+          <SectionActions
+            isEditing={isEditing}
+            onSave={handleSaveClick}
+            onCancel={handleCancelClick}
+            onEdit={handleEditClick}
+          />
+        </>
+      ) : (
+        <p className="no-data">No hay datos para mostrar en el momento.</p>
+      )}
     </section>
   );
 };

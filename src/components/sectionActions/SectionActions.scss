@@ -1,77 +1,125 @@
 @import "../../styles/variables";
+@import "../../styles/mixins";
 
 .section-actions {
   display: flex;
   gap: 12px;
   justify-content: flex-end;
-  padding: 10px;
+  padding: 14px;
+  animation: fadeInUp 0.3s ease-in-out;
 
   .btn-edit,
   .btn-save,
   .btn-cancel,
   .btn-delete {
-    padding: 10px 16px;
-    font-size: 0.95rem;
-    font-weight: 600;
-    border-radius: 8px;
+    padding: 10px 18px;
+    font-size: 1rem;
+    font-weight: 700;
+    border-radius: 10px;
     border: none;
     cursor: pointer;
-    transition: transform 0.2s ease, box-shadow 0.3s ease,
-      background-color 0.3s ease;
+    transition: all 0.2s ease-in-out;
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 10px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    gap: 8px;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
 
     &:hover {
-      transform: scale(1.05);
-      box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+      transform: translateY(-3px);
+      box-shadow: 0 5px 12px rgba(0, 0, 0, 0.25);
     }
 
     &:active {
-      transform: scale(1);
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      transform: translateY(0);
+      box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
     }
 
-    i {
-      font-size: 1.2rem;
+    i,
+    svg {
+      font-size: 1.3rem;
+      width: 1.3rem;
+      height: 1.3rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
   }
 
   .btn-edit {
-    background-color: #007bff;
-    color: #fff;
+    background: linear-gradient(135deg, #007bff, #004c9a);
+    color: $text-light;
 
     &:hover {
-      background-color: #0056b3;
+      background: linear-gradient(135deg, #005ecb, #003a7a);
     }
   }
 
   .btn-save {
-    background-color: #28a745;
-    color: #fff;
+    background: linear-gradient(135deg, #22c55e, #178b46);
+    color: $text-light;
 
     &:hover {
-      background-color: #1e7e34;
+      background: linear-gradient(135deg, #1ea44e, #12773a);
     }
   }
 
   .btn-cancel {
-    background-color: #dc3545;
-    color: #fff;
+    background: linear-gradient(135deg, #ef4444, #9b1c1c);
+    color: $text-light;
 
     &:hover {
-      background-color: #c82333;
+      background: linear-gradient(135deg, #dc2626, #7a1414);
     }
   }
 
   .btn-delete {
-    background-color: #ffc107;
-    color: #212529;
+    background: linear-gradient(135deg, #f59e0b, #b45309);
+    color: $text-light;
 
     &:hover {
-      background-color: #e0a800;
+      background: linear-gradient(135deg, #e07b00, #924207);
     }
+
+    i,
+    svg {
+      color: $text-light !important;
+    }
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(15px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@include respond-to(mobile) {
+  .section-actions {
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    padding: 10px;
+  }
+
+  .btn-edit,
+  .btn-save,
+  .btn-cancel,
+  .btn-delete {
+    padding: 9px 16px;
+    font-size: 0.9rem;
+  }
+}
+
+@include respond-to(tablet) {
+  .section-actions {
+    padding: 16px;
   }
 }
