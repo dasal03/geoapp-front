@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import PhoneInput, { isValidPhoneNumber } from "react-phone-number-input";
 import "react-phone-number-input/style.css";
 import "./PhoneField.scss";
@@ -7,7 +7,7 @@ const PhoneField = ({
   label,
   name,
   value = "",
-  handlePhoneChange,
+  onChange: handlePhoneChange,
   placeholder,
   required = false,
   disabled = false,
@@ -15,9 +15,19 @@ const PhoneField = ({
 }) => {
   const [phone, setPhone] = useState(isValidPhoneNumber(value) ? value : "");
 
-  const handleChange = (value) => {
-    setPhone(value);
-    handlePhoneChange(value);
+  useEffect(() => {
+    setPhone(value || "");
+  }, [value]);
+
+  const handleChange = (newValue) => {
+    if (!newValue || !isValidPhoneNumber(newValue)) {
+      setPhone("");
+      handlePhoneChange("");
+      return;
+    }
+
+    setPhone(newValue || "");
+    handlePhoneChange(newValue || "");
   };
 
   return (

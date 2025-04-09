@@ -1,32 +1,36 @@
-import Footer from "../../components/footer/Footer";
+import { Footer, WhatsAppButton } from "../../components";
+import { FaUsers, FaHistory, FaLightbulb, FaBullseye } from "react-icons/fa";
 import "./About.scss";
 
 function About() {
   return (
     <div className="about-page">
-      <div className="about-container">
-        <div className="about-hero">
-          <div className="about-hero-overlay"></div>
-          <div className="about-hero-text">
-            <h1 className="about-title">Acerca de Nosotros</h1>
-            <div className="h1-decorator"></div>
-            <p className="about-description">
-              Descubre nuestra historia, misión, visión y el equipo que impulsa
-              la innovación en tecnología biomédica.
-            </p>
-          </div>
+      <div className="about-hero">
+        <div className="about-hero-overlay"></div>
+        <div className="about-hero-text">
+          <h1 className="about-title">Acerca de Nosotros</h1>
+          <div className="h1-decorator"></div>
+          <p className="about-description">
+            Descubre nuestra historia, misión, visión y el equipo que impulsa la
+            innovación en tecnología biomédica.
+          </p>
         </div>
-        <div className="about-content">
-          <section className="mission-section">
+      </div>
+
+      <div className="about-content">
+        <div className="about-grid">
+          <section className="about-card">
+            <FaBullseye className="about-icon" />
             <h2>Nuestra Misión</h2>
             <p>
               Proveer soluciones innovadoras en el ámbito biomédico a través del
               alquiler, mantenimiento y venta de dispositivos que cumplen con
-              los más altos estándares de calidad, mejorando la vida de las
-              personas.
+              los más altos estándares de calidad.
             </p>
           </section>
-          <section className="vision-section">
+
+          <section className="about-card">
+            <FaLightbulb className="about-icon" />
             <h2>Nuestra Visión</h2>
             <p>
               Ser líderes en innovación tecnológica biomédica a nivel global,
@@ -34,15 +38,19 @@ function About() {
               comunidades.
             </p>
           </section>
-          <section className="history-section">
+
+          <section className="about-card">
+            <FaHistory className="about-icon" />
             <h2>Nuestra Historia</h2>
             <p>
               Fundada hace más de una década, GeoApp ha evolucionado de una
-              pequeña startup a una empresa internacional, siempre comprometida
-              con la excelencia y la innovación.
+              pequeña startup a una empresa internacional, comprometida con la
+              excelencia y la innovación.
             </p>
           </section>
-          <section className="team-section">
+
+          <section className="about-card">
+            <FaUsers className="about-icon" />
             <h2>Nuestro Equipo</h2>
             <p>
               Contamos con profesionales altamente calificados y apasionados por
@@ -52,7 +60,9 @@ function About() {
           </section>
         </div>
       </div>
+
       <Footer />
+      <WhatsAppButton />
     </div>
   );
 }

@@ -13,3 +13,19 @@
     }
   }
 }
+
+@mixin button($bg-color, $text-color) {
+  padding: 12px 18px;
+  font-size: 1rem;
+  font-weight: 500;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background-color: $bg-color;
+  color: $text-color;
+  transition: all 0.25s ease-in-out;
+}

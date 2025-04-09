@@ -2,10 +2,18 @@
 @import "../../styles/mixins";
 
 .more-info {
-  background-color: $background-light;
-  padding: 50px 20px;
+  background-color: $bg-light;
+  padding: 60px 20px;
   text-align: center;
   box-sizing: border-box;
+  opacity: 0;
+  transform: translateY(50px);
+  transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+
+  &.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
 
   .more-info-container {
     max-width: 1200px;
@@ -13,61 +21,80 @@
   }
 
   h2 {
-    font-size: 32px;
+    font-size: 34px;
     margin-bottom: 20px;
     position: relative;
     padding-bottom: 10px;
+    letter-spacing: 1px;
+
     &::after {
       content: "";
       display: block;
-      width: 50px;
-      height: 3px;
-      background-color: $accent-color;
-      margin: 0 auto;
+      width: 60px;
+      height: 4px;
+      background-color: $color-accent;
+      margin: 10px auto 0;
       border-radius: 2px;
     }
   }
 
   p {
-    font-size: 18px;
-    line-height: 1.6;
-    margin-bottom: 30px;
-    color: $text-dark;
+    font-size: 19px;
+    line-height: 1.7;
+    margin-bottom: 35px;
+    color: $text-color-primary;
+    max-width: 900px;
+    margin-left: auto;
+    margin-right: auto;
+    opacity: 0.9;
   }
 
   .service-cards {
     display: flex;
     flex-wrap: wrap;
-    gap: 20px;
+    gap: 25px;
     justify-content: center;
-    margin-top: 30px;
+    margin-top: 40px;
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.8s ease-out, transform 0.8s ease-out 0.3s;
+  }
+
+  &.visible .service-cards {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 
 @include respond-to(mobile) {
   .more-info {
-    padding: 30px 15px;
+    padding: 40px 15px;
+
     h2 {
       font-size: 28px;
       &::after {
-        width: 40px;
+        width: 45px;
       }
     }
+
     p {
-      font-size: 16px;
+      font-size: $font-size-base;
+      line-height: 1.5;
     }
   }
 }
 
 @include respond-to(tablet) {
   .more-info {
-    padding: 40px 20px;
+    padding: 50px 20px;
+
     h2 {
       font-size: 30px;
       &::after {
-        width: 45px;
+        width: 50px;
       }
     }
+
     p {
       font-size: 17px;
     }

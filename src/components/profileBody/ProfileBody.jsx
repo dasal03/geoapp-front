@@ -1,3 +1,4 @@
+import SectionCards from "../sectionCards/SectionCards";
 import {
   FaIdCard,
   FaUser,
@@ -5,51 +6,43 @@ import {
   FaCreditCard,
   FaMapMarkerAlt,
 } from "react-icons/fa";
-import { Outlet } from "react-router-dom";
-import SectionCards from "../sectionCards/SectionCards";
 import "./ProfileBody.scss";
 
-const ProfileBody = ({ profileData }) => {
+const ProfileBody = () => {
   const cards = [
     {
       path: "/profile/personal-info",
-      icon: <FaIdCard className="profile-icon" />,
+      icon: <FaIdCard />,
       title: "Información Personal",
       description: "Información personal y de identidad.",
     },
     {
       path: "/profile/account-info",
-      icon: <FaUser className="profile-icon" />,
+      icon: <FaUser />,
       title: "Datos de tu Cuenta",
       description: "Datos que representan a tu cuenta.",
     },
     {
       path: "/profile/security",
-      icon: <FaLock className="profile-icon" />,
+      icon: <FaLock />,
       title: "Seguridad",
-      description:
-        "configuraciones de seguridad.",
+      description: "Configuraciones de seguridad.",
     },
     {
       path: "/profile/payment-cards",
-      icon: <FaCreditCard className="profile-icon" />,
+      icon: <FaCreditCard />,
       title: "Tarjetas",
       description: "Tarjetas guardadas en tu cuenta.",
     },
     {
       path: "/profile/addresses",
-      icon: <FaMapMarkerAlt className="profile-icon" />,
+      icon: <FaMapMarkerAlt />,
       title: "Direcciones",
       description: "Direcciones guardadas en tu cuenta.",
     },
   ];
 
-  return (
-    <>
-      <SectionCards cards={cards} />
-      <Outlet context={{ profileData }} />
-    </>
-  );
+  return <SectionCards cards={cards} />;
 };
 
 export default ProfileBody;

@@ -1,12 +1,11 @@
 import { useState, useEffect, useRef } from "react";
 import { convertImageToBase64 } from "../../utils/generalTools";
-import ImageChangeModal from "../imageChangeModal/ImageChangeModal";
-import ImageCropperModal from "../imageCropperModal/ImageCropperModal";
-import { FaEdit } from "react-icons/fa";
+import { ImageChangeModal, ImageCropperModal } from "../";
 import placeholderProfileImage from "../../assets/profile-placeholder.jpg";
+import { FaPen } from "react-icons/fa";
 import "./ProfileImage.scss";
 
-const ProfileImage = ({ profileImage, onSaveImage }) => {
+const ProfileImage = ({ profileImage, onSave, loading }) => {
   const [image, setImage] = useState(profileImage || placeholderProfileImage);
   const [cropImage, setCropImage] = useState(null);
   const [isCropping, setIsCropping] = useState(false);
@@ -36,22 +35,22 @@ const ProfileImage = ({ profileImage, onSaveImage }) => {
 
   const handleSaveCrop = (croppedImage) => {
     setImage(croppedImage);
-    onSaveImage(croppedImage);
+    onSave(croppedImage);
     setIsCropping(false);
   };
 
   const handleDeleteImage = () => {
     setImage(placeholderProfileImage);
-    onSaveImage(null);
+    onSave(null);
     setIsModalOpen(false);
   };
 
   return (
     <div className="profile-image">
-      <img src={image} alt="Imagen de perfil" />
       <label className="edit-icon" onClick={() => setIsModalOpen(true)}>
-        <FaEdit />
+        <FaPen />
       </label>
+      <img src={image} alt="Imagen de perfil" />
 
       <ImageChangeModal
         isOpen={isModalOpen}
@@ -59,6 +58,7 @@ const ProfileImage = ({ profileImage, onSaveImage }) => {
         onClose={() => setIsModalOpen(false)}
         onDelete={handleDeleteImage}
         onUpload={() => fileInputRef.current.click()}
+        canDelete={image !== placeholderProfileImage}
       />
 
       <input
@@ -74,6 +74,7 @@ const ProfileImage = ({ profileImage, onSaveImage }) => {
           cropImage={cropImage}
           onSaveCrop={handleSaveCrop}
           onClose={() => setIsCropping(false)}
+          loading={loading}
         />
       )}
     </div>

@@ -1,53 +1,71 @@
 import { Link } from "react-router-dom";
-import useLogin from "../../hooks/UseLogin";
-import Loader from "../ui/loader/Loader";
-import InputField from "../ui/inputField/InputField";
-import PasswordField from "../ui/passwordField/PasswordField";
-import Button from "../ui/button/Button";
+import { useLogin } from "../../hooks";
+import { InputField, PasswordField, Loader, Button } from "../ui";
+
+const fieldComponents = {
+  text: InputField,
+  password: PasswordField,
+};
 
 const LoginForm = () => {
-  const { isLoading, formValues, error, handleSubmit, handleInputChange } =
+  const { fields, formValues, formError, handleSubmit, handleChange, loading } =
     useLogin();
 
   return (
-    <div className="login-container">
-      {isLoading ? (
+    <div className="login-form-container">
+      {loading ? (
         <Loader />
       ) : (
-        <div className="login-form">
+        <form className="login-form" onSubmit={handleSubmit} noValidate>
           <header className="form-header">Inicio de Sesión</header>
-          {error && <p className="error-message">{error}</p>}
 
-          <form onSubmit={handleSubmit}>
-            <div className="fields">
-              <InputField
-                label="Nombre de Usuario"
-                placeholder="Ingresa tu usuario"
-                value={formValues.username}
-                onChange={(e) => handleInputChange("username", e.target.value)}
-                required
-              />
-              <PasswordField
-                label="Contraseña"
-                placeholder="Ingresa tu contraseña"
-                value={formValues.password}
-                onChange={(value) => handleInputChange("password", value)}
-                required
-                styleType="default"
-              />
-            </div>
-            <div className="buttons">
-              <Button
-                type="submit"
-                text="Iniciar Sesión"
-                icon="fas fa-sign-in-alt"
-              />
-            </div>
-            <div className="register-link">
-              ¿No tienes una cuenta? <Link to="/register">Regístrate</Link>
-            </div>
-          </form>
-        </div>
+          <div className="fields">
+            {fields.map(({ name, type, label, placeholder }) => {
+              const Component = fieldComponents[type];
+              return (
+                <div
+                  key={name}
+                  className={`field-wrapper ${formError[name] ? "error" : ""}`}
+                >
+                  <Component
+                    label={label}
+                    name={name}
+                    value={formValues[name] || ""}
+                    placeholder={placeholder}
+                    onChange={(e) => handleChange(name, e.target.value)}
+                    className={`form-${type}${formError[name] ? " error" : ""}`}
+                    title={formError[name] || ""}
+                    aria-invalid={!!formError[name]}
+                    aria-describedby={
+                      formError[name] ? `${name}-error` : undefined
+                    }
+                  />
+                  {formError[name] && (
+                    <span
+                      className="error-message"
+                      id={`${name}-error`}
+                      aria-live="polite"
+                    >
+                      {formError[name]}
+                    </span>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+
+          <div className="buttons">
+            <Button
+              type="submit"
+              text="Iniciar Sesión"
+              icon="fas fa-sign-in-alt"
+            />
+          </div>
+
+          <div className="register-link">
+            ¿No tienes una cuenta? <Link to="/register">Regístrate</Link>
+          </div>
+        </form>
       )}
     </div>
   );

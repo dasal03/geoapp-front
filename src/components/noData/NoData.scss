@@ -1,0 +1,52 @@
+@import "../../styles/variables";
+
+.no-data {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 48px 24px;
+  border: 1px dashed $color-gray-border;
+  background-color: lighten($bg-light, 5%);
+  border-radius: 12px;
+  animation: fadeIn 0.4s ease-in-out;
+  min-height: 260px;
+
+  .no-data-icon {
+    font-size: 64px;
+    margin-bottom: $font-size-base;
+    color: lighten($color-primary, 10%);
+    animation: bounce 1.5s infinite alternate;
+  }
+
+  .no-data-title {
+    font-size: 1.5rem;
+    margin-bottom: 8px;
+    color: $text-color-primary;
+  }
+
+  .no-data-text {
+    font-size: 1rem;
+    color: darken($text-color-primary, 10%);
+    max-width: 400px;
+    margin-bottom: 20px;
+  }
+
+  .cancel-btn {
+    padding: 12px 28px;
+    font-size: 0.95rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    border-radius: 8px;
+    background: transparent;
+    border: 2px solid $color-primary;
+    color: $color-primary;
+    box-shadow: none;
+
+    &:hover {
+      background: $color-primary;
+      color: $text-color-light;
+    }
+  }
+}

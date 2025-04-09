@@ -4,15 +4,14 @@
 .profile-header {
   display: flex;
   align-items: center;
-  background-color: #f9f9f9;
+  background-color: $bg-light;
   padding: 20px;
   border-radius: 12px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   width: 100%;
   max-width: 800px;
-  margin-bottom: 30px;
-  transition: all 0.3s ease-in-out;
   margin: 80px auto 30px;
+  transition: all 0.3s ease-in-out;
 
   &:hover {
     box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
@@ -39,22 +38,22 @@
 
   .profile-info {
     flex: 1;
-    margin-left: 20px;
+    margin-left: 28px;
 
     .profile-name {
       margin: 0;
       font-size: clamp(20px, 4vw, 24px);
       font-weight: bold;
-      color: $text-dark;
+      color: $text-color-primary;
     }
 
     .profile-username {
       margin: 5px 0;
-      font-size: 16px;
-      color: $text-dark;
+      font-size: $font-size-base;
+      color: $text-color-primary;
 
       .username-decorator {
-        color: $accent-color;
+        color: $color-accent;
         font-weight: 600;
       }
     }
@@ -62,7 +61,7 @@
     .profile-member-date {
       margin-top: 5px;
       font-size: 14px;
-      color: $text-dark;
+      color: $text-color-primary;
     }
   }
 
@@ -73,26 +72,135 @@
   }
 }
 
+.skeleton {
+  display: flex;
+  align-items: center;
+  width: 100%;
+
+  .skeleton-avatar {
+    width: 120px;
+    height: 120px;
+    min-width: 120px;
+    min-height: 120px;
+    border-radius: 50%;
+    background: linear-gradient(90deg, $color-skeleton 25%, #f0f0f0 50%, $color-skeleton 75%);
+    background-size: 200% 100%;
+    animation: loading 1.5s infinite ease-in-out;
+  }
+
+  .profile-info {
+    flex: 1;
+    margin-left: 28px;
+
+    .skeleton-line {
+      height: 18px;
+      min-height: 18px;
+      background: linear-gradient(90deg, $color-skeleton 25%, #f0f0f0 50%, $color-skeleton 75%);
+      background-size: 200% 100%;
+      animation: loading 1.5s infinite ease-in-out;
+      border-radius: 4px;
+      margin-bottom: 10px;
+    }
+
+    .skeleton-line--name {
+      width: 60%;
+      height: 22px;
+      min-height: 22px;
+    }
+
+    .skeleton-line--username {
+      width: 50%;
+      height: 18px;
+    }
+
+    .skeleton-line--date {
+      width: 40%;
+      height: $font-size-base;
+    }
+  }
+}
+
+@keyframes loading {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
 @include respond-to(mobile) {
   .profile-header {
     flex-direction: column;
+    align-items: center;
+    padding: $font-size-base;
     text-align: center;
-    padding: 15px;
 
     .profile-avatar {
-      width: 70px;
-      height: 70px;
+      width: 80px;
+      height: 80px;
+      margin-bottom: 12px;
+    }
+
+    .profile-info {
+      text-align: center;
+      margin-left: 0;
+      width: 100%;
+    }
+  }
+
+  .skeleton {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: $font-size-base;
+
+    .skeleton-avatar {
+      width: 120px;
+      height: 120px;
+      min-width: 120px;
+      min-height: 120px;
+      margin-bottom: $font-size-base;
     }
 
     .profile-info {
       margin-left: 0;
-      margin-top: 10px;
+      width: 100%;
+
+      .skeleton-line {
+        margin: 10px auto;
+        background: linear-gradient(
+          90deg,
+          $color-skeleton 25%,
+          #f0f0f0 50%,
+          $color-skeleton 75%
+        );
+        background-size: 200% 100%;
+        animation: loading 1.5s infinite ease-in-out;
+        border-radius: 4px;
+      }
+
+      .skeleton-line--name {
+        width: 75%;
+        height: 24px;
+      }
+
+      .skeleton-line--username {
+        width: 65%;
+        height: 20px;
+      }
+
+      .skeleton-line--date {
+        width: 55%;
+        height: 18px;
+      }
     }
   }
 }
 
 @include respond-to(tablet) {
   .profile-header {
-    padding: 18px;
+    padding: 20px;
+    gap: 20px;
   }
 }

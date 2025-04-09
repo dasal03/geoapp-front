@@ -1,8 +1,9 @@
 import { useState, useEffect, useCallback, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAlert } from "../context/alertProvider";
+import { capitalizeText } from "../utils/generalTools";
 import apiFetch from "../utils/apiClient";
 import Validator from "../utils/formValidator";
+import { useAlert } from "../context/alertProvider";
 
 const CE = 2,
   PPT = 3;
@@ -38,7 +39,7 @@ const useRegister = () => {
         showAlert("error", "Error", "Error al conectar con el servidor.");
       }
     },
-    []
+    [showAlert]
   );
 
   useEffect(() => {
@@ -268,9 +269,32 @@ const useRegister = () => {
 
   const handleChange = useCallback(
     (fieldName, eventOrValue) => {
-      const value = eventOrValue?.target?.value ?? eventOrValue ?? "";
+      let value = eventOrValue?.target?.value ?? eventOrValue ?? "";
+      const textFields = [
+        "first_name",
+        "last_name",
+        "email",
+        "alternative_email",
+        "username",
+      ];
+      if (textFields.includes(fieldName)) {
+        value = capitalizeText(value);
+      }
+
       setFormValues((prev) => {
         const newValues = { ...prev, [fieldName]: value };
+
+        const allFields = Object.values(formFieldsSections).flat();
+        const field = allFields.find((f) => f.name === fieldName);
+
+        if (field?.required && !value.trim()) {
+          setFormError({
+            field: fieldName,
+            message: `${field.label} es obligatorio`,
+          });
+        } else if (formError.field === fieldName) {
+          setFormError({});
+        }
 
         if (["password", "confirm_password"].includes(fieldName)) {
           if (
@@ -316,15 +340,17 @@ const useRegister = () => {
     const validator = new Validator(formValues);
     const validation = validator.validateSection(currentFields);
 
-    if (direction === "next") {
-      if (validation.isValid) {
-        setActiveForm((prev) => (prev === "first" ? "second" : "third"));
-      } else {
-        setFormError({ field: validation.field, message: validation.message });
-      }
-    } else {
-      setActiveForm((prev) => (prev === "third" ? "second" : "first"));
+    if (!validation.isValid) {
+      setFormError({ field: validation.field, message: validation.message });
+      return;
     }
+
+    if (direction === "next") {
+      setActiveForm((prev) => (prev === "first" ? "second" : "third"));
+    } else {
+      setFormError({ field: validation.field, message: validation.message });
+    }
+
     window.scrollTo(0, 0);
   };
 

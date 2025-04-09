@@ -11,6 +11,8 @@ const InputField = forwardRef(
       value,
       checked,
       onChange,
+      onFocus,
+      maxLength,
       autoComplete,
       required = false,
       disabled = false,
@@ -26,8 +28,10 @@ const InputField = forwardRef(
           type={type}
           name={name}
           placeholder={placeholder}
-          {...(type === "checkbox" ? { checked } : { value })}
+          {...(type === "checkbox" ? { checked } : { defaultValue: value })}
           onChange={onChange}
+          onFocus={onFocus}
+          maxLength={maxLength}
           required={required}
           autoComplete={autoComplete}
           disabled={disabled}

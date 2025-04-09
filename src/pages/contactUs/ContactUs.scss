@@ -4,47 +4,47 @@
 .contact-us {
   margin-top: 80px;
   padding: 60px 20px;
-  background: linear-gradient(to right, $background-light, $background-dark);
-  color: $text-dark;
+  background: linear-gradient(to right, $bg-light, $bg-dark);
+  color: $text-color-primary;
   text-align: center;
 
   .container {
-    max-width: 1000px;
+    max-width: 900px;
     margin: 0 auto;
     padding: 20px;
   }
 
   .contact-title {
-    font-size: 42px;
-    font-weight: 700;
-    margin-bottom: 10px;
-    color: $primary-color;
+    font-size: 40px;
+    font-weight: bold;
+    color: $color-primary;
+    margin-bottom: 15px;
   }
 
   .contact-subtitle {
     font-size: 18px;
-    margin-bottom: 40px;
-    color: $secondary-color;
+    margin-bottom: 30px;
+    color: $color-secondary;
   }
 
   .contact-info {
-    background: $white-color;
-    padding: 30px;
+    background: $color-white;
+    padding: 25px;
     border-radius: 10px;
-    box-shadow: $box-shadow;
+    box-shadow: $box-shadow-default;
     text-align: left;
-    margin-bottom: 40px;
+    margin-bottom: 35px;
 
     h2 {
-      font-size: 28px;
-      color: $primary-color;
-      margin-bottom: 15px;
+      font-size: 26px;
+      color: $color-primary;
+      margin-bottom: 10px;
     }
 
     p {
-      font-size: 18px;
+      font-size: $font-size-base;
       margin-bottom: 15px;
-      color: $text-dark;
+      color: $text-color-primary;
     }
 
     ul {
@@ -55,66 +55,75 @@
       li {
         display: flex;
         align-items: center;
-        font-size: 18px;
+        font-size: $font-size-base;
         margin-bottom: 12px;
-        color: $text-dark;
+        color: $text-color-primary;
 
         .contact-icon {
-          font-size: 22px;
-          margin-right: 12px;
-          color: $accent-color;
-        }
-
-        span {
-          flex-grow: 1;
+          font-size: 20px;
+          margin-right: 10px;
+          color: $color-accent;
         }
       }
     }
   }
 
   .contact-form-section {
-    background: $white-color;
-    padding: 30px;
+    background: $color-white;
+    padding: 25px;
     border-radius: 10px;
-    box-shadow: $box-shadow;
+    box-shadow: $box-shadow-default;
     text-align: left;
 
     h2 {
-      font-size: 26px;
-      color: $primary-color;
-      margin-bottom: 15px;
+      font-size: 24px;
+      color: $color-primary;
+      margin-bottom: 10px;
     }
 
     p {
-      font-size: 18px;
-      color: $text-dark;
-      margin-bottom: 20px;
+      font-size: $font-size-base;
+      color: $text-color-primary;
+      margin-bottom: 15px;
+    }
+
+    .contact-form-wrapper {
+      margin-top: 50px;
     }
   }
 }
 
 @include respond-to(mobile) {
   .contact-us {
-    margin-top: 60px;
+    margin-top: 50px;
     padding: 40px 15px;
 
     .contact-title {
-      font-size: 32px;
+      font-size: 28px;
     }
 
-    .contact-info, .contact-form-section {
+    .contact-info,
+    .contact-form-section {
       padding: 20px;
+    }
+
+    ul li {
+      font-size: 14px;
     }
   }
 }
 
 @include respond-to(tablet) {
   .contact-us {
-    margin-top: 70px;
+    margin-top: 60px;
     padding: 50px 20px;
 
     .contact-title {
-      font-size: 36px;
+      font-size: 34px;
+    }
+
+    .contact-info {
+      padding: 22px;
     }
   }
 }

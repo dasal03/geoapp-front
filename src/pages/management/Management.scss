@@ -5,9 +5,9 @@
   flex-direction: column;
   width: 100%;
   max-width: 800px;
-  background-color: $light-gray;
+  background-color: $color-gray-light;
   border-radius: 12px;
-  box-shadow: $box-shadow;
+  box-shadow: $box-shadow-default;
   margin-bottom: 24px;
   padding: 12px;
   transition: max-height 0.3s ease-in-out, padding 0.3s ease-in-out;
@@ -16,7 +16,7 @@
   .no-data {
     text-align: center;
     font-size: 15px;
-    color: $light-black;
+    color: $color-black-light;
     font-style: italic;
     padding: 8px;
     display: block;
@@ -33,7 +33,7 @@
 
   .section-title {
     font-size: 22px;
-    color: $primary-color;
+    color: $color-primary;
     margin-bottom: 12px;
     text-align: center;
     font-weight: bold;
@@ -52,14 +52,14 @@
     align-items: center;
     justify-content: space-between;
     padding: 12px;
-    border: 1px solid $border-color;
+    border: 1px solid $color-gray-border;
     border-radius: 10px;
-    background-color: $white-color;
-    box-shadow: $box-shadow;
+    background-color: $color-white;
+    box-shadow: $box-shadow-default;
     transition: all 0.3s ease-in-out;
 
     &:hover {
-      box-shadow: $box-shadow;
+      box-shadow: $box-shadow-default;
       transform: translateY(-2px);
     }
 
@@ -67,7 +67,7 @@
       flex-grow: 1;
       text-align: left;
       font-size: 14px;
-      color: $light-black;
+      color: $color-black-light;
       display: flex;
       flex-direction: column;
       gap: 4px;
@@ -77,14 +77,14 @@
         font-size: 15px;
 
         strong {
-          color: $primary-color;
+          color: $color-primary;
         }
       }
     }
   }
 
   .add-item-btn {
-    background-color: $primary-color;
+    background-color: $color-primary;
     padding: 8px 14px;
     border-radius: 8px;
     font-size: 15px;
@@ -95,7 +95,7 @@
     align-self: center;
 
     &:hover {
-      background-color: darken($primary-color, 10%);
+      background-color: darken($color-primary, 10%);
       transform: scale(1.05);
     }
 
@@ -120,7 +120,7 @@
   .spinner {
     width: 24px;
     height: 24px;
-    border: 3px solid $primary-color;
+    border: 3px solid $color-primary;
     border-top-color: transparent;
     border-radius: 50%;
     animation: spin 1s linear infinite;

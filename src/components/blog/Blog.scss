@@ -1,0 +1,88 @@
+@import "../../styles/variables";
+@import "../../styles/mixins";
+
+.blog {
+  background-color: $bg-light;
+  padding: 50px 20px;
+  text-align: center;
+
+  h2 {
+    font-size: 32px;
+    margin-bottom: 20px;
+    position: relative;
+    padding-bottom: 10px;
+    &::after {
+      content: "";
+      display: block;
+      width: 50px;
+      height: 3px;
+      background-color: $color-accent;
+      margin: 0 auto;
+      border-radius: 2px;
+    }
+  }
+
+  .blog-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+    max-width: 1000px;
+    margin: 0 auto;
+  }
+
+  .blog-item {
+    background: $bg-light;
+    border-radius: 10px;
+    padding: 20px;
+    width: 300px;
+    box-shadow: $box-shadow-default;
+    transition: transform 0.3s ease-in-out;
+
+    &:hover {
+      transform: translateY(-5px);
+    }
+
+    h3 {
+      font-size: 20px;
+      color: $text-color-primary;
+      margin-bottom: 10px;
+    }
+
+    p {
+      font-size: 14px;
+      color: $text-color-primary;
+      margin-bottom: 10px;
+    }
+
+    a {
+      font-size: $font-size-base;
+      color: $color-accent;
+      text-decoration: none;
+      font-weight: bold;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+}
+
+@include respond-to(mobile) {
+  .blog {
+    padding: 30px 15px;
+    h2 {
+      font-size: 28px;
+    }
+  }
+
+  .blog-item {
+    width: 100%;
+  }
+}
+
+@include respond-to(tablet) {
+  .blog-item {
+    width: 45%;
+  }
+}

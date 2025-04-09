@@ -1,11 +1,11 @@
 import { useState, useEffect } from "react";
-import { ReactComponent as SearchIcon } from "../../assets/search-icon.svg";
-import { useAuth } from "../../context/AuthContext";
-import Loader from "../../components/ui/loader/Loader";
 import apiFetch from "../../utils/apiClient";
+import { Loader } from "../../components/ui";
+import { useAuth } from "../../context/AuthContext";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
-import Swal from "sweetalert2";
+import { useAlert } from "../../context/alertProvider";
+import { ReactComponent as SearchIcon } from "../../assets/search-icon.svg";
 import "./Maintenance.scss";
 
 function Maintenance() {
@@ -27,6 +27,8 @@ function Maintenance() {
   const [equipmentId, setEquipmentId] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
+  const { showAlert } = useAlert();
+
   const fetchMaintenances = async () => {
     setIsLoading(true);
     try {
@@ -41,11 +43,7 @@ function Maintenance() {
         );
       }
     } catch (error) {
-      Swal.fire({
-        icon: "error",
-        title: "Error",
-        text: "Error al obtener los mantenimientos programados.",
-      });
+      showAlert("error", "Error", "Error al obtener los mantenimientos.");
     } finally {
       setIsLoading(false);
     }
@@ -69,18 +67,10 @@ function Maintenance() {
           "No se encontraron equipos con su criterio de búsqueda."
         );
       } else {
-        Swal.fire({
-          icon: "error",
-          title: "Error",
-          text: data.description || "Error al obtener los equipos.",
-        });
+        showAlert("error", "Error", "Error al obtener los equipos.");
       }
     } catch (error) {
-      Swal.fire({
-        icon: "error",
-        title: "Error",
-        text: error.message || "Error al conectarse con el servidor.",
-      });
+      showAlert("error", "Error", "Error al obtener los equipos.");
     } finally {
       setIsLoading(false);
     }
@@ -97,15 +87,10 @@ function Maintenance() {
 
       await fetchEquipment();
     } catch (error) {
-      Swal.fire({
-        icon: "error",
-        title: "Error",
-        text: "Hubo un problema al cargar los equipos.",
-      });
+      showAlert("error", "Error", "Error al obtener los equipos.");
     }
   };
 
-  // Opens the change state modal
   const openChangeStateModal = () => {
     setNewState(null);
     setShowManageModal(false);
@@ -113,30 +98,20 @@ function Maintenance() {
     setShowMaintenanceModal(false);
   };
 
-  // Opens the maintenance modal
   const openMaintenanceModal = () => {
     setShowManageModal(false);
     setShowChangeStateModal(false);
     setShowMaintenanceModal(true);
   };
 
-  // Handles the state change process for maintenance
   const handleStateChange = async () => {
     if (!newState) {
-      Swal.fire({
-        icon: "warning",
-        title: "Seleccionar estado",
-        text: "Por favor seleccione un estado válido.",
-      });
+      showAlert("warning", "Seleccionar estado", "Debe seleccionar un estado.");
       return;
     }
 
     if (newState === 3 && !scheduledDate) {
-      Swal.fire({
-        icon: "warning",
-        title: "Seleccionar fecha",
-        text: "Debe seleccionar una fecha para 'mantenimiento programado'.",
-      });
+      showAlert("warning", "Seleccionar fecha", "Debe seleccionar una fecha.");
       return;
     }
 
@@ -157,37 +132,23 @@ function Maintenance() {
       });
 
       if (data.responseCode === 201) {
-        Swal.fire({
-          icon: "success",
-          title: "Estado cambiado",
-          text: "El estado ha sido actualizado.",
-        });
+        showAlert("success", "Éxito", "Estado cambiado exitosamente");
         setShowChangeStateModal(false);
         fetchMaintenances();
       } else {
-        Swal.fire({
-          icon: "error",
-          title: "Error",
-          text: data.description || "Hubo un error al cambiar el estado.",
-        });
+        showAlert("error", "Error", data.description);
       }
     } catch (error) {
-      Swal.fire({
-        icon: "error",
-        title: "Error",
-        text: error.message || "Error al conectarse con el servidor.",
-      });
+      showAlert("error", "Error", "Error al cambiar el estado.");
     } finally {
       setIsLoading(false);
     }
   };
 
-  // Handles calendar date changes and populates maintenance events
   const handleDateChange = (date) => {
     setScheduledDate(date);
   };
 
-  // Fetch maintenance events for the clicked date
   const handleDateClick = (date) => {
     const today = new Date();
     const formatDate = new Date(date).toDateString();
@@ -214,15 +175,10 @@ function Maintenance() {
       setModalData(events);
       openMaintenanceModal();
     } else {
-      Swal.fire({
-        icon: "info",
-        title: "Sin mantenimientos",
-        text: "No hay mantenimientos programados para esta fecha.",
-      });
+      showAlert("warning", "No hay mantenimientos", "No hay mantenimientos.");
     }
   };
 
-  // Fetch maintenance data on component mount
   useEffect(() => {
     fetchMaintenances();
   }, []);

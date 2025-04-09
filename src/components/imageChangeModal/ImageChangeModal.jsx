@@ -1,25 +1,48 @@
 import { createPortal } from "react-dom";
-import Button from "../ui/button/Button";
+import { Button } from "../ui";
 import "./ImageChangeModal.scss";
 
-const ImageChangeModal = ({ isOpen, image, onClose, onDelete, onUpload }) => {
+const ImageChangeModal = ({
+  isOpen,
+  image,
+  onClose,
+  onDelete,
+  onUpload,
+  canDelete,
+}) => {
   if (!isOpen) return null;
 
   return createPortal(
     <div className="modal-overlay">
       <div className="modal-content">
-        <h3>Editar Imagen</h3>
+        <Button
+          aria-label="Cerrar"
+          icon="fa fa-times"
+          onClick={onClose}
+          styleType="close-button"
+        />
+
+        <div className="modal-header">
+          <h3 className="modal-title">Editar Imagen</h3>
+        </div>
+
         <img src={image} alt="Imagen actual" className="preview-image" />
+
         <div className="modal-actions">
+          <Button
+            text="Cambiar"
+            icon="fa fa-upload"
+            onClick={onUpload}
+            styleType="success-button"
+          />
           <Button
             text="Eliminar"
             icon="fa fa-trash"
             onClick={onDelete}
-            disabled={!image}
+            disabled={!canDelete}
+            styleType="danger-button"
           />
-          <Button text="Cambiar" icon="fa fa-upload" onClick={onUpload} />
         </div>
-        <Button text="Cancelar" onClick={onClose} styleType="close-modal" />
       </div>
     </div>,
     document.getElementById("modal-root")

@@ -3,7 +3,7 @@
 button {
   padding: 10px 20px;
   border-radius: 4px;
-  font-size: 16px;
+  font-size: $font-size-base;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -11,7 +11,7 @@ button {
   transition: background-color 0.3s ease, opacity 0.3s ease;
   border: none;
   background-color: #007bff;
-  color: white;
+  color: $color-white;
   margin-bottom: 5px;
 
   &:hover {
@@ -26,7 +26,7 @@ button {
 
   span {
     margin-left: 8px;
-    font-size: 16px;
+    font-size: $font-size-base;
     font-weight: 500;
     color: inherit;
   }

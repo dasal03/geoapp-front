@@ -4,9 +4,12 @@ import "./PasswordField.scss";
 
 const PasswordField = ({
   label,
+  name,
   placeholder,
   value,
   onChange,
+  onFocus,
+  maxLength,
   required = false,
   disabled = false,
   styleType = "default",
@@ -24,8 +27,11 @@ const PasswordField = ({
         <input
           type={isPasswordVisible ? "text" : "password"}
           placeholder={placeholder}
+          name={name}
           value={value}
-          onChange={(e) => onChange(e.target.value)}
+          onChange={onChange}
+          onFocus={onFocus}
+          maxLength={maxLength}
           required={required}
           disabled={disabled}
           className={styleType}

@@ -1,9 +1,10 @@
 import {
-  createContext,
+  useRef,
   useState,
-  useContext,
   useEffect,
+  useContext,
   useCallback,
+  createContext,
 } from "react";
 import { useNavigate } from "react-router-dom";
 import apiFetch from "../utils/apiClient";
@@ -11,11 +12,12 @@ import apiFetch from "../utils/apiClient";
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-  const [token, setToken] = useState(null);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [token, setToken] = useState(localStorage.getItem("token"));
+  const [isAuthenticated, setIsAuthenticated] = useState(!!token);
   const [isLoading, setIsLoading] = useState(true);
   const [user, setUser] = useState(null);
 
+  const hasFetchedUser = useRef(false);
   const navigate = useNavigate();
 
   const logout = useCallback(() => {
@@ -23,55 +25,48 @@ export const AuthProvider = ({ children }) => {
     setToken(null);
     setUser(null);
     setIsAuthenticated(false);
+
     navigate("/login");
   }, [navigate]);
 
   useEffect(() => {
-    const storedToken = localStorage.getItem("token");
-    if (storedToken && !token) {
-      setToken(storedToken);
-      setIsAuthenticated(true);
-    } else {
-      setIsLoading(false);
-    }
-  }, [token]);
+    if (!token || hasFetchedUser.current) return;
 
-  useEffect(() => {
     const fetchUserData = async () => {
-      if (token && !user) {
-        try {
-          const response = await apiFetch("/get_user_data_by_token", {
-            method: "GET",
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          });
+      hasFetchedUser.current = true;
+      setIsLoading(true);
 
-          if (response.responseCode === 200) {
-            setUser({
-              user_id: response.data.user_id,
-              username: response.data.username,
-              profile_img: response.data.profile_img || "",
-              role_name: response.data.role_name,
-            });
-          } else if (response.responseCode === 401) {
-            logout();
-          }
-        } catch (error) {
-          console.error("Error during fetching user data:", error);
+      try {
+        const response = await apiFetch("/get_user_data_by_token", {
+          method: "GET",
+          headers: { Authorization: `Bearer ${token}` },
+        });
+
+        if (response.responseCode === 200) {
+          setUser({
+            user_id: response.data.user_id,
+            username: response.data.username,
+            profile_img: response.data.profile_img || "",
+            role_id: response.data.role_id,
+            role_name: response.data.role_name,
+          });
+          setIsAuthenticated(true);
+        } else {
           logout();
-        } finally {
-          setIsLoading(false);
         }
-      } else {
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+        logout();
+      } finally {
         setIsLoading(false);
       }
     };
 
     fetchUserData();
-  }, [token, user, logout]);
+  }, [token, logout]);
 
   const login = async (username, password) => {
+    setIsLoading(true);
     try {
       const data = await apiFetch("/auth", {
         method: "POST",
@@ -82,12 +77,29 @@ export const AuthProvider = ({ children }) => {
         localStorage.setItem("token", data.data.token);
         setToken(data.data.token);
         setIsAuthenticated(true);
-      } else {
-        throw new Error(data.message || "Error logging in.");
+        hasFetchedUser.current = false;
+        return { success: true };
       }
+
+      if (data.responseCode === 401) {
+        return {
+          success: false,
+          message: "Credenciales incorrectas. Inténtalo de nuevo.",
+        };
+      }
+
+      return {
+        success: false,
+        message: "Error en el servidor. Inténtalo más tarde.",
+      };
     } catch (error) {
       console.error("Login error:", error);
-      throw error;
+      return {
+        success: false,
+        message: "Error inesperado. Inténtalo más tarde.",
+      };
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -107,6 +119,4 @@ export const AuthProvider = ({ children }) => {
   );
 };
 
-export const useAuth = () => {
-  return useContext(AuthContext);
-};
+export const useAuth = () => useContext(AuthContext);

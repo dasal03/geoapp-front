@@ -1,9 +1,11 @@
 import { useState, useEffect } from "react";
-import InputField from "../ui/inputField/InputField";
-import SelectField from "../ui/selectField/SelectField";
-import DateInputField from "../ui/dateInputField/DateInputField";
-import PhoneField from "../ui/phoneField/PhoneField";
-import TextAreaField from "../ui/textAreaField/TextAreaField";
+import {
+  PhoneField,
+  InputField,
+  SelectField,
+  DateInputField,
+  TextAreaField,
+} from "../ui";
 import { motion } from "framer-motion";
 import "./DynamicModal.scss";
 

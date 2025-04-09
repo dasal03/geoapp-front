@@ -3,7 +3,7 @@ import { BASE_URL } from "./constants";
 
 const apiFetch = async (
   endpoint,
-  { token = localStorage.getItem("token"), logout, ...options } = {}
+  { token = localStorage.getItem("token"), ...options } = {}
 ) => {
   const headers = {
     "Content-Type": "application/json",
@@ -22,41 +22,22 @@ const apiFetch = async (
 
     const { responseCode, responseReason, data, description } = response.data;
 
-    if ([200, 201].includes(responseCode)) {
-      return {
-        responseCode,
-        responseReason,
-        data,
-        description,
-      };
-    }
-
-    return response.data;
+    return {
+      responseCode,
+      responseReason,
+      data,
+      description,
+    };
   } catch (error) {
     console.error("Error en apiFetch:", error);
 
     if (error.response) {
       const { status, data } = error.response;
 
-      if (status === 401) {
-        if (logout) logout();
-        return {
-          responseCode: 401,
-          description: "No autorizado. Sesión cerrada.",
-        };
-      }
-
-      if ([400, 404].includes(status)) {
-        return {
-          responseCode: status,
-          description: data?.description || "Error en la solicitud.",
-          data: [],
-        };
-      }
-
       return {
         responseCode: status,
         description: data?.description || "Error en la solicitud.",
+        data: [],
       };
     }
 

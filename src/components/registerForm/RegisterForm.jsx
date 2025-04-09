@@ -1,12 +1,14 @@
 import { Link } from "react-router-dom";
-import useRegister from "../../hooks/UseRegister";
-import Button from "../ui/button/Button";
-import InputField from "../ui/inputField/InputField";
-import PasswordField from "../ui/passwordField/PasswordField";
-import SelectField from "../ui/selectField/SelectField";
-import PhoneField from "../ui/phoneField/PhoneField";
-import DateInputField from "../ui/dateInputField/DateInputField";
-import Loader from "../ui/loader/Loader";
+import { useRegister } from "../../hooks";
+import {
+  Button,
+  InputField,
+  PasswordField,
+  SelectField,
+  PhoneField,
+  DateInputField,
+  Loader,
+} from "../ui";
 
 const RegisterForm = () => {
   const {

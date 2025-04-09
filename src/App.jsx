@@ -6,12 +6,12 @@ import "./App.scss";
 
 function App() {
   return (
-    <AlertProvider>
-      <AuthProvider>
+    <AuthProvider>
+      <AlertProvider>
         <Navbar />
         <AppRoutes />
-      </AuthProvider>
-    </AlertProvider>
+      </AlertProvider>
+    </AuthProvider>
   );
 }
 

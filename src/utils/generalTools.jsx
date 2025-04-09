@@ -56,3 +56,7 @@ export const formatDate = (date) => {
   const d = new Date(date);
   return d.toISOString().split("T")[0];
 };
+
+export const capitalizeText = (text) => {
+  return text.toLowerCase().replace(/\b\w/g, (char) => char.toUpperCase());
+};

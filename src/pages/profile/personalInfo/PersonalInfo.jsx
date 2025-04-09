@@ -1,15 +1,16 @@
-import { useState } from "react";
-import { useOutletContext } from "react-router-dom";
-import FormSection from "../../../components/formSection/FormSection";
-import Loader from "../../../components/ui/loader/Loader";
+import { useSearchParams } from "react-router-dom";
+import { useProfileData } from "../../../hooks";
+import { FormSection } from "../../../components";
+import { Loader } from "../../../components/ui";
+import { useAlert } from "../../../context/alertProvider";
 
 const PersonalInfo = () => {
-  const { profileData, updateProfile } = useOutletContext();
-  const [isLoading, setIsLoading] = useState(false);
+  const [searchParams] = useSearchParams();
+  const userId = searchParams.get("user_id");
+  const { profileData, updateProfile, loading } = useProfileData(userId);
+  const { showAlert } = useAlert();
 
-  if (!profileData) {
-    return <Loader />;
-  }
+  if (!profileData && !loading) return <Loader />;
 
   const sectionConfig = {
     title: "Información Personal",
@@ -17,15 +18,14 @@ const PersonalInfo = () => {
       {
         name: "full_name",
         label: "Nombre Completo",
-        placeholder: "Nombre Completo",
         type: "text",
         disabled: true,
       },
       {
         name: "phone_number",
         label: "Número Telefonico",
-        placeholder: "Numero Telefonico",
         type: "phone",
+        required: true,
       },
       {
         name: "date_of_birth",
@@ -37,20 +37,19 @@ const PersonalInfo = () => {
         name: "gender_name",
         label: "Género",
         type: "select",
-        options: profileData.gender_name,
+        options: profileData?.gender_name,
         disabled: true,
       },
       {
         name: "document_type",
         label: "Tipo de Documento",
         type: "select",
-        options: profileData.document_type,
+        options: profileData?.document_type,
         disabled: true,
       },
       {
         name: "document_number",
         label: "Número de Documento",
-        placeholder: "Numero de Documento",
         type: "text",
         disabled: true,
       },
@@ -58,14 +57,14 @@ const PersonalInfo = () => {
         name: "state_of_issue",
         label: "Departamento de Expedición",
         type: "select",
-        options: profileData.state_of_issue,
+        options: profileData?.state_of_issue,
         disabled: true,
       },
       {
         name: "city_of_issue",
         label: "Ciudad de Expedición",
         type: "select",
-        options: profileData.city_of_issue,
+        options: profileData?.city_of_issue,
         disabled: true,
       },
       {
@@ -78,29 +77,22 @@ const PersonalInfo = () => {
   };
 
   const handleSave = async (finalData) => {
-    setIsLoading(true);
     try {
       await updateProfile(finalData);
+      showAlert("success", "Éxito", "Información actualizada exitosamente");
     } catch (error) {
       console.error("Error en updateProfile", error);
-    } finally {
-      setIsLoading(false);
     }
   };
 
   return (
     <div className="profile-section">
-      {isLoading ? (
-        <Loader />
-      ) : (
-        <>
-          <FormSection
-            section={sectionConfig}
-            initialData={profileData}
-            onSave={handleSave}
-          />
-        </>
-      )}
+      <FormSection
+        section={sectionConfig}
+        initialData={profileData}
+        onSave={handleSave}
+        loading={loading}
+      />
     </div>
   );
 };

@@ -1,15 +1,16 @@
-import { useState } from "react";
-import { useOutletContext } from "react-router-dom";
-import FormSection from "../../../components/formSection/FormSection";
-import Loader from "../../../components/ui/loader/Loader";
+import { useSearchParams } from "react-router-dom";
+import { useProfileData } from "../../../hooks";
+import { FormSection } from "../../../components";
+import { Loader } from "../../../components/ui";
+import { useAlert } from "../../../context/alertProvider";
 
 const AccountInfo = () => {
-  const { profileData, updateProfile } = useOutletContext();
-  const [isLoading, setIsLoading] = useState(false);
+  const [searchParams] = useSearchParams();
+  const userId = searchParams.get("user_id");
+  const { profileData, updateProfile, loading } = useProfileData(userId);
+  const { showAlert } = useAlert();
 
-  if (!profileData) {
-    return <Loader />;
-  }
+  if (!profileData && !loading) return <Loader />;
 
   const sectionConfig = {
     title: "Datos de tu Cuenta",
@@ -18,45 +19,51 @@ const AccountInfo = () => {
         name: "username",
         label: "Nombre de Usuario",
         type: "text",
-        placeholder: "Nombre de Usuario",
+        required: true,
       },
       {
         name: "email",
         label: "Correo Electrónico",
         type: "text",
-        placeholder: "Correo Electrónico",
+        required: true,
       },
       {
         name: "alternative_email",
         label: "Correo Electrónico Alternativo",
         type: "text",
-        placeholder: "Correo Electrónico Alternativo",
       },
     ],
   };
 
   const handleSave = async (finalData) => {
-    setIsLoading(true);
     try {
-      await updateProfile(finalData);
+      console.log("Enviando datos:", finalData);
+
+      const response = await updateProfile(finalData);
+
+      if (response?.success) {
+        showAlert("success", "Éxito", "Información actualizada exitosamente");
+      } else {
+        throw new Error(response?.message || "Error en la actualización");
+      }
     } catch (error) {
       console.error("Error en updateProfile", error);
-    } finally {
-      setIsLoading(false);
+      showAlert(
+        "error",
+        "Error",
+        error.message || "No se pudo actualizar la información"
+      );
     }
   };
 
   return (
     <div className="profile-section">
-      {isLoading ? (
-        <Loader />
-      ) : (
-        <FormSection
-          section={sectionConfig}
-          initialData={profileData}
-          onSave={handleSave}
-        />
-      )}
+      <FormSection
+        section={sectionConfig}
+        initialData={profileData}
+        onSave={handleSave}
+        loading={loading}
+      />
     </div>
   );
 };

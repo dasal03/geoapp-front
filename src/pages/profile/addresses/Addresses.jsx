@@ -1,57 +1,30 @@
-import { useNavigate, useOutletContext } from "react-router-dom";
-import EditableListSection from "../../../components/editableListSection/EditableListSection";
-import Loader from "../../../components/ui/loader/Loader";
-import useAddressData from "../../../hooks/UseAddressData";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import { useAddressData } from "../../../hooks";
+import { AddressSection } from "../../../components";
 
 const Addresses = () => {
   const navigate = useNavigate();
-  const { profileData } = useOutletContext();
-  const userId = profileData?.user_id;
+  const [searchParams] = useSearchParams();
+  const userId = searchParams.get("user_id");
 
-  const { loading, addressData, deleteAddress, setAsPrimary } =
+  const { loading, addressesData, deleteAddress, setAsPrimary } =
     useAddressData(userId);
 
-  if (loading) return <Loader />;
-
-  const sectionConfig = [
-    {
-      name: "state",
-      label: "Departamento",
-    },
-    {
-      name: "city",
-      label: "Ciudad",
-    },
-    {
-      name: "full_address",
-      label: "Dirección",
-    },
-    {
-      name: "postcode",
-      label: "Código Postal",
-    },
-    {
-      name: "description",
-      label: "Descripción",
-    },
-  ];
+  const handleNavigation = (path, params = "") =>
+    navigate(`/profile/${path}?user_id=${userId}${params}`);
 
   return (
-    <div className="profile-section">
-      <EditableListSection
-        title="Direcciones"
-        sectionData={addressData}
-        sectionConfig={sectionConfig}
-        onCheckChange={setAsPrimary}
-        onAddItem={() => navigate(`/profile/addresses-form?user_id=${userId}`)}
-        onEditItem={(item) =>
-          navigate(
-            `/profile/addresses-form?user_id=${userId}&address_id=${item.id}`
-          )
-        }
-        onDeleteItem={deleteAddress}
-      />
-    </div>
+    <AddressSection
+      title="Domicilios"
+      sectionData={addressesData}
+      onCheckChange={setAsPrimary}
+      onAddItem={() => handleNavigation("addresses-form")}
+      onEditItem={(item) =>
+        handleNavigation("addresses-form", `&address_id=${item.address_id}`)
+      }
+      onDeleteItem={deleteAddress}
+      loading={loading}
+    />
   );
 };
 

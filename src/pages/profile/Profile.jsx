@@ -1,45 +1,39 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import {
-  Outlet,
   useLocation,
   useNavigate,
   Navigate,
   useMatch,
+  Outlet,
 } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
-import UseProfileData from "../../hooks/UseProfileData";
-import Breadcrumbs from "../../components/breadcrumb/Breadcrumb";
-import ProfileBody from "../../components/profileBody/ProfileBody";
-import ProfileHeader from "../../components/profileHeader/ProfileHeader";
-import Loader from "../../components/ui/loader/Loader";
+import { useProfileData } from "../../hooks";
+import { Breadcrumbs, ProfileBody, ProfileHeader } from "../../components";
 import "./Profile.scss";
 
 const Profile = () => {
-  const { user, isLoading } = useAuth();
-  const [isEditing, setIsEditing] = useState(false);
+  const { user } = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
 
-  const { profileData, errors, handleChange, loading, updateProfile } =
-    UseProfileData(user?.user_id, () => setIsEditing(false));
+  const { profileData, updateProfile, loading } = useProfileData(user?.user_id);
+  const isProfileIndex = useMatch({ path: "/profile", end: true });
 
   useEffect(() => {
-    if (user) {
-      const params = new URLSearchParams(location.search);
-      if (params.get("user_id") !== String(user.user_id)) {
-        params.set("user_id", user.user_id);
-        navigate(`${location.pathname}?${params.toString()}`, {
-          replace: true,
-        });
-      }
+    if (!user) return;
+
+    const params = new URLSearchParams(location.search);
+    if (params.get("user_id") !== String(user.user_id)) {
+      params.set("user_id", user.user_id);
+      navigate(`${location.pathname}?${params.toString()}`, { replace: true });
     }
-  }, [user, location.pathname, location.search, navigate]);
+  }, [user, location, navigate]);
 
-  const isProfileIndex = useMatch({ path: "/profile", end: true });
-  const isSecurity = useMatch({ path: "/profile/security", end: true });
-
-  if (isLoading || loading) return <Loader />;
   if (!user) return <Navigate to="/login" replace />;
+
+  const params = new URLSearchParams(location.search);
+  const isEditingPayment = params.has("payment_card_id");
+  const isEditingAddress = params.has("address_id");
 
   const breadcrumbItems = [
     { path: "/profile", label: "Perfil" },
@@ -48,38 +42,28 @@ const Profile = () => {
     { path: "/profile/security", label: "Seguridad" },
     { path: "/profile/security/change-password", label: "Cambiar Contraseña" },
     { path: "/profile/payment-cards", label: "Tarjetas" },
-    { path: "/profile/payment-cards-form", label: "Modificar Tarjetas" },
-    { path: "/profile/addresses", label: "Direcciones" },
-    { path: "/profile/addresses-form", label: "Modificar Direcciones" },
+    {
+      path: "/profile/payment-cards-form",
+      label: isEditingPayment ? "Editar Tarjeta" : "Crear Tarjeta",
+    },
+    { path: "/profile/addresses", label: "Domicilios" },
+    {
+      path: "/profile/addresses-form",
+      label: isEditingAddress ? "Editar Dirección" : "Crear Dirección",
+    },
   ];
 
   return (
     <div className="profile-container">
       <ProfileHeader
         profileData={profileData}
-        isEditing={isEditing}
-        handleChange={handleChange}
-        errors={errors}
-        setIsEditing={setIsEditing}
+        handleSave={updateProfile}
+        loading={loading}
       />
 
       {!isProfileIndex && <Breadcrumbs breadcrumbItems={breadcrumbItems} />}
-      {isProfileIndex && <ProfileBody profileData={profileData} />}
-
-      {isSecurity && (
-        <div className="security-settings">
-          <h3>Configuración de Seguridad</h3>
-        </div>
-      )}
-
-      {errors &&
-        Object.values(errors).map((error, index) => (
-          <div key={index} className="error-message">
-            {error}
-          </div>
-        ))}
-
-      <Outlet context={{ profileData, updateProfile }} />
+      {isProfileIndex && <ProfileBody loading={loading} />}
+      {!isProfileIndex && <Outlet />}
     </div>
   );
 };

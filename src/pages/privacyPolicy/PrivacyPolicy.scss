@@ -9,8 +9,8 @@
       url("../../assets/login-background.jpg") center/cover no-repeat;
     display: flex;
     align-items: flex-end;
-    border-bottom: 4px solid $accent-color;
-    box-shadow: $box-shadow;
+    border-bottom: 4px solid $color-accent;
+    box-shadow: $box-shadow-default;
 
     .privacy-hero-overlay {
       position: absolute;
@@ -22,21 +22,19 @@
       position: relative;
       z-index: 1;
       margin: 0 auto 40px;
-      color: $white-color;
       text-align: center;
       padding: 0 20px;
+      color: $color-white;
 
       .privacy-title {
-        font-family: "Aperçu", sans-serif;
         font-size: 48px;
         font-weight: 700;
-        margin: 0;
       }
 
       .h1-decorator {
         width: 60px;
         height: 6px;
-        background-color: $accent-color;
+        background-color: $color-accent;
         margin: 20px auto;
         border-radius: 3px;
       }
@@ -51,9 +49,9 @@
 
   .privacy-content {
     padding: 50px 20px;
-    background-color: $background-light;
     max-width: 1000px;
     margin: 0 auto;
+    background-color: $bg-light;
 
     section {
       margin-bottom: 40px;
@@ -61,16 +59,17 @@
 
       h2 {
         font-size: 28px;
-        color: $primary-color;
+        color: $color-primary;
         margin-bottom: 15px;
         position: relative;
         padding-bottom: 10px;
+
         &::after {
           content: "";
           display: block;
           width: 50px;
           height: 3px;
-          background-color: $accent-color;
+          background-color: $color-accent;
           margin-top: 5px;
           border-radius: 2px;
         }
@@ -79,17 +78,18 @@
       p {
         font-size: 18px;
         line-height: 1.6;
-        color: $text-dark;
+        color: $text-color-primary;
         margin-bottom: 15px;
       }
 
       ul {
         list-style: disc;
         margin-left: 40px;
+
         li {
           font-size: 18px;
           line-height: 1.6;
-          color: $text-dark;
+          color: $text-color-primary;
           margin-bottom: 10px;
         }
       }
@@ -101,32 +101,40 @@
   .privacy-container {
     .privacy-hero {
       height: 40vh;
+
       .privacy-hero-text {
         margin: 0 20px 20px;
+
         .privacy-title {
           font-size: 32px;
         }
+
         .h1-decorator {
           width: 40px;
           height: 3px;
         }
+
         .privacy-description {
-          font-size: 16px;
+          font-size: $font-size-base;
         }
       }
     }
+
     .privacy-content {
       padding: 30px 15px;
+
       section {
         h2 {
           font-size: 24px;
+
           &::after {
             width: 40px;
           }
         }
+
         p,
         li {
-          font-size: 16px;
+          font-size: $font-size-base;
         }
       }
     }
@@ -137,29 +145,37 @@
   .privacy-container {
     .privacy-hero {
       height: 50vh;
+
       .privacy-hero-text {
         margin: 0 30px 30px;
+
         .privacy-title {
           font-size: 36px;
         }
+
         .h1-decorator {
           width: 50px;
           height: 4px;
         }
+
         .privacy-description {
           font-size: 18px;
         }
       }
     }
+
     .privacy-content {
       padding: 40px 20px;
+
       section {
         h2 {
           font-size: 26px;
+
           &::after {
             width: 45px;
           }
         }
+
         p,
         li {
           font-size: 17px;

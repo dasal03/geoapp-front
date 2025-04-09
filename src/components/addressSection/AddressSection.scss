@@ -1,0 +1,567 @@
+@import "../../styles/variables";
+@import "../../styles/mixins";
+
+.address-section {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 800px;
+  border-radius: 12px;
+  margin-bottom: 24px;
+  transition: all 0.3s ease-in-out;
+  overflow: hidden;
+
+  .section-title {
+    font-size: 22px;
+    color: $color-primary;
+    font-weight: 600;
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
+  .address-list {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  .address-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 28px;
+    border-radius: 12px;
+    background-color: $bg-light;
+    border: 1px solid $color-gray-border;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease;
+    width: 100%;
+    max-width: 100%;
+    min-height: 130px;
+
+    &:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    }
+  }
+
+  .address-main {
+    display: flex;
+    align-items: center;
+    gap: 28px;
+
+    .icon-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      width: 64px;
+      height: 64px;
+
+      .house-icon {
+        font-size: 34px;
+        color: $text-color-primary;
+      }
+    }
+
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 36px;
+      height: 20px;
+      margin-top: 8px;
+
+      input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+      }
+
+      .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: $color-gray-border;
+        transition: 0.3s;
+        border-radius: 20px;
+
+        &:before {
+          content: "";
+          position: absolute;
+          height: 14px;
+          width: 14px;
+          left: 3px;
+          bottom: 3px;
+          background-color: $color-white;
+          border-radius: 50%;
+          transition: 0.3s;
+        }
+      }
+
+      input:checked + .slider {
+        background-color: $color-primary;
+      }
+
+      input:checked + .slider:before {
+        transform: translateX($font-size-base);
+      }
+    }
+
+    .address-info {
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+
+      .address-name {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: $text-color-primary;
+      }
+
+      .address-location {
+        font-size: 0.96rem;
+        color: $text-color-muted;
+      }
+
+      .address-description {
+        font-size: 0.91rem;
+        color: $text-color-muted;
+      }
+    }
+  }
+
+  .card-options {
+    position: relative;
+    margin-left: 12px;
+
+    .menu-button {
+      background: none;
+      border: none;
+      font-size: 1.1rem;
+      cursor: pointer;
+      color: $text-color-muted;
+      border-radius: 50%;
+      width: 36px;
+      height: 36px;
+      padding: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background-color 0.2s ease;
+
+      &:hover {
+        background-color: rgba(0, 0, 0, 0.05);
+        color: $color-primary;
+      }
+    }
+
+    .dropdown-menu {
+      position: absolute;
+      top: 100%;
+      right: 0;
+      background-color: $bg-light;
+      border: 1px solid $color-gray-border;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      min-width: 160px;
+      z-index: 10;
+      padding: 8px 0;
+      overflow: hidden;
+
+      .dropdown-item {
+        padding: 10px $font-size-base;
+        font-size: 0.95rem;
+        color: $text-color-primary;
+        cursor: pointer;
+        white-space: nowrap;
+
+        &:hover {
+          background-color: $color-primary;
+          color: $text-color-light;
+        }
+      }
+    }
+  }
+
+  .add-button-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 24px;
+
+    .add-item-btn {
+      padding: 14px 22px;
+      border-radius: 8px;
+      font-size: 17px;
+      font-weight: bold;
+      color: $text-color-light;
+      cursor: pointer;
+      background: linear-gradient(
+        135deg,
+        $color-primary,
+        darken($color-primary, 10%)
+      );
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+      transition: transform 0.2s ease;
+
+      &:hover {
+        transform: scale(1.05);
+        background: linear-gradient(
+          135deg,
+          darken($color-primary, 5%),
+          darken($color-primary, 15%)
+        );
+      }
+    }
+  }
+
+  .card-loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+    gap: 10px;
+
+    span.loader {
+      width: 24px;
+      height: 24px;
+      border: 3px solid $color-gray-border;
+      border-top: 3px solid $color-primary;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    p {
+      font-size: 0.95rem;
+      color: $text-color-primary;
+    }
+  }
+
+  .no-data {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: lighten($bg-light, 3%);
+    border: 1px dashed $color-gray-border;
+    border-radius: 12px;
+    padding: 40px 20px;
+    color: $text-color-primary;
+    text-align: center;
+    font-size: 1.05rem;
+    font-weight: 500;
+    min-height: 160px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.06);
+    animation: fadeIn 0.3s ease-in-out;
+
+    i {
+      font-size: 36px;
+      color: lighten($color-primary, 10%);
+      margin-bottom: 12px;
+    }
+  }
+}
+
+.skeleton-item {
+  @extend .address-card;
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  padding: 28px;
+  overflow: hidden;
+  background-color: lighten($bg-light, 4%);
+  border: 1px solid $color-gray-border;
+  z-index: 1;
+
+  .skeleton-left,
+  .skeleton-info,
+  .skeleton-options {
+    position: relative;
+    z-index: 2;
+  }
+
+  .skeleton-left {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    width: 64px;
+
+    .skeleton-icon,
+    .skeleton-switch {
+      background-color: #e2e2e2;
+      animation: shimmerPulse 1.4s infinite ease-in-out;
+    }
+
+    .skeleton-icon {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+    }
+
+    .skeleton-switch {
+      width: 36px;
+      height: 20px;
+      border-radius: 10px;
+    }
+  }
+
+  .skeleton-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+    .skeleton-line {
+      height: 14px;
+      border-radius: 6px;
+      background-color: #e2e2e2;
+      animation: shimmerPulse 1.4s infinite ease-in-out;
+
+      &:nth-child(1) {
+        width: 55%;
+      }
+      &:nth-child(2) {
+        width: 80%;
+      }
+      &:nth-child(3) {
+        width: 60%;
+      }
+    }
+  }
+
+  .skeleton-options {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background-color: #e2e2e2;
+    animation: shimmerPulse 1.4s infinite ease-in-out;
+  }
+
+  &::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -120px;
+    height: 100%;
+    width: 160px;
+    background: linear-gradient(
+      120deg,
+      transparent 0%,
+      rgba(255, 255, 255, 0.35) 50%,
+      transparent 100%
+    );
+    animation: shimmerSlide 1.2s infinite;
+    z-index: 1;
+    pointer-events: none;
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    left: -200px;
+    opacity: 0.2;
+  }
+  50% {
+    opacity: 0.4;
+  }
+  100% {
+    left: 100%;
+    opacity: 0.2;
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+@keyframes shimmerSlide {
+  0% {
+    left: -150px;
+  }
+  100% {
+    left: 100%;
+  }
+}
+
+@keyframes shimmerPulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+@include respond-to(mobile) {
+  .address-section {
+    .address-card {
+      flex-direction: column;
+      align-items: flex-start;
+      padding: 20px;
+      gap: $font-size-base;
+      min-height: auto;
+
+      .address-main {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: $font-size-base;
+
+        .icon-container {
+          flex-direction: row;
+          justify-content: flex-start;
+          width: auto;
+          height: auto;
+          gap: 12px;
+
+          .house-icon {
+            font-size: 28px;
+          }
+
+          .switch {
+            margin-top: 0;
+          }
+        }
+
+        .address-info {
+          .address-name {
+            font-size: 1rem;
+          }
+
+          .address-location,
+          .address-description {
+            font-size: 0.9rem;
+          }
+        }
+      }
+
+      .card-options {
+        position: absolute;
+        top: 12px;
+        right: 12px;
+        margin-left: 0;
+
+        .menu-button {
+          width: 32px;
+          height: 32px;
+          font-size: 1rem;
+        }
+      }
+    }
+
+    .skeleton-item {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: $font-size-base;
+      padding: 20px;
+
+      .skeleton-left {
+        flex-direction: row;
+        width: auto;
+        gap: 12px;
+
+        .skeleton-icon {
+          width: 28px;
+          height: 28px;
+        }
+
+        .skeleton-switch {
+          width: 32px;
+          height: 18px;
+        }
+      }
+
+      .skeleton-info {
+        width: 100%;
+
+        .skeleton-line {
+          height: 12px;
+
+          &:nth-child(1) {
+            width: 60%;
+          }
+          &:nth-child(2) {
+            width: 75%;
+          }
+          &:nth-child(3) {
+            width: 50%;
+          }
+        }
+      }
+
+      .skeleton-options {
+        width: 32px;
+        height: 32px;
+        position: absolute;
+        top: 12px;
+        right: 12px;
+      }
+    }
+
+    .add-button-container {
+      .add-item-btn {
+        font-size: 15px;
+        padding: 12px 18px;
+      }
+    }
+  }
+}
+
+@include respond-to(tablet) {
+  .address-section {
+    .address-card {
+      position: relative;
+      padding: 24px;
+      gap: 24px;
+    }
+
+    .address-main {
+      .address-info {
+        .address-name {
+          font-size: 1.15rem;
+        }
+
+        .address-location,
+        .address-description {
+          font-size: 1rem;
+        }
+      }
+    }
+
+    .card-options {
+      position: absolute;
+      top: $font-size-base;
+      right: $font-size-base;
+      margin-left: 0;
+    }
+  }
+}

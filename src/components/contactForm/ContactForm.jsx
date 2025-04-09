@@ -1,67 +1,69 @@
-import { useState } from "react";
-import InputField from "../ui/inputField/InputField";
-import TextAreaField from "../ui/textAreaField/TextAreaField";
-import Button from "../ui/button/Button";
+import { InputField, TextAreaField, Button, Loader } from "../ui";
 import "./ContactForm.scss";
 
-const ContactForm = () => {
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    message: "",
-  });
+const ContactForm = ({
+  fields,
+  formValues,
+  formError,
+  handleSubmit,
+  handleChange,
+  loading,
+}) => {
+  const renderField = (field) => {
+    const value = formValues[field.name] || "";
+    const errorMessage = formError[field.name];
+    const hasError = Boolean(errorMessage);
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-  };
+    const commonProps = {
+      label: field.label,
+      value,
+      placeholder: field.placeholder,
+      styleType: `form-${field.type}${hasError ? ` ${field.type}-error` : ""}`,
+      disabled: field.disabled || false,
+      "aria-invalid": hasError,
+      onChange: (e) => handleChange(field.name, e),
+    };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+    const fieldComponents = {
+      text: InputField,
+      email: InputField,
+      textarea: TextAreaField,
+    };
+
+    const Component = fieldComponents[field.type] || InputField;
+
+    return (
+      <div
+        key={field.name}
+        className={`field-wrapper ${hasError ? "error" : ""}`}
+      >
+        <Component {...commonProps} />
+        {hasError && <span className="error-message">{errorMessage}</span>}
+      </div>
+    );
   };
 
   return (
-    <div className="contact-form">
-      <h3>Envíanos tu mensaje</h3>
-      <form onSubmit={handleSubmit}>
-        <div className="form-group">
-          <InputField
-            label="Nombre"
-            type="text"
-            name="name"
-            placeholder="Tu nombre"
-            value={formData.name}
-            onChange={handleChange}
-            required
-          />
+    <div className="contact-form-container">
+      {loading ? (
+        <Loader />
+      ) : (
+        <div className="contact-form">
+          <header>
+            <h2 className="form-header">Envíanos tu mensaje</h2>
+          </header>
+          <form onSubmit={handleSubmit} noValidate>
+            <div className="fields">{fields.map(renderField)}</div>
+            <div className="buttons">
+              <Button
+                type="submit"
+                text="Enviar mensaje"
+                icon="fas fa-arrow-right"
+              />
+            </div>
+          </form>
         </div>
-        <div className="form-group">
-          <InputField
-            label="Correo"
-            type="email"
-            name="email"
-            placeholder="Tu correo@email"
-            value={formData.email}
-            onChange={handleChange}
-            required
-          />
-        </div>
-        <div className="form-group">
-          <TextAreaField
-            label="Mensaje"
-            id="message"
-            name="message"
-            placeholder="Escribe tu mensaje aquí..."
-            value={formData.message}
-            onChange={handleChange}
-            required
-          />
-        </div>
-        <Button type="submit" text="Enviar mensaje" />
-      </form>
+      )}
     </div>
   );
 };

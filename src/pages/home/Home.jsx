@@ -1,19 +1,43 @@
-import Hero from "../../components/hero/Hero";
-import Footer from "../../components/footer/Footer";
-import MoreInfo from "../../components/moreInfo/MoreInfo";
+import {
+  Footer,
+  Hero,
+  MoreInfo,
+  Benefits,
+  Blog,
+  Location,
+  Partners,
+  WhatsAppButton,
+} from "../../components";
 import saleImage from "../../assets/sale.jpg";
 import rentalImage from "../../assets/rental.jpg";
 import maintenanceImage from "../../assets/maintenance.jpg";
+import { useEffect, useState } from "react";
 import "./Home.scss";
 
-function Home() {
+function HomePage() {
+  const [isMoreInfoVisible, setIsMoreInfoVisible] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const moreInfoSection = document.getElementById("more-info");
+      if (moreInfoSection) {
+        const sectionTop = moreInfoSection.getBoundingClientRect().top;
+        const windowHeight = window.innerHeight;
+        if (sectionTop < windowHeight * 0.75) {
+          setIsMoreInfoVisible(true);
+        }
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    handleScroll();
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   const handleReadMore = () => {
-    const cardsSection = document.getElementById("cards-section");
-    if (cardsSection) {
-      window.scrollTo({
-        top: cardsSection.offsetTop - 20,
-        behavior: "smooth",
-      });
+    const moreInfoSection = document.getElementById("more-info");
+    if (moreInfoSection) {
+      moreInfoSection.scrollIntoView({ behavior: "smooth" });
     }
   };
 
@@ -44,12 +68,20 @@ function Home() {
   return (
     <div className="home-container">
       <Hero onReadMore={handleReadMore} />
-      <section id="cards-section">
+      <section
+        id="more-info"
+        className={`more-info-section ${isMoreInfoVisible ? "visible" : ""}`}
+      >
         <MoreInfo cards={serviceCards} />
       </section>
+      <Benefits />
+      <Partners />
+      <Blog />
+      <Location />
       <Footer />
+      <WhatsAppButton />
     </div>
   );
 }
 
-export default Home;
+export default HomePage;

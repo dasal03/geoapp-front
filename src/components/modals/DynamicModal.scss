@@ -1,3 +1,5 @@
+@import "../../styles/variables";
+
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -20,7 +22,7 @@
 }
 
 .modal-container {
-  background: #fff;
+  background: $bg-light;
   width: 90%;
   max-width: 800px;
   padding: 25px;
@@ -40,7 +42,7 @@
     font-size: 1.8rem;
     margin-bottom: 15px;
     text-align: center;
-    color: #222;
+    color: $color-black-light;
   }
 
   .form-grid {
@@ -58,7 +60,7 @@
       font-size: 0.95rem;
       font-weight: 600;
       margin-bottom: 5px;
-      color: #555;
+      color: $color-black-light;
     }
 
     input,
@@ -66,7 +68,7 @@
     textarea {
       width: 100%;
       padding: 12px;
-      border: 1px solid #ccc;
+      border: 1px solid $color-gray-border;
       border-radius: 8px;
       font-size: 1rem;
       transition: border 0.3s ease;
@@ -101,8 +103,8 @@
     }
 
     .cancel-btn {
-      background: #ccc;
-      color: #333;
+      background: $color-gray-border;
+      color: $color-gray-border;
 
       &:hover {
         background: #b3b3b3;
@@ -111,7 +113,7 @@
 
     .save-btn {
       background: #007bff;
-      color: white;
+      color: $color-white;
 
       &:hover {
         background: #0056b3;

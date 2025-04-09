@@ -1,29 +1,45 @@
 import PropTypes from "prop-types";
-import ProfileImage from "../profileImage/ProfileImage";
 import { formatDate } from "../../utils/generalTools";
+import ProfileImage from "../profileImage/ProfileImage";
 import "./ProfileHeader.scss";
 
-const ProfileHeader = ({ profileData, handleChange }) => {
-  const profileImage = profileData?.profile_image || null;
-  const fullName = profileData?.full_name || "N/A";
-  const username = profileData?.username || "N/A";
-  const createdAt = profileData?.created_at || null;
+const ProfileHeader = ({ profileData, handleSave, loading }) => {
+  if (loading || !profileData) {
+    return (
+      <div className="profile-header skeleton">
+        <div className="skeleton-avatar" />
+        <div className="profile-info">
+          <div className="skeleton-line skeleton-line--name" />
+          <div className="skeleton-line skeleton-line--username" />
+          <div className="skeleton-line skeleton-line--date" />
+        </div>
+      </div>
+    );
+  }
+
+  const {
+    profile_image: profileImage,
+    full_name: fullName,
+    username: userName,
+    created_at: createdAt,
+  } = profileData;
 
   return (
     <div className="profile-header">
       <ProfileImage
         profileImage={profileImage}
-        onSaveImage={(value) => handleChange("profile_image", value)}
+        onSave={handleSave}
+        loading={loading}
       />
 
       <div className="profile-info">
         <h1 className="profile-name">{fullName}</h1>
         <p className="profile-username">
           <span className="username-decorator">@</span>
-          {username}
+          {userName}
         </p>
         <p className="profile-member-date">
-          Miembro desde: {createdAt ? formatDate(createdAt) : "N/A"}
+          Miembro desde: {formatDate(createdAt)}
         </p>
       </div>
     </div>
@@ -37,7 +53,8 @@ ProfileHeader.propTypes = {
     username: PropTypes.string,
     created_at: PropTypes.string,
   }),
-  handleChange: PropTypes.func.isRequired,
+  handleSave: PropTypes.func.isRequired,
+  loading: PropTypes.bool.isRequired,
 };
 
 export default ProfileHeader;

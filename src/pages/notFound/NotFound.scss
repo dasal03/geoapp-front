@@ -7,7 +7,7 @@
   align-items: center;
   justify-content: center;
   height: 100vh;
-  background-color: $light-gray;
+  background-color: $color-gray-light;
   text-align: center;
   padding: 20px;
 
@@ -20,20 +20,20 @@
 
     .notfound-icon {
       font-size: 80px;
-      color: $accent-color;
+      color: $color-accent;
       margin-bottom: 15px;
     }
 
     h1 {
       font-size: clamp(60px, 12vw, 120px);
       font-weight: bold;
-      color: $primary-color;
+      color: $color-primary;
       margin: 0;
     }
 
     .notfound-message {
-      font-size: clamp(16px, 3vw, 22px);
-      color: $primary-color;
+      font-size: clamp($font-size-base, 3vw, 22px);
+      color: $color-primary;
       margin: 15px 0;
       max-width: 600px;
     }
@@ -41,7 +41,7 @@
     .h1-decorator {
       width: 80px;
       height: 6px;
-      background-color: $accent-color;
+      background-color: $color-accent;
       margin: 15px auto;
       border-radius: 3px;
     }
@@ -50,8 +50,8 @@
       padding: 12px 28px;
       font-size: 18px;
       font-weight: bold;
-      color: $white-color;
-      background-color: $accent-color;
+      color: $color-white;
+      background-color: $color-accent;
       border: none;
       border-radius: 6px;
       cursor: pointer;
@@ -59,7 +59,7 @@
       box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 
       &:hover {
-        background-color: darken($accent-color, 10%);
+        background-color: darken($color-accent, 10%);
         transform: translateY(-2px);
         box-shadow: 0 6px 14px rgba(0, 0, 0, 0.3);
       }
@@ -71,7 +71,7 @@
 
     p {
       font-size: clamp(14px, 2vw, 18px);
-      color: $primary-color;
+      color: $color-primary;
       line-height: 1.6;
       max-width: 600px;
       margin: 0 auto;
@@ -104,7 +104,7 @@
       }
 
       button {
-        font-size: 16px;
+        font-size: $font-size-base;
         padding: 10px 24px;
       }
     }

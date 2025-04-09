@@ -16,7 +16,7 @@
   width: 100%;
   margin: 0 15px;
   padding: 40px;
-  background-color: $text-light;
+  background-color: $text-color-light;
   border-radius: 8px;
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
   display: flex;
@@ -28,7 +28,7 @@
 .form-header {
   font-size: 30px;
   font-weight: 700;
-  color: $text-dark;
+  color: $text-color-primary;
   text-align: left;
   position: relative;
   margin-bottom: 30px;
@@ -41,7 +41,7 @@
     width: 40px;
     height: 4px;
     border-radius: 8px;
-    background-color: $form-btn-color;
+    background-color: $btn-color-primary;
   }
 }
 
@@ -59,7 +59,7 @@
     .title {
       font-size: 22px;
       font-weight: 500;
-      color: $text-dark;
+      color: $text-color-primary;
       margin-bottom: 15px;
       text-align: left;
     }
@@ -91,12 +91,12 @@
     select {
       width: 100%;
       padding: 10px;
-      border: 1px solid $border-color;
+      border: 1px solid $color-gray-border;
       border-radius: 4px;
       transition: border-color 0.3s ease, box-shadow 0.3s ease;
 
       &:focus {
-        border-color: $form-btn-color;
+        border-color: $btn-color-primary;
         box-shadow: 0 0 4px rgba(64, 112, 244, 0.5);
         outline: none;
       }
@@ -106,7 +106,7 @@
       margin-top: 5px;
       font-size: 14px;
       font-weight: 700;
-      color: $danger-color;
+      color: $color-danger;
       background-color: rgba(231, 76, 60, 0.1);
       padding: 5px;
       border-radius: 4px;
@@ -121,24 +121,24 @@
       &.error input,
       &.error textarea,
       &.error select {
-        border-color: $danger-color;
+        border-color: $color-danger;
         box-shadow: 0 0 4px rgba(231, 76, 60, 0.5);
       }
 
       &.success input,
       &.success textarea,
       &.success select {
-        border-color: $success-color;
+        border-color: $color-success;
         box-shadow: 0 0 4px rgba(46, 204, 113, 0.5);
       }
 
       &.password-success input {
-        border-color: $success-color;
+        border-color: $color-success;
         box-shadow: 0 0 4px rgba(46, 204, 113, 0.5);
       }
 
       &.password-error input {
-        border-color: $danger-color;
+        border-color: $color-danger;
         box-shadow: 0 0 4px rgba(231, 76, 60, 0.5);
       }
     }
@@ -149,7 +149,7 @@
   text-align: center;
 
   a {
-    color: $form-btn-color;
+    color: $btn-color-primary;
     text-decoration: none;
     font-weight: 600;
     transition: text-decoration 0.3s ease;
@@ -162,7 +162,7 @@
 
 .btn-group {
   display: flex;
-  font-size: 16px;
+  font-size: $font-size-base;
   justify-content: space-between;
   align-items: center;
   gap: 20px;
@@ -171,8 +171,8 @@
   .back-btn {
     width: 100%;
     padding: 10px 20px;
-    background-color: $border-color;
-    color: $text-dark;
+    background-color: $color-gray-border;
+    color: $text-color-primary;
     border-radius: 4px;
     cursor: pointer;
     transition: background-color 0.3s ease;
@@ -188,8 +188,8 @@
   .register-btn {
     width: 100%;
     padding: 10px 20px;
-    background-color: $form-btn-color;
-    color: $text-light;
+    background-color: $btn-color-primary;
+    color: $text-color-light;
     border-radius: 4px;
     cursor: pointer;
     transition: background-color 0.3s ease;

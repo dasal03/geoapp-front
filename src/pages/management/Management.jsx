@@ -1,9 +1,7 @@
 import { useState, useCallback } from "react";
-import useManagementData from "../../hooks/UseManagementData";
-import SectionActions from "../../components/sectionActions/SectionActions";
-import Button from "../../components/ui/button/Button";
-import DynamicModal from "../../components/modals/DynamicModal";
-import Loader from "../../components/ui/loader/Loader";
+import { useManagementData } from "../../hooks";
+import { SectionActions, DynamicModal } from "../../components";
+import { Loader, Button } from "../../components/ui";
 import "./Management.scss";
 
 function Management() {

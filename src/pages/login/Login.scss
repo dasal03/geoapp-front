@@ -1,72 +1,99 @@
 @import "../../styles/variables";
 @import "../../styles/mixins";
 
-.login-container {
+.login-form-container {
   display: flex;
   justify-content: center;
   align-items: center;
   height: 100vh;
   padding: 20px;
-}
 
-.login-form {
-  width: 100%;
-  max-width: 400px;
-  padding: 40px;
-  background-color: $background-light;
-  border-radius: 8px;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-
-.form-header {
-  position: relative;
-  font-size: 24px;
-  font-weight: 600;
-  color: $text-dark;
-  margin-bottom: 20px;
-  &::before {
-    content: "";
-    position: absolute;
-    left: 0;
-    bottom: -5px;
-    height: 4px;
-    width: 40px;
+  .login-form {
+    width: 100%;
+    max-width: 400px;
+    padding: 40px;
+    background-color: $bg-light;
     border-radius: 8px;
-    background-color: $form-btn-color;
-  }
-}
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
 
-.fields {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
+    .form-header {
+      position: relative;
+      font-size: 24px;
+      font-weight: 600;
+      color: $text-color-primary;
+      margin-bottom: 20px;
 
-.buttons {
-  display: flex;
-  justify-content: center;
-  padding: 20px 0;
-}
+      &::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        bottom: -5px;
+        height: 4px;
+        width: 40px;
+        border-radius: 8px;
+        background-color: $btn-color-primary;
+      }
+    }
 
-.error-message {
-  font-size: 14px;
-  color: $danger-color;
-  text-align: center;
-}
+    .fields {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
 
-.register-link {
-  text-align: center;
+      .field-wrapper {
+        position: relative;
+        padding-bottom: 20px;
 
-  a {
-    color: $form-btn-color;
-    text-decoration: none;
-    font-weight: 600;
+        &.error input,
+        &.error textarea,
+        &.error select {
+          border-color: $color-danger;
+          box-shadow: 0 0 4px rgba(231, 76, 60, 0.5);
+        }
 
-    &:hover {
-      text-decoration: underline;
+        &.success input,
+        &.success textarea,
+        &.success select {
+          border-color: $color-success;
+          box-shadow: 0 0 4px rgba(46, 204, 113, 0.5);
+        }
+
+        .error-message {
+          margin-top: 5px;
+          font-size: 14px;
+          font-weight: 700;
+          color: $color-danger;
+          background-color: rgba(231, 76, 60, 0.1);
+          padding: 6px 8px;
+          border-radius: 4px;
+        }
+      }
+    }
+
+    .buttons {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px 0;
+    }
+
+    .register-link {
+      text-align: center;
+
+      a {
+        color: $btn-color-primary;
+        text-decoration: none;
+        font-weight: 600;
+        transition: color 0.3s ease-in-out;
+
+        &:hover {
+          text-decoration: underline;
+          color: darken($btn-color-primary, 10%);
+        }
+      }
     }
   }
 }
@@ -75,10 +102,10 @@
   .login-form {
     padding: 20px;
     max-width: 320px;
-  }
 
-  .form-header {
-    font-size: 22px;
+    .form-header {
+      font-size: 22px;
+    }
   }
 }
 
@@ -86,9 +113,9 @@
   .login-form {
     max-width: 450px;
     padding: 40px;
-  }
 
-  .form-header {
-    font-size: 26px;
+    .form-header {
+      font-size: 26px;
+    }
   }
 }

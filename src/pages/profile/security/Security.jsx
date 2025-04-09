@@ -1,15 +1,10 @@
+import { Outlet, useLocation } from "react-router-dom";
+import { SectionCards } from "../../../components";
 import { FaKey } from "react-icons/fa";
-import { Outlet, useLocation, useOutletContext } from "react-router-dom";
-import Loader from "../../../components/ui/loader/Loader";
-import SectionCards from "../../../components/sectionCards/SectionCards";
 
 const Security = () => {
-  const { profileData } = useOutletContext();
   const location = useLocation();
-
-  if (!profileData) {
-    return <Loader />;
-  }
+  const isSecurityIndex = location.pathname === "/profile/security";
 
   const cards = [
     {
@@ -20,14 +15,10 @@ const Security = () => {
     },
   ];
 
-  if (location.pathname !== "/profile/security") {
-    return <Outlet context={{ profileData }} />;
-  }
-
   return (
     <>
-      <SectionCards cards={cards} />
-      <Outlet context={{ profileData }} />
+      {isSecurityIndex && <SectionCards cards={cards} />}
+      <Outlet />
     </>
   );
 };

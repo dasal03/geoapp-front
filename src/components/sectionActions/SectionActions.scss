@@ -50,7 +50,7 @@
 
   .btn-edit {
     background: linear-gradient(135deg, #007bff, #004c9a);
-    color: $text-light;
+    color: $text-color-light;
 
     &:hover {
       background: linear-gradient(135deg, #005ecb, #003a7a);
@@ -59,7 +59,7 @@
 
   .btn-save {
     background: linear-gradient(135deg, #22c55e, #178b46);
-    color: $text-light;
+    color: $text-color-light;
 
     &:hover {
       background: linear-gradient(135deg, #1ea44e, #12773a);
@@ -68,7 +68,7 @@
 
   .btn-cancel {
     background: linear-gradient(135deg, #ef4444, #9b1c1c);
-    color: $text-light;
+    color: $text-color-light;
 
     &:hover {
       background: linear-gradient(135deg, #dc2626, #7a1414);
@@ -77,7 +77,7 @@
 
   .btn-delete {
     background: linear-gradient(135deg, #f59e0b, #b45309);
-    color: $text-light;
+    color: $text-color-light;
 
     &:hover {
       background: linear-gradient(135deg, #e07b00, #924207);
@@ -85,7 +85,7 @@
 
     i,
     svg {
-      color: $text-light !important;
+      color: $text-color-light !important;
     }
   }
 }
@@ -113,13 +113,13 @@
   .btn-save,
   .btn-cancel,
   .btn-delete {
-    padding: 9px 16px;
+    padding: 9px $font-size-base;
     font-size: 0.9rem;
   }
 }
 
 @include respond-to(tablet) {
   .section-actions {
-    padding: 16px;
+    padding: $font-size-base;
   }
 }

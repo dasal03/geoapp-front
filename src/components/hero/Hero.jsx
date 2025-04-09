@@ -1,4 +1,4 @@
-import Button from "../ui/button/Button";
+import { Button } from "../ui";
 import "./Hero.scss";
 
 const Hero = ({ onReadMore }) => (
@@ -8,14 +8,16 @@ const Hero = ({ onReadMore }) => (
       <h1 className="hero-title">GeoApp</h1>
       <div className="h1-decorator"></div>
       <p className="hero-description">
-        Somos una compañía especializada en el alquiler, mantenimiento y venta
-        de dispositivos biomédicos.
+        Líderes en soluciones biomédicas: alquiler, mantenimiento y venta de
+        equipos de última tecnología para el sector de la salud. Innovamos para
+        mejorar vidas.
       </p>
       <Button
         type="button"
-        text="Conócenos"
-        icon="fas fa-arrow-down"
+        text="Más información"
+        icon="fas fa-arrow-right"
         onClick={onReadMore}
+        styleType="hero-button"
       />
     </div>
   </section>

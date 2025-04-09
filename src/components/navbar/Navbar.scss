@@ -2,8 +2,8 @@
 @import "../../styles/mixins";
 
 .navbar {
-  background: $primary-color;
-  color: $text-light;
+  background: $color-primary;
+  color: $text-color-light;
   padding: 1rem;
   display: flex;
   justify-content: space-between;
@@ -22,13 +22,13 @@
   }
 
   .navbar-logo {
-    color: $white-color;
+    color: $color-white;
     font-size: 28px;
     font-weight: bold;
     text-decoration: none;
     transition: color 0.3s;
     &:hover {
-      color: $accent-color;
+      color: $color-accent;
     }
   }
 
@@ -48,10 +48,10 @@
         text-decoration: none;
         font-size: 18px;
         font-weight: 500;
-        color: $text-light;
+        color: $text-color-light;
         transition: color 0.3s;
         &:hover {
-          color: $accent-color;
+          color: $color-accent;
         }
       }
 
@@ -69,12 +69,12 @@
           position: absolute;
           top: 100%;
           left: 0;
-          background: $primary-color;
+          background: $color-primary;
           border-radius: 5px;
           padding: 0.5rem 0;
           list-style: none;
           min-width: 160px;
-          box-shadow: $box-shadow;
+          box-shadow: $box-shadow-default;
           opacity: 0;
           visibility: hidden;
           transform: translateY(10px);
@@ -85,12 +85,12 @@
             padding: 0.5rem 1rem;
             transition: background 0.3s;
             &:hover {
-              background: $accent-color;
+              background: $color-accent;
             }
             .dropdown-item,
             button.dropdown-item {
               text-decoration: none;
-              color: $text-light;
+              color: $text-color-light;
               display: block;
               width: 100%;
               background: none;
@@ -125,7 +125,7 @@
     gap: 1rem;
 
     .icon-link {
-      color: $text-light;
+      color: $text-color-light;
       font-size: 1.5rem;
       position: relative;
       width: 40px;
@@ -136,19 +136,20 @@
       border-radius: 50%;
       transition: background 0.3s;
       &:hover {
-        background: $accent-color;
+        background: $color-accent;
       }
 
       .badge {
-        background: $danger-color;
-        color: $text-light;
+        background: $color-danger;
+        color: $text-color-light;
         font-size: 0.7rem;
         border-radius: 50%;
         padding: 0.2rem 0.5rem;
         position: absolute;
         top: -5px;
         right: -5px;
-        min-width: 16px;
+        width: 22px;
+        height: 22px;
         text-align: center;
       }
     }
@@ -160,7 +161,7 @@
         background: none;
         border: none;
         cursor: pointer;
-        color: $text-light;
+        color: $text-color-light;
         font-size: 1rem;
         display: flex;
         align-items: center;
@@ -171,7 +172,7 @@
         width: 40px;
         height: 40px;
         &:hover {
-          background: $accent-color;
+          background: $color-accent;
         }
       }
 
@@ -179,12 +180,12 @@
         position: absolute;
         right: 0;
         top: 100%;
-        background: $primary-color;
+        background: $color-primary;
         border-radius: 5px;
         padding: 0.5rem 0;
         list-style: none;
         min-width: 160px;
-        box-shadow: $box-shadow;
+        box-shadow: $box-shadow-default;
         opacity: 0;
         visibility: hidden;
         transform: translateY(10px);
@@ -195,12 +196,12 @@
           padding: 0.5rem 1rem;
           transition: background 0.3s;
           &:hover {
-            background: $accent-color;
+            background: $color-accent;
           }
           .dropdown-item,
           button.dropdown-item {
             text-decoration: none;
-            color: $text-light;
+            color: $text-color-light;
             display: block;
             width: 100%;
             background: none;
@@ -213,17 +214,10 @@
         }
       }
 
-      &:hover .dropdown-menu,
       &.active .dropdown-menu {
         opacity: 1;
         visibility: visible;
         transform: translateY(0);
-      }
-
-      &.active:hover .dropdown-menu {
-        opacity: 0;
-        visibility: hidden;
-        transform: translateY(10px);
       }
     }
 
@@ -263,7 +257,7 @@
       top: 100%;
       left: 0;
       width: 100%;
-      background: $primary-color;
+      background: $color-primary;
       padding: 1rem 0;
       text-align: center;
       transition: all 0.3s ease-in-out;
@@ -300,9 +294,9 @@
             width: 100%;
             text-align: center;
             padding: 0.5rem 0;
-            background: $primary-color;
+            background: $color-primary;
             border-radius: 5px;
-            box-shadow: $box-shadow;
+            box-shadow: $box-shadow-default;
             z-index: 1000;
           }
 
@@ -337,7 +331,7 @@
       top: 100%;
       left: 0;
       width: 100%;
-      background: $primary-color;
+      background: $color-primary;
       padding: 1rem 0;
       text-align: center;
       transition: all 0.3s ease-in-out;
@@ -374,9 +368,9 @@
             width: 100%;
             text-align: center;
             padding: 0.5rem 0;
-            background: $primary-color;
+            background: $color-primary;
             border-radius: 5px;
-            box-shadow: $box-shadow;
+            box-shadow: $box-shadow-default;
             z-index: 1000;
           }
 

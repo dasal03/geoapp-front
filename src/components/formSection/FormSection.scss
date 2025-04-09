@@ -1,29 +1,29 @@
 @import "../../styles/variables";
 @import "../../styles/mixins";
 
+.visually-hidden {
+  border: 0;
+  clip: rect(0 0 0 0);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  width: 1px;
+}
+
 .form-section {
-  background-color: #f9f9f9;
-  border: 1px solid $border-color;
+  background-color: $bg-light;
   border-radius: 10px;
   padding: 25px;
-  box-shadow: $box-shadow;
   width: 100%;
   max-width: 800px;
   margin-bottom: 30px;
   display: flex;
   flex-direction: column;
   gap: 20px;
-  height: auto;
   align-items: stretch;
-
-  .no-data {
-    text-align: center;
-    font-size: 15px;
-    color: $light-black;
-    font-style: italic;
-    padding: 8px;
-    display: block;
-  }
+  transition: background-color 0.3s ease;
 
   &.empty {
     max-height: 200px;
@@ -36,10 +36,12 @@
 
   .form-section-title {
     font-size: 22px;
-    color: $primary-color;
+    color: $color-primary;
     margin-bottom: 12px;
     text-align: center;
     font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
   }
 
   .form-section-fields {
@@ -53,16 +55,155 @@
     display: flex;
     flex-direction: column;
   }
+
+  .field-wrapper {
+    position: relative;
+    padding-bottom: 20px;
+
+    input,
+    select,
+    textarea {
+      transition: border 0.2s ease, box-shadow 0.2s ease;
+
+      &:focus {
+        border-color: $color-primary;
+        box-shadow: 0 0 0 2px rgba($color-primary, 0.2);
+        outline: none;
+      }
+
+      &:disabled {
+        background-color: $color-gray-light;
+        cursor: not-allowed;
+      }
+    }
+
+    &.error input,
+    &.error textarea,
+    &.error select {
+      border-color: $color-danger;
+      box-shadow: 0 0 4px rgba(231, 76, 60, 0.5);
+    }
+
+    &.success input,
+    &.success textarea,
+    &.success select {
+      border-color: $color-success;
+      box-shadow: 0 0 4px rgba(46, 204, 113, 0.5);
+    }
+
+    .error-message {
+      margin-top: 5px;
+      font-size: 14px;
+      font-weight: 700;
+      color: $color-danger;
+      background-color: rgba(231, 76, 60, 0.1);
+      padding: 6px 8px;
+      border-radius: 4px;
+    }
+  }
+
+  .no-data {
+    text-align: center;
+    font-size: 15px;
+    color: $color-black-light;
+    font-style: italic;
+    padding: 8px;
+    display: block;
+  }
+}
+
+.skeleton {
+  .skeleton-title {
+    width: 40%;
+    height: 20px;
+    margin: 0 auto $font-size-base auto;
+    border-radius: 6px;
+    background: $color-skeleton;
+    background-image: linear-gradient(
+      90deg,
+      $color-skeleton 0px,
+      #f0f0f0 40px,
+      $color-skeleton 80px
+    );
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+  }
+
+  .skeleton-field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: $font-size-base;
+
+    .skeleton-label {
+      width: 50%;
+      height: 14px;
+      border-radius: 4px;
+      background: $color-skeleton;
+      background-image: linear-gradient(
+        90deg,
+        $color-skeleton 0px,
+        #f0f0f0 40px,
+        $color-skeleton 80px
+      );
+      background-size: 200% 100%;
+      animation: shimmer 1.5s infinite;
+    }
+
+    .skeleton-input {
+      width: 100%;
+      height: 36px;
+      border-radius: 6px;
+      background: $color-skeleton;
+      background-image: linear-gradient(
+        90deg,
+        $color-skeleton 0px,
+        #f0f0f0 40px,
+        $color-skeleton 80px
+      );
+      background-size: 200% 100%;
+      animation: shimmer 1.5s infinite;
+    }
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
 }
 
 @include respond-to(mobile) {
   .form-section {
     padding: 15px;
+
+    .form-section-fields {
+      grid-template-columns: 1fr;
+    }
+
+    .form-section-title {
+      font-size: 18px;
+    }
   }
 }
 
 @include respond-to(tablet) {
   .form-section {
     padding: 20px;
+
+    .form-section-fields {
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    }
+  }
+}
+
+@media (min-width: 1024px) {
+  .form-section {
+    .form-section-fields {
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    }
   }
 }

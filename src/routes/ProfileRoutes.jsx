@@ -5,9 +5,9 @@ import AccountInfo from "../pages/profile/accountInfo/AccountInfo";
 import Security from "../pages/profile/security/Security";
 import ChangePassword from "../pages/profile/security/changePassword/ChangePassword";
 import PaymentCards from "../pages/profile/paymentCards/PaymentCards";
-import PaymentCardsForm from "../pages/profile/paymentCards/PaymentCardsForm";
+import PaymentCardsForm from "../pages/profile/paymentCards/form/PaymentCardsForm";
 import Addresses from "../pages/profile/addresses/Addresses";
-import AddressesForm from "../pages/profile/addresses/AddressesForm";
+import AddressesForm from "../pages/profile/addresses/form/AddressesForm";
 
 const ProfileRoutes = () => {
   return (

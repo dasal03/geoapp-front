@@ -14,8 +14,9 @@
   z-index: 9999;
 
   .modal-content {
-    background: $background-light;
+    background: $bg-light;
     padding: 20px;
+    gap: 10px;
     border-radius: 8px;
     width: 400px;
     display: flex;

@@ -1,0 +1,275 @@
+@import "../../../../styles/variables";
+@import "../../../../styles/mixins";
+
+.addresses-form-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 800px;
+  background-color: $bg-light;
+  border-radius: 12px;
+  box-shadow: $box-shadow-default;
+  padding: 20px;
+  margin: 0 auto 24px;
+  transition: all 0.3s ease-in-out;
+
+  .field-label {
+    display: block;
+    margin-bottom: 6px;
+    font-size: 14px;
+    font-weight: 500;
+    color: $text-color-primary;
+  }
+
+  form {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+    width: 100%;
+
+    .full-width {
+      grid-column: span 2;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid $color-gray-border;
+      border-radius: 8px;
+      font-size: $font-size-base;
+      background-color: $color-white;
+      transition: all 0.3s ease;
+
+      &:focus {
+        border-color: $color-primary;
+        outline: none;
+        box-shadow: 0 0 5px rgba(0, 123, 255, 0.3);
+      }
+    }
+
+    input:disabled {
+      color: darken($color-gray-light, 20%);
+      background-color: $color-gray-light;
+      cursor: not-allowed;
+    }
+
+    .address-autofill {
+      position: relative;
+      z-index: 1;
+
+      input {
+        z-index: 2;
+        position: relative;
+      }
+
+      .mapbox-searchbox {
+        z-index: 10;
+      }
+    }
+
+    .buttons {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      grid-column: span 2;
+      margin-top: 18px;
+
+      button {
+        flex: 1;
+        padding: 12px;
+        font-size: $font-size-base;
+        font-weight: bold;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-transform: uppercase;
+        box-shadow: 0 3px 6px rgba(0, 0, 0, 0.15);
+        min-width: 120px;
+
+        &:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        &:active {
+          transform: translateY(0);
+          box-shadow: 0 3px 6px rgba(0, 0, 0, 0.15);
+        }
+      }
+
+      .save-btn {
+        background: linear-gradient(
+          135deg,
+          $color-primary,
+          darken($color-primary, 10%)
+        );
+        color: $text-color-light;
+        margin-right: 12px;
+      }
+
+      .cancel-btn {
+        background: linear-gradient(
+          135deg,
+          $color-danger,
+          darken($color-danger, 10%)
+        );
+        color: $text-color-light;
+      }
+    }
+
+    .field-wrapper {
+      position: relative;
+      padding-bottom: 20px;
+
+      &.error input,
+      &.error textarea,
+      &.error select {
+        border-color: $color-danger;
+        box-shadow: 0 0 4px rgba(231, 76, 60, 0.5);
+      }
+
+      &.success input,
+      &.success textarea,
+      &.success select {
+        border-color: $color-success;
+        box-shadow: 0 0 4px rgba(46, 204, 113, 0.5);
+      }
+
+      .error-message {
+        margin-top: 6px;
+        font-size: 13px;
+        font-weight: 500;
+        color: $color-danger;
+        background-color: rgba(231, 76, 60, 0.1);
+        padding: 4px 6px;
+        border-radius: 4px;
+      }
+    }
+  }
+}
+
+.skeleton-form {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+  padding: 20px;
+  border-radius: 12px;
+  background-color: $bg-light;
+
+  .skeleton-input {
+    height: 44px;
+    border-radius: 8px;
+    background: linear-gradient(90deg, #e2e2e2 25%, $color-gray-light 50%, #e2e2e2 75%);
+    background-size: 200% 100%;
+    animation: pulse 1.5s infinite ease-in-out;
+  }
+
+  .full-width {
+    grid-column: span 2;
+  }
+
+  .skeleton-field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .skeleton-label {
+    width: 40%;
+    height: 12px;
+    border-radius: 4px;
+    background: linear-gradient(90deg, #e2e2e2 25%, $color-gray-light 50%, #e2e2e2 75%);
+    background-size: 200% 100%;
+    animation: pulse 1.5s infinite ease-in-out;
+  }
+
+  .skeleton-buttons {
+    display: flex;
+    justify-content: space-between;
+    grid-column: span 2;
+    gap: 12px;
+
+    .skeleton-btn {
+      flex: 1;
+      height: 44px;
+      border-radius: 8px;
+      background: linear-gradient(90deg, #e2e2e2 25%, $color-gray-light 50%, #e2e2e2 75%);
+      background-size: 200% 100%;
+      animation: pulse 1.5s infinite ease-in-out;
+    }
+  }
+}
+
+@keyframes bounce {
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(-6px);
+  }
+}
+
+@keyframes pulse {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+@include respond-to(mobile) {
+  .skeleton-form {
+    grid-template-columns: 1fr;
+  }
+
+  .addresses-form-container {
+    padding: $font-size-base;
+
+    form {
+      grid-template-columns: 1fr;
+
+      .field-wrapper {
+        padding-bottom: $font-size-base;
+      }
+
+      input {
+        font-size: 14px;
+      }
+
+      .buttons {
+        flex-direction: column;
+        gap: 10px;
+
+        button {
+          width: 100%;
+          min-width: unset;
+        }
+      }
+    }
+  }
+}
+
+@include respond-to(tablet) {
+  .skeleton-form {
+    grid-template-columns: 1fr;
+  }
+
+  .addresses-form-container {
+    padding: 20px;
+
+    form {
+      grid-template-columns: repeat(2, 1fr);
+
+      .buttons {
+        flex-direction: row;
+        gap: 12px;
+
+        button {
+          width: auto;
+        }
+      }
+    }
+  }
+}

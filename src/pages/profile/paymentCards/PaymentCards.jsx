@@ -1,57 +1,33 @@
-import { useNavigate, useOutletContext } from "react-router-dom";
-import EditableListSection from "../../../components/editableListSection/EditableListSection";
-import Loader from "../../../components/ui/loader/Loader";
-import usePaymentCardsData from "../../../hooks/UsePaymentCardsData";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import { usePaymentCardsData } from "../../../hooks";
+import { PaymentCardSection } from "../../../components";
 
 const PaymentCards = () => {
   const navigate = useNavigate();
-  const { profileData } = useOutletContext();
-  const userId = profileData?.user_id;
+  const [searchParams] = useSearchParams();
+  const userId = searchParams.get("user_id");
 
   const { loading, paymentCardsData, deletePaymentCard, setAsPrimary } =
     usePaymentCardsData(userId);
 
-  if (loading) return <Loader />;
-
-  const sectionConfig = [
-    {
-      name: "name",
-      label: "Titular de la Tarjeta",
-    },
-    {
-      name: "number",
-      label: "Número de Tarjeta",
-    },
-    {
-      name: "expiry",
-      label: "Fecha de Vencimiento",
-    },
-    {
-      cvc: "cvc",
-      label: "CVC",
-      isVisible: false,
-    },
-  ];
+  const handleNavigation = (path, params = "") =>
+    navigate(`/profile/${path}?user_id=${userId}${params}`);
 
   return (
-    <div className="profile-section">
-      <EditableListSection
-        title="Tarjetas"
-        sectionData={paymentCardsData}
-        sectionConfig={sectionConfig}
-        onCheckChange={setAsPrimary}
-        onAddItem={() =>
-          navigate(`/profile/payment-cards-form?user_id=${userId}`)
-        }
-        onEditItem={(item) => {
-          navigate(
-            `/profile/payment-cards-form?user_id=${userId}&payment_card_id=${item.id}`,
-            { state: item }
-          );
-        }}
-        onDeleteItem={deletePaymentCard}
-      />
-    </div>
+    <PaymentCardSection
+      title="Medios de pago"
+      sectionData={paymentCardsData}
+      onCheckChange={setAsPrimary}
+      onAddItem={() => handleNavigation("payment-cards-form")}
+      onEditItem={(item) =>
+        handleNavigation(
+          "payment-cards-form",
+          `&payment_card_id=${item.payment_card_id}`
+        )
+      }
+      onDeleteItem={deletePaymentCard}
+      loading={loading}
+    />
   );
 };
 

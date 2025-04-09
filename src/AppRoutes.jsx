@@ -1,18 +1,19 @@
 import { Routes, Route } from "react-router-dom";
-import PrivateRoute from "./components/auth/PrivateRoute";
+import { routes, ServiceRoutes, ProfileRoutes } from "./routes";
+import { PrivateRoute } from "./components";
+import {
+  Home,
+  Login,
+  Register,
+  About,
+  PrivacyPolicy,
+  ContactUs,
+  NotFound,
+  Unauthorized,
+} from "./pages";
 
-import Home from "./pages/home/Home";
-import Login from "./pages/login/Login";
-import Register from "./pages/register/Register";
-import About from "./pages/about/About";
-import PrivacyPolicy from "./pages/privacyPolicy/PrivacyPolicy";
-import ContactUs from "./pages/contactUs/ContactUs";
-import NotFound from "./pages/notFound/NotFound";
-import Unauthorized from "./pages/unauthorized/Unauthorized";
-
-import routes from "./routes/routes";
-import ServiceRoutes from "./routes/ServiceRoutes";
-import ProfileRoutes from "./routes/ProfileRoutes";
+const ADMIN = 1,
+  CLIENT = 2;
 
 const AppRoutes = () => {
   return (
@@ -25,12 +26,12 @@ const AppRoutes = () => {
       <Route path={routes.contactUs} element={<ContactUs />} />
       <Route path={routes.unauthorized} element={<Unauthorized />} />
 
-      <Route element={<PrivateRoute allowedRoles={["admin"]} />}>
+      <Route element={<PrivateRoute allowedRoles={[ADMIN]} />}>
         <Route path={routes.services.maintenance} element={<ServiceRoutes />} />
         <Route path={routes.services.management} element={<ServiceRoutes />} />
       </Route>
 
-      <Route element={<PrivateRoute allowedRoles={["client", "admin"]} />}>
+      <Route element={<PrivateRoute allowedRoles={[ADMIN, CLIENT]} />}>
         <Route path={`${routes.profile.base}/*`} element={<ProfileRoutes />} />
       </Route>
 

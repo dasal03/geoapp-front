@@ -1,0 +1,74 @@
+@import "../../styles/variables";
+@import "../../styles/mixins";
+
+.benefits {
+  background-color: $bg-light;
+  padding: 50px 20px;
+  text-align: center;
+
+  h2 {
+    font-size: 32px;
+    margin-bottom: 20px;
+  }
+
+  .benefits-container {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+
+    .benefit-card {
+      max-width: 300px;
+      padding: 20px;
+      background: $bg-light-gray;
+      border-radius: 10px;
+      text-align: center;
+      box-shadow: $box-shadow-default;
+
+      .icon {
+        font-size: 40px;
+        color: $color-primary;
+        margin-bottom: 10px;
+      }
+
+      h3 {
+        font-size: 22px;
+        margin-bottom: 10px;
+      }
+
+      p {
+        font-size: $font-size-base;
+        color: $text-color-primary;
+      }
+    }
+  }
+}
+
+@include respond-to(mobile) {
+  .benefits {
+    padding: 30px 10px;
+
+    h2 {
+      font-size: 28px;
+    }
+
+    .benefits-container {
+      flex-direction: column;
+      align-items: center;
+
+      .benefit-card {
+        max-width: 90%;
+        margin-bottom: 20px;
+      }
+    }
+  }
+}
+
+@include respond-to(tablet) {
+  .benefits {
+    .benefits-container {
+      flex-direction: row;
+      justify-content: center;
+    }
+  }
+}

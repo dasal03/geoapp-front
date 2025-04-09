@@ -4,51 +4,123 @@
 .footer {
   background: linear-gradient(
     180deg,
-    $light-black 0%,
-    darken($light-black, 5%) 100%
+    $color-black-light 0%,
+    darken($color-black-light, 5%) 100%
   );
-  color: $white-color;
-  padding: 30px 20px;
+  color: $color-white;
+  padding: 40px 20px;
   text-align: center;
-  border-top: 1px solid lighten($light-black, 10%);
+  border-top: 1px solid lighten($color-black-light, 10%);
   box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.2);
 
-  .footer-content {
+  .footer-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
     max-width: 1200px;
     margin: 0 auto;
+    text-align: left;
   }
 
-  a {
-    color: $accent-color;
-    text-decoration: none;
-    font-weight: bold;
-    transition: color 0.3s ease, transform 0.3s ease;
+  .footer-section {
+    flex: 1;
+    min-width: 250px;
+    padding: 15px;
 
-    &:hover {
-      color: lighten($accent-color, 10%);
-      transform: scale(1.05);
+    h2 {
+      font-size: 22px;
+      color: $color-accent;
+      margin-bottom: 10px;
     }
+
+    h3 {
+      font-size: 18px;
+      color: $color-accent;
+      margin-bottom: 8px;
+    }
+
+    p {
+      font-size: 14px;
+      color: lighten($color-white, 30%);
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+
+      li {
+        margin: 8px 0;
+        font-size: 14px;
+
+        a {
+          color: $color-white;
+          text-decoration: none;
+          transition: color 0.3s ease;
+
+          &:hover {
+            color: lighten($color-accent, 10%);
+          }
+        }
+      }
+    }
+  }
+
+  .social-links {
+    text-align: center;
+
+    .social-icons {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      margin-top: 10px;
+
+      a {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 40px;
+        height: 40px;
+        background: $color-accent;
+        border-radius: 50%;
+        color: $color-white;
+        font-size: 18px;
+        transition: transform 0.3s ease, background 0.3s ease;
+
+        &:hover {
+          transform: scale(1.15);
+          background: lighten($color-accent, 10%);
+        }
+      }
+    }
+  }
+
+  .footer-bottom {
+    margin-top: 20px;
+    border-top: 1px solid lighten($color-black-light, 15%);
+    padding-top: 15px;
+    font-size: 12px;
+    color: lighten($color-white, 40%);
   }
 }
 
 @include respond-to(mobile) {
   .footer {
-    font-size: 12px;
-    padding: 20px 10px;
+    padding: 30px 10px;
 
-    p {
-      margin: 5px 0;
+    .footer-container {
+      flex-direction: column;
+      text-align: center;
     }
   }
 }
 
 @include respond-to(tablet) {
   .footer {
-    font-size: 14px;
-    padding: 25px 15px;
+    padding: 35px 15px;
 
-    p {
-      margin: 8px 0;
+    .footer-container {
+      flex-direction: row;
+      text-align: left;
     }
   }
 }
